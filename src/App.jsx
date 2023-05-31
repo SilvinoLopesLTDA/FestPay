@@ -1,7 +1,7 @@
 function App() {
   return(
     <div>
-      <h1>10k</h1>
+      <h1 className="text-emerald-400 text-9xl">10k</h1>
     </div>
   )
 }
