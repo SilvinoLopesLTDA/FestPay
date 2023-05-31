@@ -9,6 +9,7 @@ const errorHandler = require("./middleware/errorMiddleware");
 // const path = require("path");
 
 const clientRoute = require("./routes/clientRoute");
+const shopRoute = require("./routes/shopRoute");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.options("*", cors());
 
 // Routes Middleware
 app.use("/api/clients", clientRoute);
+app.use("/api/shops", shopRoute);
 
 // Routes
 app.get("/", (req, res) => {
