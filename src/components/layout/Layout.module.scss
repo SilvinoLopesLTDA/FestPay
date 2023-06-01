@@ -1,0 +1,9 @@
+.layout {
+    min-height: 100%;
+  }
+  
+  @media screen and (max-width: 800px) {
+    .layout {
+      min-height: 125vh;
+    }
+  }

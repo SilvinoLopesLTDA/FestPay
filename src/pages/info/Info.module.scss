@@ -1,0 +1,21 @@
+.info_container {
+    margin: 6em 9em -3em 9em;
+    h3 {
+      text-align: center;
+    }
+  }
+  
+  .info_item {
+    margin-top: 3em;
+    margin-bottom: 3em;
+    p {
+      text-indent: 2em;
+    }
+    a {
+      text-decoration: underline;
+      &:hover {
+        font-weight: 600;
+        text-decoration: none;
+      }
+    }
+  }
