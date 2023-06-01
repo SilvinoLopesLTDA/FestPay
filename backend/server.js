@@ -10,6 +10,7 @@ const errorHandler = require("./middleware/errorMiddleware");
 
 const clientRoute = require("./routes/clientRoute");
 const shopRoute = require("./routes/shopRoute");
+const qrCodeRoute = require("./routes/qrCodeRoute");
 
 const app = express();
 
@@ -20,9 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-    ],
+    origin: ["http://localhost:5173"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Cookie"],
   })
@@ -34,6 +33,7 @@ app.options("*", cors());
 // Routes Middleware
 app.use("/api/clients", clientRoute);
 app.use("/api/shops", shopRoute);
+app.use("/api/qrCode", qrCodeRoute);
 
 // Routes
 app.get("/", (req, res) => {

@@ -13,15 +13,18 @@ const clientSchema = mongoose.Schema(
       type: String,
       default: "+55",
     },
-    paymentMethod: {
+    email: {
       type: String,
-      enum: ["debito", "credito", "dinheiro"],
       required: true,
     },
-    credits: {
+    paymentMethod: {
+      type: String,
+      enum: ["Débito", "Crédito", "Dinheiro", "Pix"],
+      required: true,
+    },
+    balance: {
       type: Number,
       default: 0,
-      enum: [2, 5, 10, 20, 30, 40, 50],
     },
     qrCode: {
       type: String,
@@ -39,7 +42,7 @@ clientSchema.pre("save", async function (next) {
       name: this.name,
       phone: this.phone,
       paymentMethod: this.paymentMethod,
-      credits: this.credits
+      balance: this.balance,
     };
     this.qrCode = await generateQRCode(JSON.stringify(qrCodeData));
     next();
@@ -49,8 +52,8 @@ clientSchema.pre("save", async function (next) {
 });
 
 async function generateQRCode(data) {
-    const qrCode = await QRCode.toDataURL(data);
-    return qrCode;
+  const qrCode = await QRCode.toDataURL(data);
+  return qrCode;
 }
 
 const Client = mongoose.model("Client", clientSchema);

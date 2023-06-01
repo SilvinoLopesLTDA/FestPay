@@ -3,16 +3,16 @@ const Client = require("../models/clientModel");
 
 // Register Client
 const registerClient = asyncHandler(async (req, res) => {
-  const { name, phone, paymentMethod, credits } = req.body;
+  const { name, phone, email, paymentMethod, balance } = req.body;
 
   // Validation
-  if (!name || !phone || !paymentMethod || !credits) {
+  if (!name || !email || !paymentMethod || !balance) {
     res.status(400);
     throw new Error("Preencha os campos corretamente.");
   }
 
   // Check if client already exist
-  const clientExists = await Client.findOne({ phone });
+  const clientExists = await Client.findOne({ email });
 
   if (clientExists) {
     res.status(400);
@@ -23,8 +23,9 @@ const registerClient = asyncHandler(async (req, res) => {
   const client = await Client.create({
     name,
     phone,
+    email,
     paymentMethod,
-    credits,
+    balance,
   });
 
   if (client) {
@@ -33,8 +34,9 @@ const registerClient = asyncHandler(async (req, res) => {
       _id,
       name,
       phone,
+      email,
       paymentMethod,
-      credits,
+      balance,
       qrCode,
     });
   } else {
@@ -74,7 +76,7 @@ const deleteClient = asyncHandler(async (req, res) => {
 
 // Update Client
 const updateClient = asyncHandler(async (req, res) => {
-    const { name, phone, paymentMethod, credits } = req.body;
+    const { name, phone, email, paymentMethod, balance } = req.body;
     const { id } = req.params;
     const client = await Client.findById(id);
   
@@ -90,8 +92,9 @@ const updateClient = asyncHandler(async (req, res) => {
       {
         name,
         phone,
+        email,
         paymentMethod,
-        credits
+        balance
       },
       {
         new: true,
