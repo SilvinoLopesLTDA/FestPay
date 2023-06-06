@@ -9,12 +9,15 @@ import Client from "./pages/client/Client";
 import Terms from "./pages/info/Terms";
 import Privacy from "./pages/info/Privacy";
 import Faq from "./pages/info/FAQ";
-import AddBalance from "./pages/addBalance/AddBalance";
+import AddBalance from "./pages/client/addBalance/AddBalance";
+import AddShop from "./pages/shop/addShop/AddShop";
+import ShopDetails from "./pages/shop/shopDetails/ShopDetails";
+import ShopEdit from "./pages/shop/shopEdit/ShopEdit";
 
 function App() {
   return (
     <Router>
-      <ToastContainer />
+      <ToastContainer theme="dark" />
       <Routes>
         <Route
           path="/"
@@ -32,6 +35,36 @@ function App() {
             <Sidebar>
               <Layout>
                 <Shop />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/add-shop"
+          element={
+            <Sidebar>
+              <Layout>
+                <AddShop />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/details-shop/:id"
+          element={
+            <Sidebar>
+              <Layout>
+                <ShopDetails />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/edit-shop/:id"
+          element={
+            <Sidebar>
+              <Layout>
+                <ShopEdit />
               </Layout>
             </Sidebar>
           }

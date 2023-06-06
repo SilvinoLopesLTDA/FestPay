@@ -3,28 +3,32 @@ const Shop = require("../models/shopModel");
 
 // Create Shop
 const createShop = asyncHandler(async (req, res) => {
-  const { name, items, profit, cost } = req.body;
+  const { name,
+    //  items, 
+     profit, cost } = req.body;
 
   // Validation
-  if (!name || !items || !cost) {
+  if (!name ||
+    //  !items ||
+      !cost) {
     res.status(400);
     throw new Error("Por favor, preencha os campos corretamente!");
   }
 
-  if (!Array.isArray(items)) {
-    res.status(400);
-    throw new Error("O campo items deve ser um array.");
-  }
+  // if (!Array.isArray(items)) {
+  //   res.status(400);
+  //   throw new Error("O campo items deve ser um array.");
+  // }
 
-  const createdItems = items.map((item) => ({
-    name: item.name,
-    price: parseFloat(item.price),
-  }));
+  // const createdItems = items.map((item) => ({
+  //   name: item.name,
+  //   price: parseFloat(item.price),
+  // }));
 
   // Create Shop
   const shop = await Shop.create({
     name,
-    items: createdItems,
+    // items: createdItems,
     profit,
     cost,
   });

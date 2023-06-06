@@ -5,7 +5,7 @@ mongoose.set("strictQuery", false);
 const itemSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    // required: true,
   },
   price: {
     type: Number,

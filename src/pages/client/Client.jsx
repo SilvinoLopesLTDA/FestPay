@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import { Link } from "react-router-dom";
 import PasswordCard from "../../components/passwordCard/PasswordCard";
 import styles from "./Client.module.scss";
@@ -9,7 +8,8 @@ import Loader from "../../components/loader/Loader";
 import {
   createClient,
   selectIsLoading,
-} from "../../redux/features/clientSlice";
+} from "../../redux/features/client/clientSlice";
+import AddClient from "../../components/forms/client/FormClient";
 
 const initialState = {
   name: "",
@@ -23,7 +23,6 @@ const Client = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [client, setClient] = useState(initialState);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const isLoading = useSelector(selectIsLoading);
 
@@ -34,8 +33,8 @@ const Client = () => {
     setClient({ ...client, [name]: value });
   };
 
-  const saveClient = async (e) => {
-    e.preventDefault();
+  const saveClient = async () => {
+    event.preventDefault();
     const formData = new FormData();
     formData.append("name", name);
     formData.append("phone", phone);
@@ -43,6 +42,8 @@ const Client = () => {
     formData.append("paymentMethod", paymentMethod);
     formData.append("balance", balance);
 
+    
+    console.log(...formData);
     await dispatch(createClient(formData));
 
     if (
@@ -57,24 +58,6 @@ const Client = () => {
       paymentMethod.trim() !== "" &&
       balance.trim() !== ""
     ) {
-      navigate("/clients");
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmitted(true);
-
-    if (
-      client.name &&
-      client.category &&
-      client.cost &&
-      client.price &&
-      client.quantity
-    ) {
-      saveClient(client);
-      navigate("/clients");
-    } else {
       navigate("/clients");
     }
   };
@@ -100,84 +83,12 @@ const Client = () => {
             {" "}
             - Adicione os dados do cliente abaixo{" "}
           </p>
-          <form
-            className="flex flex-col"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit(e);
-              saveClient(e);
-            }}
-          >
-            <label htmlFor="name"> Nome </label>
-            <input
-              type="text"
-              placeholder="Matheus..."
-              name="name"
-              id="name"
-              value={client?.name}
-              onChange={handleInputChange}
-              className={
-                isSubmitted && client?.name === "" ? `${styles.highlight}` : ""
-              }
-            />
-
-            <label htmlFor="email"> Email </label>
-            <input
-              type="text"
-              placeholder="email@gmail.com"
-              name="email"
-              id="email"
-              value={client?.email}
-              onChange={handleInputChange}
-              className={
-                isSubmitted && client?.email === "" ? `${styles.highlight}` : ""
-              }
-            />
-
-            <label htmlFor="phone"> Tel </label>
-            <input
-              type="text"
-              placeholder="+55 61 99409-2521"
-              name="phone"
-              id="phone"
-              value={client?.phone}
-              onChange={handleInputChange}
-              className={
-                isSubmitted && client?.phone === "" ? `${styles.highlight}` : ""
-              }
-            />
-
-            <label htmlFor="balance"> Saldo </label>
-            <input
-              type="text"
-              placeholder="10"
-              name="balance"
-              id="balance"
-              value={client?.balance}
-              onChange={handleInputChange}
-              className={
-                isSubmitted && client?.balance === ""
-                  ? `${styles.highlight}`
-                  : ""
-              }
-            />
-
-            <label htmlFor="paymentMethod"> Metodo de Pagamento</label>
-            <select name="paymentMethod" id="paymentMethod">
-              <option value="credit">Crédito</option>
-              <option value="debit">Débito</option>
-              <option value="money">Dinheiro</option>
-              <option value="pix">Pix</option>
-            </select>
-          </form>
-          <button
-            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
-            type="submit"
-            onClick={saveClient}
-          >
-            {" "}
-            Criar Cliente
-          </button>
+          <AddClient
+            client={client}
+            handleInputChange={handleInputChange}
+            saveClient={saveClient}
+            required={"*"}
+          />
         </div>
       </div>
     </>

@@ -9,7 +9,7 @@ const {
     updateShop,
 } = require("../controllers/shopController");
 
-router.post("/create-shop", createShop);
+router.post("/createshop", createShop);
 router.get("/", getShops);
 router.get("/:id", getShop);
 router.delete("/:id", deleteShop);

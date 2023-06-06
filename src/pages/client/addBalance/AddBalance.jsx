@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import styles from "../client/Client.module.scss";
+import styles from "../Client.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../../components/loader/Loader";
 import {
   createClient,
   selectIsLoading,
-} from "../../redux/features/clientSlice";
+} from "../../../redux/features/client/clientSlice";
 
 const initialState = {
   email: "",
@@ -51,13 +51,13 @@ const Client = () => {
       paymentMethod.trim() !== "" &&
       rechargeAmount.trim() !== ""
     ) {
-      navigate("/clients");
+      navigate("/add-balance");
     }
   };
 
   const saveClientData = () => {
     const clientData = {
-      ...client
+      ...client,
     };
 
     saveClient(clientData);
@@ -75,9 +75,9 @@ const Client = () => {
       client.quantity
     ) {
       saveClient(client);
-      navigate("/clients");
+      navigate("/add-balance");
     } else {
-      navigate("/clients");
+      navigate("/add-balance");
     }
   };
 
@@ -109,7 +109,6 @@ const Client = () => {
               saveClient(e);
             }}
           >
-
             <label htmlFor="email"> Email </label>
             <input
               type="text"
@@ -139,21 +138,21 @@ const Client = () => {
             />
 
             <label htmlFor="paymentMethod"> Metodo de Pagamento</label>
-            <select name="paymentMethod" id="paymentMethod">
+            <select name="paymentMethod" id="paymentMethod" className={isSubmitted && client?.email === "" ? `${styles.highlight}` : ""}>
               <option value="credit">Crédito</option>
               <option value="debit">Débito</option>
               <option value="money">Dinheiro</option>
               <option value="pix">Pix</option>
             </select>
+            <button
+              className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
+              type="submit"
+              onClick={saveClientData}
+            >
+              {" "}
+              Fazer Recarga
+            </button>
           </form>
-          <button
-            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
-            type="submit"
-            onClick={saveClientData}
-          >
-            {" "}
-            Fazer Recarga
-          </button>
         </div>
       </div>
     </>
