@@ -9,7 +9,7 @@ import {
   createClient,
   selectIsLoading,
 } from "../../redux/features/client/clientSlice";
-import AddClient from "../../components/forms/client/FormClient";
+import FormClient from "../../components/forms/client/FormClient";
 
 const initialState = {
   name: "",
@@ -35,15 +35,14 @@ const Client = () => {
 
   const saveClient = async () => {
     event.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("phone", phone);
-    formData.append("email", email);
-    formData.append("paymentMethod", paymentMethod);
-    formData.append("balance", balance);
+    const formData = {
+      name: name,
+      phone: phone,
+      email: email,
+      paymentMethod: paymentMethod,
+      balance: balance,
+    };
 
-    
-    console.log(...formData);
     await dispatch(createClient(formData));
 
     if (
@@ -64,7 +63,7 @@ const Client = () => {
 
   return (
     <>
-      <PasswordCard password={"1234"} />
+      {/* <PasswordCard password={"1234"} /> */}
       <div className="flex justify-center items-center">
         {isLoading && <Loader />}
         <div className={styles.content}>
@@ -83,7 +82,7 @@ const Client = () => {
             {" "}
             - Adicione os dados do cliente abaixo{" "}
           </p>
-          <AddClient
+          <FormClient
             client={client}
             handleInputChange={handleInputChange}
             saveClient={saveClient}

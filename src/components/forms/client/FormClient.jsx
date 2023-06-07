@@ -1,42 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from 'prop-types'
-import styles from '../../../pages/client/Client.module.scss'
+import PropTypes from "prop-types";
+import styles from "../../../pages/client/Client.module.scss";
 
-const FormClient = ({
-    client,
-    handleInputChange,
-    saveClient,
-    required,
-  }) => {
-    const navigate = useNavigate();
-    const [isSubmitted, setIsSubmitted] = useState(false);
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      setIsSubmitted(true);
-  
-      if (
-        client.name &&
-        client.phone &&
-        client.email &&
-        client.paymentMethod &&
-        client.balance
-      ) {
-        saveClient(client);
-        navigate("/clients");
-      } else {
-        navigate("/clients");
-      }
+const FormClient = ({ client, handleInputChange, saveClient, required }) => {
+  const navigate = useNavigate();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+
+    if (
+      client.name &&
+      client.phone &&
+      client.email &&
+      client.paymentMethod &&
+      client.balance
+    ) {
+      saveClient(client);
+      navigate("/clients");
+    } else {
+      navigate("/clients");
+    }
+  };
+
+  const saveClientData = () => {
+    const clientData = {
+      ...client,
     };
-  
-    const saveClientData = () => {
-      const clientData = {
-        ...client,
-      };
-      saveClient(clientData);
-    };
-  
+    saveClient(JSON.stringify(clientData));
+  };
+
   return (
     <div>
       <form
@@ -56,10 +51,10 @@ const FormClient = ({
           placeholder="Matheus..."
           name="name"
           id="name"
-          value={client?.name}
+          value={client.name}
           onChange={handleInputChange}
           className={
-            isSubmitted && client?.name === "" ? `${styles.highlight}` : ""
+            isSubmitted && client.name === "" ? `${styles.highlight}` : ""
           }
         />
 
@@ -72,10 +67,10 @@ const FormClient = ({
           placeholder="email@gmail.com"
           name="email"
           id="email"
-          value={client?.email}
+          value={client.email}
           onChange={handleInputChange}
           className={
-            isSubmitted && client?.email === "" ? `${styles.highlight}` : ""
+            isSubmitted && client.email === "" ? `${styles.highlight}` : ""
           }
         />
 
@@ -88,10 +83,10 @@ const FormClient = ({
           placeholder="+55 61 99409-2521"
           name="phone"
           id="phone"
-          value={client?.phone}
+          value={client.phone}
           onChange={handleInputChange}
           className={
-            isSubmitted && client?.phone === "" ? `${styles.highlight}` : ""
+            isSubmitted && client.phone === "" ? `${styles.highlight}` : ""
           }
         />
 
@@ -118,7 +113,7 @@ const FormClient = ({
           name="paymentMethod"
           id="paymentMethod"
           className={
-            isSubmitted && client?.name === "" ? `${styles.highlight}` : ""
+            isSubmitted && client.name === "" ? `${styles.highlight}` : ""
           }
           value={client.paymentMethod}
           onChange={handleInputChange}
