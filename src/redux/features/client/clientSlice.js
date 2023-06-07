@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import clientService from "./clientSevice";
+import clientService from "./clientService";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -16,7 +16,8 @@ export const createClient = createAsyncThunk(
   "clients/create",
   async (formData, thunkAPI) => {
     try {
-      return await clientService.createClient(formData);
+      const response = await clientService.createClient(formData);
+      return response.data;
     } catch (error) {
       const message =
         (error.response &&
@@ -108,7 +109,7 @@ export const updateClient = createAsyncThunk(
 const clientSlice = createSlice({
   name: "client",
   initialState,
-//   reducers: {},
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(createClient.pending, (state) => {

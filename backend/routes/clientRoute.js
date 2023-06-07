@@ -9,7 +9,7 @@ const {
   updateClient,
 } = require("../controllers/clientController");
 
-router.post("/", registerClient);
+router.post("/register", registerClient);
 router.get("/", getClients);
 router.get("/:id", getClient);
 router.delete("/:id", deleteClient);
