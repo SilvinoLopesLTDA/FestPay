@@ -63,7 +63,7 @@ const Client = () => {
 
   return (
     <>
-      <PasswordCard password={"1234"} />
+      {/* <PasswordCard password={"1234"} /> */}
       <div className="flex justify-center items-center">
         {isLoading && <Loader />}
         <div className={styles.content}>
