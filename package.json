@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "back": "nodemon backend/server.js",
+    "server": "node backend/server.js",
     "both": "concurrently \"npm run back \" \"npm run dev \"",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
