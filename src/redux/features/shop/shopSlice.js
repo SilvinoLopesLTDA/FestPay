@@ -13,7 +13,7 @@ const initialState = {
 
 // Create New Shop
 export const createShop = createAsyncThunk(
-  "shop/create",
+  "shops/create",
   async (formData, thunkAPI) => {
     try {
       return await shopService.createShop(formData);
@@ -106,9 +106,19 @@ export const updateShop = createAsyncThunk(
 );
 
 const shopSlice = createSlice({
-  name: "shop",
+  name: "shops",
   initialState,
-//   reducers: {},
+  reducers: {
+    GENERATE_PASSWORD: () => {
+      const shop = shop
+      if (shop && shop._id) {
+        const shopId = String(shop._id);
+        const password = shopId.slice(-4);
+        return password;
+      }
+      return "";
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createShop.pending, (state) => {
@@ -194,7 +204,7 @@ const shopSlice = createSlice({
   },
 });
 
-// export const {  } = shopSlice.actions;
+export const {  GENERATE_PASSWORD } = shopSlice.actions;
 
 export const selectIsLoading = (state) => state.shop.isLoading;
 export const selectShop = (state) => state.shop.shop;

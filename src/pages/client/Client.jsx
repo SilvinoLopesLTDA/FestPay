@@ -42,7 +42,6 @@ const Client = () => {
       paymentMethod: paymentMethod,
       balance: balance,
     };
-
     await dispatch(createClient(formData));
 
     if (

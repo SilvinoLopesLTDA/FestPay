@@ -12,25 +12,34 @@ const itemSchema = mongoose.Schema({
   },
 });
 
-const shopSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const shopSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    client: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Client",
+    },
+    items: [itemSchema],
+    profit: {
+      type: Number,
+      default: 0,
+    },
+    cost: {
+      type: Number,
+      default: 0,
+    },
   },
-  client: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Client",
-  },
-  items: [itemSchema],
-  profit: {
-    type: Number,
-    default: 0,
-  },
-  cost: {
-    type: Number,
-    default: 0,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const Shop = mongoose.model("Shop", shopSchema);
 module.exports = Shop;

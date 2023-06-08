@@ -3,16 +3,26 @@ const Shop = require("../models/shopModel");
 
 // Create Shop
 const createShop = asyncHandler(async (req, res) => {
-  const { name,
+  const { name, password,
     //  items, 
      profit, cost } = req.body;
 
   // Validation
-  if (!name ||
+  if (!name || !password ||
     //  !items ||
       !cost) {
     res.status(400);
     throw new Error("Por favor, preencha os campos corretamente!");
+  }
+
+  if( password.length > 4) {
+    res.status(400);
+    throw new Error("A senha não pode conter mais de 4 caracteres!");
+  }
+
+  if( password.length < 4) {
+    res.status(400);
+    throw new Error("A senha não pode conter menos de 4 caracteres!");
   }
 
   // if (!Array.isArray(items)) {
@@ -28,6 +38,7 @@ const createShop = asyncHandler(async (req, res) => {
   // Create Shop
   const shop = await Shop.create({
     name,
+    password,
     // items: createdItems,
     profit,
     cost,
@@ -69,13 +80,18 @@ const deleteShop = asyncHandler(async (req, res) => {
 
 // Update Shop
 const updateShop = asyncHandler(async (req, res) => {
-  const { name, items, profit, cost } = req.body;
+  const { name, password, items, profit, cost } = req.body;
   const { id } = req.params;
   const shop = await Shop.findById(id);
 
   if (!shop) {
     res.status(404);
     throw new Error("Ponto de venda não encontrado.");
+  }
+
+  if( password > 4) {
+    res.status(400);
+    throw new Error("A senha não pode conter mais de 4 caracteres!");
   }
 
   const updatedItems = items.map((item) => ({
@@ -87,6 +103,7 @@ const updateShop = asyncHandler(async (req, res) => {
     { _id: id },
     {
       name,
+      password,
       items: updatedItems,
       profit,
       cost,

@@ -108,7 +108,10 @@ const Client = () => {
               saveClient(e);
             }}
           >
-            <label htmlFor="email"> Email </label>
+            <label htmlFor="email">
+              {" "}
+              Email <span className="text-red-600">*</span>
+            </label>
             <input
               type="text"
               placeholder="email@gmail.com"
@@ -121,7 +124,10 @@ const Client = () => {
               }
             />
 
-            <label htmlFor="rechargeAmount"> Saldo </label>
+            <label htmlFor="rechargeAmount">
+              {" "}
+              Saldo <span className="text-red-600">*</span>
+            </label>
             <input
               type="text"
               placeholder="10"
@@ -135,13 +141,15 @@ const Client = () => {
                   : ""
               }
             />
-
-            <label htmlFor="paymentMethod">Método de Pagamento</label>
+            <label htmlFor="paymentMethod">
+              {" "}
+              Metodo de Pagamento <span className="text-red-600">*</span>
+            </label>
             <select
               name="paymentMethod"
               id="paymentMethod"
               className={
-                isSubmitted && client.name === "" ? `${styles.highlight}` : ""
+                isSubmitted && client.paymentMethod === "" ? `${styles.highlight}` : ""
               }
               value={client.paymentMethod}
               onChange={handleInputChange}
