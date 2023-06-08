@@ -1,4 +1,4 @@
-import styles from './info.module.scss';
+import styles from './Info.module.scss';
 
 const Faq = () => {
   return (

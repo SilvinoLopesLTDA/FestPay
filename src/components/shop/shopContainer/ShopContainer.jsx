@@ -18,7 +18,7 @@ const ShopContainer = ({ shop }) => {
             Pontos de <span className="text-violet-700 font-bold">Vendas</span>
           </h3>
           <Link to="/add-shop">
-            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-5">
+            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-semibold mt-5">
               Adicionar Barraca
             </button>
           </Link>

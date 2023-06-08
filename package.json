@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "back": "nodemon backend/server.js",
+    "server": "node backend/server.js",
     "both": "concurrently \"npm run back \" \"npm run dev \"",
     "install-all": "npm install && cd backend && npm install && cd ..",
     "build": "vite build",

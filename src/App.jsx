@@ -13,6 +13,7 @@ import AddBalance from "./pages/client/addBalance/AddBalance";
 import AddShop from "./pages/shop/addShop/AddShop";
 import ShopDetails from "./pages/shop/shopDetails/ShopDetails";
 import ShopEdit from "./pages/shop/shopEdit/ShopEdit";
+import AddItem from "./pages/shop/addItem/AddItem";
 
 function App() {
   return (
@@ -65,6 +66,16 @@ function App() {
             <Sidebar>
               <Layout>
                 <ShopEdit />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/add-item/:id"
+          element={
+            <Sidebar>
+              <Layout>
+                <AddItem />
               </Layout>
             </Sidebar>
           }
