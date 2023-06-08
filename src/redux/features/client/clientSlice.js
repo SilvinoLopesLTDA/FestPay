@@ -106,6 +106,25 @@ export const updateClient = createAsyncThunk(
   }
 );
 
+// Recharge Client Amount
+export const rechargeClient = createAsyncThunk(
+  "qrCode/recharge",
+  async (formData, thunkAPI) => {
+    try {
+      return await clientService.rechargeClient(formData);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const clientSlice = createSlice({
   name: "client",
   initialState,
@@ -187,6 +206,22 @@ const clientSlice = createSlice({
         toast.success("Cliente Atualizado com sucesso!");
       })
       .addCase(updateClient.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+
+      .addCase(rechargeClient.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(rechargeClient.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Saldo Atualizado com sucesso!");
+      })
+      .addCase(rechargeClient.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

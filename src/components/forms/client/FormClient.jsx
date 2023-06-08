@@ -80,7 +80,7 @@ const FormClient = ({ client, handleInputChange, saveClient, required }) => {
         </label>
         <input
           type="text"
-          placeholder="+55 61 99409-2521"
+          placeholder="+55 00 91234-5678"
           name="phone"
           id="phone"
           value={client.phone}

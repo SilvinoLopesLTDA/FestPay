@@ -3,6 +3,7 @@ import axios from "axios";
 export const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
 const API_URL = `${BACKEND_URL}/api/clients`;
+const API_URL_QR = `${BACKEND_URL}/api/qrCode`;
 
 // Create New Client
 const createClient = async (formData) => {
@@ -40,12 +41,24 @@ const updateClient = async (id, formData) => {
   return response.data;
 };
 
+// Recharge Client Amount
+const rechargeClient = async (formData) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.post(`${API_URL_QR}/recharge`, formData, config);
+  return response.data;
+};
+
 const clientService = {
   createClient,
   getClients,
   deleteClient,
   getClient,
   updateClient,
+  rechargeClient,
 };
 
 export default clientService;

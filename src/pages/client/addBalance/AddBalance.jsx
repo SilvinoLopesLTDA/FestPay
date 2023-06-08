@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Loader from "../../../components/loader/Loader";
 import {
-  createClient,
+  rechargeClient,
   selectIsLoading,
 } from "../../../redux/features/client/clientSlice";
 
@@ -23,35 +23,34 @@ const Client = () => {
 
   const isLoading = useSelector(selectIsLoading);
 
-  const { name, phone, email, paymentMethod, rechargeAmount } = client;
+  const { email, paymentMethod, rechargeAmount } = client;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setClient({ ...client, [name]: value });
   };
+  console.log(client);
 
-  const saveClient = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("paymentMethod", paymentMethod);
-    formData.append("rechargeAmount", rechargeAmount);
-
-    await dispatch(createClient(formData));
+  const saveClient = async () => {
+    event.preventDefault();
+    const amount = parseFloat(rechargeAmount);
+    const formData = {
+      email: email,
+      paymentMethod: paymentMethod,
+      rechargeAmount: amount,
+    };
+    console.log(formData);
+    await dispatch(rechargeClient(formData));
 
     if (
-      name &&
-      phone &&
       email &&
       paymentMethod &&
       rechargeAmount &&
-      name.trim() !== "" &&
-      phone.trim() !== "" &&
       email.trim() !== "" &&
       paymentMethod.trim() !== "" &&
       rechargeAmount.trim() !== ""
     ) {
-      navigate("/add-balance");
+      navigate("/clients");
     }
   };
 
@@ -115,10 +114,10 @@ const Client = () => {
               placeholder="email@gmail.com"
               name="email"
               id="email"
-              value={client?.email}
+              value={client.email}
               onChange={handleInputChange}
               className={
-                isSubmitted && client?.email === "" ? `${styles.highlight}` : ""
+                isSubmitted && client.email === "" ? `${styles.highlight}` : ""
               }
             />
 
@@ -128,21 +127,29 @@ const Client = () => {
               placeholder="10"
               name="rechargeAmount"
               id="rechargeAmount"
-              value={client?.rechargeAmount}
+              value={client.rechargeAmount}
               onChange={handleInputChange}
               className={
-                isSubmitted && client?.rechargeAmount === ""
+                isSubmitted && client.rechargeAmount === ""
                   ? `${styles.highlight}`
                   : ""
               }
             />
 
-            <label htmlFor="paymentMethod"> Metodo de Pagamento</label>
-            <select name="paymentMethod" id="paymentMethod" className={isSubmitted && client?.email === "" ? `${styles.highlight}` : ""}>
-              <option value="credit">Crédito</option>
-              <option value="debit">Débito</option>
-              <option value="money">Dinheiro</option>
-              <option value="pix">Pix</option>
+            <label htmlFor="paymentMethod">Método de Pagamento</label>
+            <select
+              name="paymentMethod"
+              id="paymentMethod"
+              className={
+                isSubmitted && client.name === "" ? `${styles.highlight}` : ""
+              }
+              value={client.paymentMethod}
+              onChange={handleInputChange}
+            >
+              <option value="Crédito">Crédito</option>
+              <option value="Débito">Débito</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Pix">Pix</option>
             </select>
             <button
               className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
