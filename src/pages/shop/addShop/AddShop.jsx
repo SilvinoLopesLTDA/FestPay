@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createShop,
+  getShops,
   selectIsLoading,
 } from "../../../redux/features/shop/shopSlice";
 import FormShop from "../../../components/forms/shop/formShop";
@@ -28,6 +29,7 @@ const AddShop = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [shop, setShop] = useState(initialState);
+  const [submittedShops, setSubmittedShops] = useState([])
 
   const { name, password, profit, cost } = shop;
 
@@ -48,6 +50,13 @@ const AddShop = () => {
     }
 
     await dispatch(createShop(formData));
+
+    if (shop.name && shop.password && shop.cost) {
+      const newShop = { ...shop };
+      setSubmittedShops([...submittedShops, newShop]);
+      setShop(initialState);
+      dispatch(getShops());
+    }
 
     if (
       name &&

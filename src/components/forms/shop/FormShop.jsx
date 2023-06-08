@@ -2,9 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "../../../pages/client/Client.module.scss";
+import { useDispatch } from "react-redux";
+import { getShops } from "../../../redux/features/shop/shopSlice";
+// import { getShops } from "../../../redux/features/shop/shopSlice";
 
 const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
@@ -14,6 +18,7 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
     if (shop.name && shop.password && shop.cost) {
       saveShop(shop);
       navigate("/shops");
+      dispatch(getShops)
     } else {
       navigate("/add-shop");
     }
@@ -25,6 +30,7 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
     };
     saveShop(shopData);
   };
+
   return (
     <div>
       <form
