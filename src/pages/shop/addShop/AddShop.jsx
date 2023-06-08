@@ -7,7 +7,7 @@ import {
   getShops,
   selectIsLoading,
 } from "../../../redux/features/shop/shopSlice";
-import FormShop from "../../../components/forms/shop/formShop";
+import FormShop from "../../../components/forms/shop/FormShop";
 import Loader from "../../../components/loader/Loader";
 import styles from "../../client/Client.module.scss";
 
