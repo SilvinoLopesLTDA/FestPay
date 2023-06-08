@@ -63,7 +63,7 @@ const PasswordCard = ({password}) => {
 };
 
 PasswordCard.propTypes = {
-    password: PropTypes.string.isRequired,
+    password: PropTypes.string,
   };
 
 export default PasswordCard;

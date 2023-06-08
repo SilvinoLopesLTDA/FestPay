@@ -3,17 +3,17 @@ import shopService from "./shopService";
 import { toast } from "react-toastify";
 
 const initialState = {
-  shops: null,
-  shop: [],
+  items: null,
+  item: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: "",
 };
 
-// Create New Shop
-export const createShop = createAsyncThunk(
-  "shops/create",
+// Create New Item
+export const createItem = createAsyncThunk(
+  "items/create",
   async (formData, thunkAPI) => {
     try {
       return await shopService.createShop(formData);
@@ -29,9 +29,9 @@ export const createShop = createAsyncThunk(
   }
 );
 
-// Get all Shops
-export const getShops = createAsyncThunk(
-  "shops/getAll",
+// Get all Items
+export const getItems = createAsyncThunk(
+  "items/getAll",
   async (_, thunkAPI) => {
     try {
       return await shopService.getShops();
@@ -48,9 +48,9 @@ export const getShops = createAsyncThunk(
   }
 );
 
-// Delete a Shop
-export const deleteShop = createAsyncThunk(
-  "shops/delete",
+// Delete a Item
+export const deleteItem = createAsyncThunk(
+  "items/delete",
   async (id, thunkAPI) => {
     try {
       return await shopService.deleteShop(id);
@@ -67,9 +67,9 @@ export const deleteShop = createAsyncThunk(
   }
 );
 
-// Get a Shop
-export const getShop = createAsyncThunk(
-  "shops/getShop",
+// Get a Item
+export const getItem = createAsyncThunk(
+  "items/getItem",
   async (id, thunkAPI) => {
     try {
       return await shopService.getShop(id);
@@ -86,9 +86,9 @@ export const getShop = createAsyncThunk(
   }
 );
 
-// Update Shop
-export const updateShop = createAsyncThunk(
-  "shops/updateShop",
+// Update Item
+export const updateItem = createAsyncThunk(
+  "shops/updateItem",
   async ({ id, formData }, thunkAPI) => {
     try {
       return await shopService.updateShop(id, formData);
@@ -105,87 +105,87 @@ export const updateShop = createAsyncThunk(
   }
 );
 
-const shopSlice = createSlice({
-  name: "shops",
+const itemSlice = createSlice({
+  name: "items",
   initialState,
-  reducers: {},
+//   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createShop.pending, (state) => {
+      .addCase(createItem.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createShop.fulfilled, (state, action) => {
+      .addCase(createItem.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.shop.push(action.payload);
-        toast.success("Ponto de venda Adicionado com Sucesso!");
+        state.item.push(action.payload);
+        toast.success("Item Adicionado com Sucesso!");
       })
-      .addCase(createShop.rejected, (state, action) => {
+      .addCase(createItem.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         toast.error(action.payload);
       })
 
-      .addCase(getShops.pending, (state) => {
+      .addCase(getItems.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getShops.fulfilled, (state, action) => {
+      .addCase(getItems.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.shop = action.payload;
+        state.item = action.payload;
       })
-      .addCase(getShops.rejected, (state, action) => {
+      .addCase(getItems.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         toast.error(action.payload);
       })
 
-      .addCase(deleteShop.pending, (state) => {
+      .addCase(deleteItem.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deleteShop.fulfilled, (state) => {
+      .addCase(deleteItem.fulfilled, (state) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        toast.success("Ponto de venda deletado com sucesso!");
+        toast.success("Item deletado com sucesso!");
       })
-      .addCase(deleteShop.rejected, (state, action) => {
+      .addCase(deleteItem.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         toast.error(action.payload);
       })
 
-      .addCase(getShop.pending, (state) => {
+      .addCase(getItem.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getShop.fulfilled, (state, action) => {
+      .addCase(getItem.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.shop = action.payload;
+        state.item = action.payload;
       })
-      .addCase(getShop.rejected, (state, action) => {
+      .addCase(getItem.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         toast.error(action.payload);
       })
 
-      .addCase(updateShop.pending, (state) => {
+      .addCase(updateItem.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateShop.fulfilled, (state) => {
+      .addCase(updateItem.fulfilled, (state) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        toast.success("Ponto de venda Atualizado com sucesso!");
+        toast.success("Item Atualizado com sucesso!");
       })
-      .addCase(updateShop.rejected, (state, action) => {
+      .addCase(updateItem.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -194,7 +194,9 @@ const shopSlice = createSlice({
   },
 });
 
-export const selectIsLoading = (state) => state.shop.isLoading;
-export const selectShop = (state) => state.shop.shop;
+// export const {  } = itemSlice.actions;
 
-export default shopSlice.reducer;
+export const selectIsLoading = (state) => state.item.isLoading;
+export const selectItem = (state) => state.item.item;
+
+export default itemSlice.reducer;
