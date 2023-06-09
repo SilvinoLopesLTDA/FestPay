@@ -2,40 +2,6 @@
 const asyncHandler = require("express-async-handler");
 const Client = require("../models/clientModel");
 const Shop = require("../models/shopModel");
-const nodemailer = require("nodemailer");
-const cloudinary = require("cloudinary").v2;
-
-// Configuração do Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
-
-const transporter = nodemailer.createTransport({
-  host: process.env.MAIL_HOST,
-  port: process.env.MAIL_PORT,
-  secure: false,
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
-  },
-});
-
-// Função para salvar a imagem em base64 no Cloudinary
-const saveBase64ImageToCloudinary = async (base64String, fileName) => {
-  try {
-    const result = await cloudinary.uploader.upload(base64String, {
-      folder: "FestPay",
-      public_id: fileName,
-      overwrite: true,
-    });
-    return result.secure_url; // Retorna a URL da imagem salva no Cloudinary
-  } catch (error) {
-    console.error("Erro ao salvar a imagem no Cloudinary:", error);
-    throw error;
-  }
-};
 
 const qrCodeReader = asyncHandler(async (req, res) => {
   try {
@@ -56,34 +22,6 @@ const qrCodeReader = asyncHandler(async (req, res) => {
       paymentMethod: db_client.paymentMethod,
       balance: db_client.balance,
     };
-
-    // Salve a imagem no Cloudinary
-    const fileName = `${db_client.name}-${db_client.email}`;
-    const cloudinaryImageUrl = await saveBase64ImageToCloudinary(
-      qrCodeData,
-      fileName
-    );
-
-    const mailOptions = {
-      from: "FestPay 🎉 <festpay@gmx.com>",
-      to: db_client.email,
-      subject: "Aqui está o seu QR Code!",
-      text: "Aqui está o seu QR Code pré-pago! Qualquer problema ou falta de saldo procure o Guichê mais perto; é um prazer te ter aqui!",
-      attachments: [
-        {
-          filename: "qr-code.jpg",
-          path: cloudinaryImageUrl,
-        },
-      ],
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Erro ao enviar o email:", error);
-        return res.status(500).json({ message: "Erro ao enviar o email" });
-      }
-      console.log("Email enviado:", info.response);
-    });
 
     // Retorne os dados formatados
     return res.json(formattedData);

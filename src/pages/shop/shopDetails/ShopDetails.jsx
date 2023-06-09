@@ -11,6 +11,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import { SpinnerImg } from "../../../components/loader/Loader";
 import PasswordCard from "../../../components/passwordCard/PasswordCard";
 import { getItems, updateItem } from "../../../redux/features/shop/itemSlice";
+import QrCodeReader from "../../../components/qrCodeReader/qrCodeReader";
 
 const ShopDetails = () => {
   const dispatch = useDispatch();
@@ -181,6 +182,10 @@ const ShopDetails = () => {
             </div>
           </div>
 
+          <div>
+            <QrCodeReader />
+          </div>
+
           <div className="px-5 py-2 w-full text-center">
             <h2 className="text-3xl font-semibold"> Itens da Barraca </h2>
           </div>
@@ -188,7 +193,7 @@ const ShopDetails = () => {
           <div className="m-5">
             {!isLoading && item.length === 0 ? (
               <p className="p-4 text-center">
-                 Nenhum item cadastrado. Por favor, adicione um item!
+                Nenhum item cadastrado. Por favor, adicione um item!
               </p>
             ) : (
               <table className="bg-slate-950/75 w-full">

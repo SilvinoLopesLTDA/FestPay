@@ -105,6 +105,25 @@ export const updateShop = createAsyncThunk(
   }
 );
 
+// Purchase QR Code
+export const purchaseQRCode = createAsyncThunk(
+  "qrCode/purchase",
+  async (formData, thunkAPI) => {
+    try {
+      return await shopService.purchaseQRCode(formData);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const shopSlice = createSlice({
   name: "shops",
   initialState,
@@ -186,6 +205,22 @@ const shopSlice = createSlice({
         toast.success("Ponto de venda Atualizado com sucesso!");
       })
       .addCase(updateShop.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+
+      .addCase(purchaseQRCode.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(purchaseQRCode.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Compra realizada com sucesso!");
+      })
+      .addCase(purchaseQRCode.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

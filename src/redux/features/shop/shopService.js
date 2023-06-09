@@ -3,6 +3,7 @@ import axios from "axios";
 export const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
 const API_URL = `${BACKEND_URL}/api/shops/`;
+const API_URL_QR = `${BACKEND_URL}/api/qrCode`;
 
 // Create New Shop
 const createShop = async (formData) => {
@@ -34,12 +35,23 @@ const updateShop = async (id, formData) => {
   return response.data;
 };
 
+const purchaseQRCode = async (formData) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.post(`${API_URL_QR}/purchase`, formData, config);
+  return response.data;
+};
+
 const shopService = {
   createShop,
   getShops,
   deleteShop,
   getShop,
   updateShop,
+  purchaseQRCode,
 };
 
 export default shopService;

@@ -41,6 +41,7 @@ clientSchema.pre("save", async function (next) {
     const qrCodeData = {
       name: this.name,
       phone: this.phone,
+      email: this.email,
       paymentMethod: this.paymentMethod,
       balance: this.balance,
     };
