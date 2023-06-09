@@ -32,9 +32,10 @@ const AddItem = () => {
 
   const saveItems = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
+    const formData = {
+      name: name,
+      price: price,
+    }
 
     await dispatch(updateItem(formData));
 

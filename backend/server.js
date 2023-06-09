@@ -11,6 +11,7 @@ const errorHandler = require("./middleware/errorMiddleware");
 const clientRoute = require("./routes/clientRoute");
 const shopRoute = require("./routes/shopRoute");
 const qrCodeRoute = require("./routes/qrCodeRoute");
+const itemRoute = require("./routes/itemRoute");
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.options("*", cors());
 app.use("/api/clients", clientRoute);
 app.use("/api/shops", shopRoute);
 app.use("/api/qrCode", qrCodeRoute);
+app.use("/api/items", itemRoute);
 
 // Routes
 app.get("/", (req, res) => {

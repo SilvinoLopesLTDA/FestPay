@@ -22,8 +22,10 @@ const ShopDetails = () => {
     (state) => state.shop
   );
 
-  const { item } = useSelector((state) => state.item);
-
+  const { item } = useSelector(
+    (state) => state.item
+  );
+  
   // const itemTest = [
   //   {
   //     name: "teste",
@@ -149,7 +151,7 @@ const ShopDetails = () => {
                   Lucros:{" "}
                   <span className="text-green-500 font-bold text-2xl">
                     {"R$"}
-                    {shop.profit}
+                    {shop.profit === null ? "0" : shop.profit }
                   </span>{" "}
                 </p>
                 <p className="text-lg font-medium ml-4">

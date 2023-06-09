@@ -13,7 +13,7 @@ const initialState = {
 
 // Create New Item
 export const createItem = createAsyncThunk(
-  "items/create",
+  "item/create",
   async (formData, thunkAPI) => {
     try {
       return await shopService.createShop(formData);
@@ -31,7 +31,7 @@ export const createItem = createAsyncThunk(
 
 // Get all Items
 export const getItems = createAsyncThunk(
-  "items/getAll",
+  "item/getAll",
   async (_, thunkAPI) => {
     try {
       return await shopService.getShops();
@@ -50,7 +50,7 @@ export const getItems = createAsyncThunk(
 
 // Delete a Item
 export const deleteItem = createAsyncThunk(
-  "items/delete",
+  "item/delete",
   async (id, thunkAPI) => {
     try {
       return await shopService.deleteShop(id);
@@ -69,7 +69,7 @@ export const deleteItem = createAsyncThunk(
 
 // Get a Item
 export const getItem = createAsyncThunk(
-  "items/getItem",
+  "item/getItem",
   async (id, thunkAPI) => {
     try {
       return await shopService.getShop(id);
@@ -88,7 +88,7 @@ export const getItem = createAsyncThunk(
 
 // Update Item
 export const updateItem = createAsyncThunk(
-  "shops/updateItem",
+  "item/updateItem",
   async ({ id, formData }, thunkAPI) => {
     try {
       return await shopService.updateShop(id, formData);
@@ -106,9 +106,9 @@ export const updateItem = createAsyncThunk(
 );
 
 const itemSlice = createSlice({
-  name: "items",
+  name: "item",
   initialState,
-//   reducers: {},
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(createItem.pending, (state) => {

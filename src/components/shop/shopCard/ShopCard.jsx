@@ -12,7 +12,7 @@ const ShopCard = ({ shop, isLoading }) => {
     >
       {isLoading && <SpinnerImg />}
       {!isLoading && shop.length === 0 ? (
-        <p className={styles.placeholder}>
+        <p className={`${styles.placeholder} px-10`}>
           -- Nenhum ponto de venda cadastrado. Por favor, adicione um Ponto de
           venda!
         </p>

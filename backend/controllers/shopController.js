@@ -71,7 +71,7 @@ const deleteShop = asyncHandler(async (req, res) => {
 
   if (!shop) {
     res.status(404);
-    throw new Error("Produto não encontrado.");
+    throw new Error("Ponto de venda não encontrado.");
   }
 
   await shop.remove();
@@ -92,6 +92,11 @@ const updateShop = asyncHandler(async (req, res) => {
   if( password > 4) {
     res.status(400);
     throw new Error("A senha não pode conter mais de 4 caracteres!");
+  }
+
+  if( password < 4) {
+    res.status(400);
+    throw new Error("A senha não pode conter menos de 4 caracteres!");
   }
 
   const updatedItems = items.map((item) => ({
