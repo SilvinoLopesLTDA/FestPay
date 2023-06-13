@@ -60,7 +60,6 @@ const getShop = async (id) => {
 
 // Update Shop
 const updateShop = async (id, formData) => {
-  console.log(formData);
     const config = {
     headers: {
       "Content-Type": "application/json",

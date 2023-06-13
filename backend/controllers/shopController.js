@@ -114,7 +114,7 @@ const deleteItem = asyncHandler(async (req, res) => {
 
 // Update Shop
 const updateShop = asyncHandler(async (req, res) => {
-  const { name, password, items, profit, cost } = req.body;
+  const { name, password, profit, cost } = req.body;
   const { id } = req.params;
   const shop = await Shop.findById(id);
 
@@ -128,15 +128,6 @@ const updateShop = asyncHandler(async (req, res) => {
   shop.password = password;
   shop.profit = profit;
   shop.cost = cost;
-
-  // Crie os items atualizados
-  const updatedItems = items.map((item) => ({
-    name: item.name,
-    price: parseFloat(item.price),
-  }));
-
-  // Defina os items atualizados no shop
-  shop.items = updatedItems;
 
   // Salve o shop atualizado no banco de dados
   const updatedShop = await shop.save();

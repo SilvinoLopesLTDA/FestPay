@@ -27,16 +27,17 @@ const ShopEdit = () => {
   };
 
   const saveEditShop = async () => {
-    event.preventDefault();
     const formData = {
-      id: id,
       name: name,
       password: password,
       profit: profit,
       cost: cost,
     };
-    console.log(formData);
-    await dispatch(updateShop(formData));
+    const updateData = {
+      id: id,
+      formData: formData,
+    };
+    await dispatch(updateShop(updateData));
     navigate(`/details-shop/${id}`);
 
   };
