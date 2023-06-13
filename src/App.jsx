@@ -14,6 +14,7 @@ import AddShop from "./pages/shop/addShop/AddShop";
 import ShopDetails from "./pages/shop/shopDetails/ShopDetails";
 import ShopEdit from "./pages/shop/shopEdit/ShopEdit";
 import AddItem from "./pages/shop/addItem/AddItem";
+import BuyItem from "./pages/shop/BuyItem/BuyItem";
 
 function App() {
   return (
@@ -76,6 +77,16 @@ function App() {
             <Sidebar>
               <Layout>
                 <AddItem />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/buyitem"
+          element={
+            <Sidebar>
+              <Layout>
+                <BuyItem />
               </Layout>
             </Sidebar>
           }

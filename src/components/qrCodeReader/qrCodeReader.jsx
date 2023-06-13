@@ -16,7 +16,7 @@ const initialState = {
 const QrCodeReader = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [, setQrscan] = useState("No result");
+  const [, setQrscan] = useState("Sem Resultados");
   const [isReadingEnabled, setIsReadingEnabled] = useState(true);
   const [shopInitial, setShop] = useState(initialState);
   const isLoading = useSelector(selectIsLoading);
@@ -80,36 +80,40 @@ const QrCodeReader = () => {
   };
 
   return (
-    <>
-      <div className="flex justify-center items-center">
+    <div className="w-full">
+      <div className="flex justify-center items-center flex-col">
         {isLoading && <Loader />}
-        <div>
-          <div style={{ height: 250, width: 250 }}>
+        <form onSubmit={handleSubmit} className="flex flex-col w-full">
+          <label htmlFor="name">Nome do Ponto de Venda:</label>
+          <input type="text" id="name" value={shop.name} className="cursor-not-allowed" disabled />
+          <label htmlFor="email">Email:</label>
+          <input type="text" id="email" value={email} className="cursor-not-allowed" disabled />
+          <label htmlFor="purchaseAmount">Valor da compra:</label>
+          <input
+            type="text"
+            id="purchaseAmount"
+            value={purchaseAmount}
+            onChange={handlePurchaseAmountChange}
+          />
+          <label>Aproxime o QRcode</label>
+          <div className="flex justify-center border-4 border-indigo-900">
             <QrReader
               onError={handleError}
               onScan={handleScan}
               onResult={handleResult}
               onLoad={handleEnableReading}
-              style={{ height: 200, width: 200 }}
+              className="w-5/6"
             />
           </div>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <p>Name: {shop.name}</p>
-          <p>Email: {email}</p>
-          <label>
-            Valor da compra:
-            <input
-              type="text"
-              value={purchaseAmount}
-              onChange={handlePurchaseAmountChange}
-            />
-          </label>
-          <br />
-          <button type="submit">Submit</button>
+          <button
+            type="submit"
+            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
+          >
+            Realizar compra
+          </button>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

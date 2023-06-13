@@ -11,7 +11,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import { SpinnerImg } from "../../../components/loader/Loader";
 import PasswordCard from "../../../components/passwordCard/PasswordCard";
 import { getItems, updateItem } from "../../../redux/features/shop/itemSlice";
-import QrCodeReader from "../../../components/qrCodeReader/qrCodeReader";
+import { BsQrCodeScan } from "react-icons/bs";
 
 const ShopDetails = () => {
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const ShopDetails = () => {
   );
 
   const item = shop.items;
-
+  
   const created = new Date(shop.createdAt);
   const updated = new Date(shop.updatedAt);
 
@@ -130,7 +130,7 @@ const ShopDetails = () => {
                   Lucros:{" "}
                   <span className="text-green-500 font-bold text-2xl">
                     {"R$"}
-                    {shop.profit === null ? "0" : shop.profit}
+                    {shop.profit === null || "" ? "0" : shop.profit}
                   </span>{" "}
                 </p>
                 <p className="text-lg font-medium ml-4">
@@ -141,6 +141,11 @@ const ShopDetails = () => {
                     {shop.cost}
                   </span>
                 </p>
+                <Link to="/buyitem">
+                  <button className="text-lg font-medium p-2 bg-violet-700 rounded">
+                    <BsQrCodeScan size={25} color="white" />
+                  </button>
+                </Link>
               </div>
             </div>
             <div className="flex flex-col float-right p-5 text-white">
@@ -162,11 +167,6 @@ const ShopDetails = () => {
               </Link>
             </div>
           </div>
-
-          <div>
-            <QrCodeReader />
-          </div>
-
           <div className="px-5 py-2 w-full text-center">
             <h2 className="text-3xl font-semibold"> Itens da Barraca </h2>
           </div>
