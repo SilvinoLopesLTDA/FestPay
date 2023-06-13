@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { SpinnerImg } from "../../../components/loader/Loader";
 import PasswordCard from "../../../components/passwordCard/PasswordCard";
-import { getItems, updateItem } from "../../../redux/features/shop/itemSlice";
+import { deleteItem } from "../../../redux/features/shop/itemSlice";
 import { BsQrCodeScan } from "react-icons/bs";
 
 const ShopDetails = () => {
@@ -23,7 +23,7 @@ const ShopDetails = () => {
   );
 
   const item = shop.items;
-  
+
   const created = new Date(shop.createdAt);
   const updated = new Date(shop.updatedAt);
 
@@ -78,12 +78,12 @@ const ShopDetails = () => {
     });
   };
 
-  const delItem = async (id) => {
-    await dispatch(updateItem(id));
-    await dispatch(getItems());
+  const delItem = async (itemId) => {
+    await dispatch(deleteItem(itemId));
+    await dispatch(getShop(id)); // Buscar o shop atualizado após a exclusão do item
   };
 
-  const confirmDeleteItem = (id) => {
+  const confirmDeleteItem = (itemId) => {
     Swal.fire({
       title: "Tem certeza?",
       text: "Deseja excluir permanentemente esse item?",
@@ -96,7 +96,7 @@ const ShopDetails = () => {
       cancelButtonText: "Não, Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        delItem(id);
+        delItem(itemId);
         navigate(`/details-shop/${id}`);
         Swal.fire({
           icon: "success",

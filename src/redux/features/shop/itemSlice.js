@@ -48,7 +48,7 @@ export const deleteItem = createAsyncThunk(
   "item/delete",
   async (id, thunkAPI) => {
     try {
-      return await shopService.deleteShop(id);
+      return await shopService.deleteItem(id);
     } catch (error) {
       const message =
         (error.response &&

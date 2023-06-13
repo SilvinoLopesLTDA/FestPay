@@ -90,6 +90,28 @@ const deleteShop = asyncHandler(async (req, res) => {
   res.status(200).json(shop);
 });
 
+// Delete Item
+const deleteItem = asyncHandler(async (req, res) => {
+  const itemId = req.params.id;
+  console.log(itemId);
+
+  const shop = await Shop.findOne({ "items._id": itemId });
+  console.log(shop);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Ponto de venda não encontrado.");
+  }
+
+  // Filtrar os itens do shop, excluindo o item com o ID especificado
+  shop.items = shop.items.filter((item) => item._id.toString() !== itemId);
+
+  // Salvar o shop atualizado no banco de dados
+  const updatedShop = await shop.save();
+
+  res.status(200).json(updatedShop);
+});
+
+
 // Update Shop
 const updateShop = asyncHandler(async (req, res) => {
   const { name, password, items, profit, cost } = req.body;
@@ -128,5 +150,6 @@ module.exports = {
   getShops,
   getShop,
   deleteShop,
+  deleteItem,
   updateShop,
 };

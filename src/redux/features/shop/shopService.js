@@ -45,6 +45,13 @@ const deleteShop = async (id) => {
   return response.data;
 };
 
+// Delete a Shop
+const deleteItem = async (id) => {
+  console.log(id);
+  const response = await axios.delete(`${API_URL}/delete-item/${id}`);
+  return response.data;
+};
+
 // Get a Shop
 const getShop = async (id) => {
   const response = await axios.get(`${API_URL}/${id}`);
@@ -72,6 +79,7 @@ const shopService = {
   createItem,
   getShops,
   deleteShop,
+  deleteItem,
   getShop,
   updateShop,
   purchaseQRCode,

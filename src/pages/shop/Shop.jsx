@@ -12,8 +12,6 @@ const Shop = () => {
     (state) => state.shop
   );
 
-  console.log(shop);
-
   useEffect(() => {
       dispatch(getShops());
   

@@ -7,6 +7,7 @@ const {
   getShops,
   getShop,
   deleteShop,
+  deleteItem,
   updateShop,
 } = require("../controllers/shopController");
 
@@ -15,6 +16,7 @@ router.post("/create-item/:id", createItem);
 router.get("/", getShops);
 router.get("/:id", getShop);
 router.delete("/:id", deleteShop);
+router.delete("/delete-item/:id", deleteItem);
 router.patch("/:id", updateShop);
 
 module.exports = router;
