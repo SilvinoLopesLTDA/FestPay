@@ -22,7 +22,7 @@ const Shop = () => {
 
   return (
     <div>
-      <PasswordCard password={"2104"} />
+      <PasswordCard password={"1234"} />
       <ShopContainer shop={shop} isLoading={isLoading} />
     </div>
   );

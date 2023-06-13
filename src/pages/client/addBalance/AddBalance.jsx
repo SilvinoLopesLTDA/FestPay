@@ -98,7 +98,7 @@ const Client = () => {
           </div>
           <p className="mb-3 text-lg">
             {" "}
-            - Adicione os dados do cliente abaixo{" "}
+            - Insira os dados do cliente abaixo{" "}
           </p>
           <form
             className="flex flex-col"

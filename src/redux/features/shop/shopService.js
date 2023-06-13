@@ -60,7 +60,13 @@ const getShop = async (id) => {
 
 // Update Shop
 const updateShop = async (id, formData) => {
-  const response = await axios.patch(`${API_URL}/${id}`, formData);
+  console.log(formData);
+    const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.patch(`${API_URL}/${id}`, formData, config);
   return response.data;
 };
 

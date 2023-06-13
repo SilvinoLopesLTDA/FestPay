@@ -130,7 +130,7 @@ const ShopDetails = () => {
                   Lucros:{" "}
                   <span className="text-green-500 font-bold text-2xl">
                     {"R$"}
-                    {shop.profit === null || "" ? "0" : shop.profit}
+                    {shop.profit === null || undefined || "" ? "0" : shop.profit}
                   </span>{" "}
                 </p>
                 <p className="text-lg font-medium ml-4">
@@ -138,7 +138,7 @@ const ShopDetails = () => {
                   Custos:{" "}
                   <span className="text-rose-700 font-bold text-2xl">
                     {"R$"}
-                    {shop.cost}
+                    {shop.cost === null || undefined || "" ? "0" : shop.cost}
                   </span>
                 </p>
                 <Link to="/buyitem">

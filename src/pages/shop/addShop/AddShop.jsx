@@ -25,7 +25,6 @@ const AddShop = () => {
   const [submittedShops, setSubmittedShops] = useState([]);
 
   const { name, password, profit, cost } = shop;
-  console.log(shop);
 
   const isLoading = useSelector(selectIsLoading);
 
@@ -72,7 +71,7 @@ const AddShop = () => {
       <div className={styles.content}>
         <div className="flex justify-between mb-3">
           <h2 className="text-2xl font-semibold">
-            Adcione uma{" "}
+            Adicione uma{" "}
             <span className="text-violet-700 font-bold">Barraca</span>
           </h2>
           <Link to="/shops">
@@ -82,7 +81,7 @@ const AddShop = () => {
             </button>
           </Link>
         </div>
-        <p className="mb-3 text-lg">- Adcione os dados da barraca abaixo</p>
+        <p className="mb-3 text-lg">- Adicione os dados da barraca abaixo</p>
         <FormShop
           shop={shop}
           saveShop={saveShop}
