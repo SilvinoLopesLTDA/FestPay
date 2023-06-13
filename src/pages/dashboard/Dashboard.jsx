@@ -138,9 +138,9 @@ const Dashboard = () => {
                       return (
                         <div
                           key={_id}
-                          className="bg-slate-950/50 drop-shadow-4xl w-10/12 p-5 my-3 rounded"
+                          className="bg-slate-950/50 drop-shadow-4xl w-11/12 p-4 my-3 rounded"
                         >
-                          <h2 className="bg-slate-900 p-2 text-lg font-semibold mb-5 text-center">
+                          <h2 className="bg-slate-900 p-3 text-lg font-semibold mb-5 text-center">
                             {name}
                           </h2>
                           <div className="flex justify-around">
