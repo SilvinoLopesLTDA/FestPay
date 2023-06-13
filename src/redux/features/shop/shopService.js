@@ -2,12 +2,34 @@ import axios from "axios";
 
 export const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
-const API_URL = `${BACKEND_URL}/api/shops/`;
+const API_URL = `${BACKEND_URL}/api/shops`;
 const API_URL_QR = `${BACKEND_URL}/api/qrCode`;
 
 // Create New Shop
 const createShop = async (formData) => {
-  const response = await axios.post(`${API_URL}createshop`, formData);
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  console.log(formData);
+  const response = await axios.post(`${API_URL}/create-shop`, formData, config);
+  return response.data;
+};
+
+// Create New Item
+const createItem = async (formData) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const id = formData.id;
+  const response = await axios.post(
+    `${API_URL}/create-item/${id}`,
+    formData,
+    config
+  );
   return response.data;
 };
 
@@ -19,19 +41,19 @@ const getShops = async () => {
 
 // Delete a Shop
 const deleteShop = async (id) => {
-  const response = await axios.delete(`${API_URL + id}`);
+  const response = await axios.delete(`${API_URL}/${id}`);
   return response.data;
 };
 
 // Get a Shop
 const getShop = async (id) => {
-  const response = await axios.get(`${API_URL + id}`);
+  const response = await axios.get(`${API_URL}/${id}`);
   return response.data;
 };
 
 // Update Shop
 const updateShop = async (id, formData) => {
-  const response = await axios.patch(`${API_URL}${id}`, formData);
+  const response = await axios.patch(`${API_URL}/${id}`, formData);
   return response.data;
 };
 
@@ -47,6 +69,7 @@ const purchaseQRCode = async (formData) => {
 
 const shopService = {
   createShop,
+  createItem,
   getShops,
   deleteShop,
   getShop,

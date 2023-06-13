@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Loader from "../../../components/loader/Loader";
 import {
+  createItem,
   selectIsLoading,
-  updateItem,
 } from "../../../redux/features/shop/itemSlice";
 
 const initialState = {
@@ -24,23 +24,25 @@ const AddItem = () => {
 
   const { id } = useParams();
   const { name, price } = item;
+  console.log(item);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setItem({ ...item, [name]: value });
   };
 
-  const saveItems = async (e) => {
-    e.preventDefault();
+  const saveItems = async () => {
+    event.preventDefault();
     const formData = {
+      id: id,
       name: name,
       price: price,
-    }
-
-    await dispatch(updateItem(formData));
+    };
+    console.log(formData);
+    await dispatch(createItem(formData));
 
     if (name && price && name.trim() !== "" && price.trim() !== "") {
-      navigate(`/add-item/${id}`);
+      navigate(`/details-shop/${id}`);
     }
   };
 
@@ -49,7 +51,7 @@ const AddItem = () => {
       ...item,
     };
 
-    saveItems(itemData);
+    saveItems(JSON.stringify(itemData));
   };
 
   const handleSubmit = (e) => {
@@ -80,10 +82,7 @@ const AddItem = () => {
               </button>
             </Link>
           </div>
-          <p className="mb-3 text-lg">
-            {" "}
-            - Adicione os dados do Item abaixo{" "}
-          </p>
+          <p className="mb-3 text-lg"> - Adicione os dados do Item abaixo </p>
           <form
             className="flex flex-col"
             onSubmit={(e) => {

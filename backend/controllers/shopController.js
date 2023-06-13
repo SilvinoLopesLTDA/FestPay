@@ -3,48 +3,60 @@ const Shop = require("../models/shopModel");
 
 // Create Shop
 const createShop = asyncHandler(async (req, res) => {
-  const { name, password,
-    //  items, 
-     profit, cost } = req.body;
+  const { name, password, profit, cost } = req.body;
 
   // Validation
-  if (!name || !password ||
-    //  !items ||
-      !cost) {
+  if (!name || !password || !cost) {
     res.status(400);
     throw new Error("Por favor, preencha os campos corretamente!");
   }
 
-  if( password.length > 4) {
+  if (password.length > 4) {
     res.status(400);
     throw new Error("A senha não pode conter mais de 4 caracteres!");
   }
 
-  if( password.length < 4) {
+  if (password.length < 4) {
     res.status(400);
     throw new Error("A senha não pode conter menos de 4 caracteres!");
   }
-
-  // if (!Array.isArray(items)) {
-  //   res.status(400);
-  //   throw new Error("O campo items deve ser um array.");
-  // }
-
-  // const createdItems = items.map((item) => ({
-  //   name: item.name,
-  //   price: parseFloat(item.price),
-  // }));
 
   // Create Shop
   const shop = await Shop.create({
     name,
     password,
-    // items: createdItems,
     profit,
     cost,
   });
 
-  res.status(201).json(shop);
+  res.status(201).json({ _id: shop._id, name, password, profit, cost });
+});
+
+const createItem = asyncHandler(async (req, res) => {
+  const { name, price } = req.body;
+  const id = req.params.id;
+
+  if (!name || !price) {
+    res.status(400);
+    throw new Error("Por favor, preencha os campos corretamente!");
+  }
+
+  const shop = await Shop.findById(id);
+
+  if (!shop) {
+    res.status(404);
+    throw new Error("Ponto de venda não encontrado.");
+  }
+
+  const newItem = {
+    name,
+    price: parseFloat(price),
+  };
+
+  shop.items.push(newItem);
+  const updatedShop = await shop.save();
+
+  res.status(201).json(updatedShop);
 });
 
 // Get all Shops
@@ -89,41 +101,30 @@ const updateShop = asyncHandler(async (req, res) => {
     throw new Error("Ponto de venda não encontrado.");
   }
 
-  if( password > 4) {
-    res.status(400);
-    throw new Error("A senha não pode conter mais de 4 caracteres!");
-  }
+  // Atualize os campos do shop
+  shop.name = name;
+  shop.password = password;
+  shop.profit = profit;
+  shop.cost = cost;
 
-  if( password < 4) {
-    res.status(400);
-    throw new Error("A senha não pode conter menos de 4 caracteres!");
-  }
-
+  // Crie os items atualizados
   const updatedItems = items.map((item) => ({
     name: item.name,
     price: parseFloat(item.price),
   }));
 
-  const updatedShop = await Shop.findByIdAndUpdate(
-    { _id: id },
-    {
-      name,
-      password,
-      items: updatedItems,
-      profit,
-      cost,
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  // Defina os items atualizados no shop
+  shop.items = updatedItems;
+
+  // Salve o shop atualizado no banco de dados
+  const updatedShop = await shop.save();
 
   res.status(200).json(updatedShop);
 });
 
 module.exports = {
   createShop,
+  createItem,
   getShops,
   getShop,
   deleteShop,

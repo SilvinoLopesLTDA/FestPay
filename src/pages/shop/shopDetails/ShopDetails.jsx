@@ -22,28 +22,7 @@ const ShopDetails = () => {
     (state) => state.shop
   );
 
-  const { item } = useSelector(
-    (state) => state.item
-  );
-  
-  // const itemTest = [
-  //   {
-  //     name: "teste",
-  //     price: 121,
-  //   },
-  //   {
-  //     name: "teste",
-  //     price: 121,
-  //   },
-  //   {
-  //     name: "teste",
-  //     price: 121,
-  //   },
-  //   {
-  //     name: "teste",
-  //     price: 121,
-  //   },
-  // ];
+  const item = shop.items;
 
   const created = new Date(shop.createdAt);
   const updated = new Date(shop.updatedAt);
@@ -151,7 +130,7 @@ const ShopDetails = () => {
                   Lucros:{" "}
                   <span className="text-green-500 font-bold text-2xl">
                     {"R$"}
-                    {shop.profit === null ? "0" : shop.profit }
+                    {shop.profit === null ? "0" : shop.profit}
                   </span>{" "}
                 </p>
                 <p className="text-lg font-medium ml-4">
@@ -193,7 +172,7 @@ const ShopDetails = () => {
           </div>
 
           <div className="m-5">
-            {!isLoading && item.length === 0 ? (
+            {!isLoading && item?.length === 0 ? (
               <p className="p-4 text-center">
                 Nenhum item cadastrado. Por favor, adicione um item!
               </p>
@@ -208,7 +187,7 @@ const ShopDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {item.map((item, index) => {
+                  {item?.map((item, index) => {
                     const { _id, name, price } = item;
                     return (
                       <tr

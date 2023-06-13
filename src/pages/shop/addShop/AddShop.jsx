@@ -14,13 +14,6 @@ import styles from "../../client/Client.module.scss";
 const initialState = {
   name: "",
   password: "",
-  // client: "",
-  // items: [
-  //   {
-  //     name: "",
-  //     price: "",
-  //   },
-  // ],
   profit: "",
   cost: "",
 };
@@ -29,9 +22,10 @@ const AddShop = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [shop, setShop] = useState(initialState);
-  const [submittedShops, setSubmittedShops] = useState([])
+  const [submittedShops, setSubmittedShops] = useState([]);
 
   const { name, password, profit, cost } = shop;
+  console.log(shop);
 
   const isLoading = useSelector(selectIsLoading);
 
@@ -40,15 +34,15 @@ const AddShop = () => {
     setShop({ ...shop, [name]: value });
   };
 
-  const saveShop = async (e) => {
-    e.preventDefault();
+  const saveShop = async () => {
+    event.preventDefault();
     const formData = {
       name: name,
       password: password,
       profit: profit,
       cost: cost,
-    }
-
+    };
+    console.log(formData);
     await dispatch(createShop(formData));
 
     if (shop.name && shop.password && shop.cost) {

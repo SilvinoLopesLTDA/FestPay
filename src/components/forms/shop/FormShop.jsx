@@ -8,7 +8,7 @@ import { getShops } from "../../../redux/features/shop/shopSlice";
 
 const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
@@ -18,7 +18,7 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
     if (shop.name && shop.password && shop.cost) {
       saveShop(shop);
       navigate("/shops");
-      dispatch(getShops)
+      dispatch(getShops());
     } else {
       navigate("/add-shop");
     }
@@ -28,19 +28,12 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
     const shopData = {
       ...shop,
     };
-    saveShop(shopData);
+    saveShop(JSON.stringify(shopData));
   };
 
   return (
     <div>
-      <form
-        className="flex flex-col"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit(e);
-          saveShop(e);
-        }}
-      >
+      <form className="flex flex-col" onSubmit={handleSubmit}>
         <label htmlFor="name">
           Nome <span className="text-red-600">{required}</span>
         </label>

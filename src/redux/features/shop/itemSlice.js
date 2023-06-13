@@ -16,7 +16,7 @@ export const createItem = createAsyncThunk(
   "item/create",
   async (formData, thunkAPI) => {
     try {
-      return await shopService.createShop(formData);
+      return await shopService.createItem(formData);
     } catch (error) {
       const message =
         (error.response &&
@@ -30,23 +30,18 @@ export const createItem = createAsyncThunk(
 );
 
 // Get all Items
-export const getItems = createAsyncThunk(
-  "item/getAll",
-  async (_, thunkAPI) => {
-    try {
-      return await shopService.getShops();
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      console.log(message);
-      return thunkAPI.rejectWithValue(message);
-    }
+export const getItems = createAsyncThunk("item/getAll", async (_, thunkAPI) => {
+  try {
+    return await shopService.getShops();
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    console.log(message);
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 // Delete a Item
 export const deleteItem = createAsyncThunk(
