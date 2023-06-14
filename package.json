@@ -8,7 +8,7 @@
     "back": "nodemon backend/server.js",
     "server": "node backend/server.js",
     "both": "concurrently \"npm run back \" \"npm run dev \"",
-    "install-all": "npm install --force && cd backend && npm install --force && cd ..",
+    "install-all": "npm install --legacy-peer-deps && cd backend && npm install --legacy-peer-deps && cd ..",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
