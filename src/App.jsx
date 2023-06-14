@@ -14,7 +14,7 @@ import AddShop from "./pages/shop/addShop/AddShop";
 import ShopDetails from "./pages/shop/shopDetails/ShopDetails";
 import ShopEdit from "./pages/shop/shopEdit/ShopEdit";
 import AddItem from "./pages/shop/addItem/AddItem";
-import BuyItem from "./pages/shop/BuyItem/BuyItem";
+import BuyItem from "./pages/shop/buyItem/BuyItem";
 
 function App() {
   return (
