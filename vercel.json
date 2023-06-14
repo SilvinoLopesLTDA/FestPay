@@ -6,6 +6,6 @@
   ],
   "cleanUrls": true,
   "framework": "vite",
-  "installCommand": "npm install --force",
+  "installCommand": "npm run install-all",
   "public": true
 }
