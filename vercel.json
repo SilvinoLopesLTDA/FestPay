@@ -1,6 +1,13 @@
 {
-  "builds": [{ "src": "package.json", "use": "@vercel/static-build" }],
-  "build": {
-    "command": "npm run build"
-  }
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "builds": [
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "*.js", "use": "@vercel/node" }
+  ],
+  "build": "npm run build",
+  "cleanUrls": true,
+  "devCommand": "npm run dev",
+  "framework": "vite",
+  "installCommand": "npm install --force",
+  "public": true
 }
