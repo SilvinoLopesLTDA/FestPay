@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { QrReader } from "react-qr-reader";
+import QrReader from "react-qr-scanner";
 import Loader from "../loader/Loader";
 import {
   purchaseQRCode,
