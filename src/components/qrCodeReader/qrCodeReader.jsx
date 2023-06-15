@@ -27,6 +27,7 @@ const QrCodeReader = () => {
   const handleScan = (data) => {
     if (isReadingEnabled && data) {
       setQrscan(data);
+      handleResult(data)
     }
   };
 
@@ -100,7 +101,6 @@ const QrCodeReader = () => {
             <QrReader
               onError={handleError}
               onScan={handleScan}
-              onResult={handleResult}
               onLoad={handleEnableReading}
               className="w-5/6"
             />
