@@ -96,10 +96,7 @@ const Client = () => {
               </button>
             </Link>
           </div>
-          <p className="mb-3 text-lg">
-            {" "}
-            - Insira os dados do cliente abaixo{" "}
-          </p>
+          <p className="mb-3 text-lg"> - Insira os dados do cliente abaixo </p>
           <form
             className="flex flex-col"
             onSubmit={(e) => {
@@ -149,11 +146,14 @@ const Client = () => {
               name="paymentMethod"
               id="paymentMethod"
               className={
-                isSubmitted && client.paymentMethod === "" ? `${styles.highlight}` : ""
+                isSubmitted && client.paymentMethod === ""
+                  ? `${styles.highlight}`
+                  : ""
               }
               value={client.paymentMethod}
               onChange={handleInputChange}
             >
+              <option value="">Selecione um método de pagamento</option>
               <option value="Crédito">Crédito</option>
               <option value="Débito">Débito</option>
               <option value="Dinheiro">Dinheiro</option>
