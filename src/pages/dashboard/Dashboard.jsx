@@ -16,6 +16,7 @@ import { Pie } from "react-chartjs-2";
 import { useEffect } from "react";
 import { getShops } from "../../redux/features/shop/shopSlice";
 import { Bar } from "react-chartjs-2";
+import { format } from "date-fns";
 
 Chart.register(
   CategoryScale,
@@ -33,7 +34,6 @@ const Dashboard = () => {
   const { shop, isLoading, isError, message } = useSelector(
     (state) => state.shop
   );
-  console.log(shop);
 
   const currentItems = Array.isArray(shop) ? shop : [];
 
@@ -51,6 +51,31 @@ const Dashboard = () => {
   const totalProfit = profits.reduce((acc, curr) => acc + curr, 0);
   const totalCost = costs.reduce((acc, curr) => acc + curr, 0);
 
+  const sortedShops = [...currentItems].sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return dateA - dateB;
+  });
+
+  const dataByDate = {};
+
+  sortedShops.forEach((shop) => {
+    const createdAt = format(new Date(shop.createdAt), "dd/MM/yyyy");
+    if (!dataByDate[createdAt]) {
+      dataByDate[createdAt] = {
+        profit: shop.profit || 0,
+        cost: shop.cost || 0,
+      };
+    } else {
+      dataByDate[createdAt].profit += shop.profit || 0;
+      dataByDate[createdAt].cost += shop.cost || 0;
+    }
+  });
+
+  const labels = Object.keys(dataByDate);
+  const profitsDated = labels.map((date) => dataByDate[date].profit);
+  const costsDated = labels.map((date) => dataByDate[date].cost);
+
   const PieData = {
     labels: ["Lucros", "Custos"],
     datasets: [
@@ -67,28 +92,45 @@ const Dashboard = () => {
     ],
   };
 
-  const options = {
+  const optionsBar = {
     responsive: true,
     plugins: {
       legend: {
         position: "top",
       },
+      title: {
+        display: true,
+        text: "Lucros e Custos Diários"
+      },
+    },
+  };
+
+  const optionsPie = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Valores totais das Barracas"
+      },
     },
   };
 
   const data = {
-    labels: ["Dia 1", "Dia 2", "Dia 3", "Dia 4", "Dia 5", "Dia 6", "Dia 7"],
+    labels: labels,
     datasets: [
       {
         label: "Lucros",
-        data: profits,
+        data: profitsDated,
         backgroundColor: "rgba(129, 140, 248, 0.2)",
         borderColor: "rgba(129, 140, 248, 1)",
         borderWidth: 1,
       },
       {
         label: "Custos",
-        data: costs,
+        data: costsDated,
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
@@ -108,10 +150,10 @@ const Dashboard = () => {
           </h3>
           <div className="flex justify-between">
             <div className=" flex w-3/5">
-              <Bar options={options} data={data} />
+              <Bar options={optionsBar} data={data} />
             </div>
             <div className="w-1/3">
-              <Pie data={PieData} />
+              <Pie data={PieData} options={optionsPie} />
             </div>
           </div>
           <div className="flex justify-center items-center h-full flex-col">
