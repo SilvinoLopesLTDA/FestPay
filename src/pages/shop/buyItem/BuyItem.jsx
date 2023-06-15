@@ -1,12 +1,13 @@
 import { useSelector } from "react-redux";
 import QrCodeReader from "../../../components/qrCodeReader/qrCodeReader";
 import Loader from "../../../components/loader/Loader";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "../../../pages/client/Client.module.scss";
 
 const BuyItem = () => {
-  const { id } = useParams();
-  const { isLoading } = useSelector((state) => state.shop);
+  const { shop, isLoading } = useSelector((state) => state.shop);
+
+  const { _id } = shop;
 
   return (
     <div className="flex justify-center items-center">
@@ -17,7 +18,7 @@ const BuyItem = () => {
             Bem-vindo ao{" "}
             <span className="text-violet-700 font-bold">Caixa</span>
           </h2>
-          <Link to={`/details-shop/${id}`}>
+          <Link to={`/details-shop/${_id}`}>
             <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium">
               Voltar
             </button>

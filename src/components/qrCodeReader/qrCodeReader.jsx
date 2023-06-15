@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import QrReader from "react-qr-scanner";
 import Loader from "../loader/Loader";
 import {
@@ -20,8 +20,9 @@ const QrCodeReader = () => {
   const [isReadingEnabled, setIsReadingEnabled] = useState(true);
   const [shopInitial, setShop] = useState(initialState);
   const isLoading = useSelector(selectIsLoading);
-  const { id } = useParams();
+
   const { shop } = useSelector((state) => state.shop);
+  const { _id } = shop;
   const { email, purchaseAmount } = shopInitial;
 
   const handleScan = (data) => {
@@ -75,7 +76,7 @@ const QrCodeReader = () => {
       email.trim() !== "" &&
       purchaseAmount.trim() !== ""
     ) {
-      navigate(`/details-shop/${id}`);
+      navigate(`/details-shop/${_id}`);
       setQrscan("No result");
     }
   };
@@ -102,7 +103,7 @@ const QrCodeReader = () => {
               onError={handleError}
               onScan={handleScan}
               onLoad={handleEnableReading}
-              className="w-5/6"
+              className="w-full m-4"
             />
           </div>
           <button

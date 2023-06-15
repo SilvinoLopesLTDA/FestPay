@@ -45,8 +45,9 @@ const Dashboard = () => {
     }
   }, [dispatch, isError, message]);
 
-  const profits = shop.map((item) => item.profit);
-  const costs = shop.map((item) => item.cost);
+  const profits = Array.isArray(shop) ? shop.map((item) => item.profit) : [];
+  const costs = Array.isArray(shop) ? shop.map((item) => item.cost) : [];
+
   const totalProfit = profits.reduce((acc, curr) => acc + curr, 0);
   const totalCost = costs.reduce((acc, curr) => acc + curr, 0);
 
