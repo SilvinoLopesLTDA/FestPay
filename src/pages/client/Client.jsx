@@ -66,18 +66,18 @@ const Client = () => {
       <div className="flex justify-center items-center">
         {isLoading && <Loader />}
         <div className={styles.content}>
-          <div className="flex justify-between mb-3">
+          <div className="flex justify-between mb-3 sm:flex-col">
             <h2 className="text-2xl font-semibold">
               Bem-vindo ao{" "}
               <span className="text-violet-700 font-bold">Guichê</span>
             </h2>
             <Link to="/add-balance">
-              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium">
+              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium sm:my-4 sm:w-full">
                 Fazer Recarga
               </button>
             </Link>
           </div>
-          <p className="mb-3 text-lg">
+          <p className="mb-3 text-lg sm:text-center">
             {" "}
             - Adicione os dados do cliente abaixo{" "}
           </p>

@@ -19,3 +19,21 @@
       }
     }
   }
+
+  @media screen and (max-width: 639px) {
+    .footer {
+      display: flex;
+      flex-direction: column;
+      .info {
+        width: 100%;
+        text-align: center;
+      }
+      .links {
+        text-align: center;
+      }
+      a {
+        font-size: 14px;
+        margin: 0 5px;
+      }
+    }
+  }

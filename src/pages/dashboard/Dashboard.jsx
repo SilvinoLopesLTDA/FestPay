@@ -148,11 +148,11 @@ const Dashboard = () => {
             Dashboard do
             <span className="text-violet-700 font-bold"> FestPay</span>
           </h3>
-          <div className="flex justify-between">
-            <div className=" flex w-3/5">
+          <div className="flex justify-between sm:flex-col">
+            <div className=" flex w-3/5 sm:w-full">
               <Bar options={optionsBar} data={data} />
             </div>
-            <div className="w-1/3">
+            <div className="w-1/3 sm:w-full">
               <Pie data={PieData} options={optionsPie} />
             </div>
           </div>
@@ -167,7 +167,7 @@ const Dashboard = () => {
               </div>
               <div className="shop-container">
                 <div
-                  className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full my-8`}
+                  className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full my-8 sm:gap-4`}
                 >
                   {isLoading && <SpinnerImg />}
                   {!isLoading && shop.length === 0 ? (
@@ -181,12 +181,12 @@ const Dashboard = () => {
                       return (
                         <div
                           key={_id}
-                          className="bg-slate-950/50 drop-shadow-4xl w-11/12 p-4 my-3 rounded"
+                          className="bg-slate-950/50 drop-shadow-4xl w-11/12 p-4 my-3 rounded sm:mx-5 sm:col-start-1 sm:col-span-4"
                         >
                           <h2 className="bg-slate-900 p-3 text-lg font-semibold mb-5 text-center">
                             {name}
                           </h2>
-                          <div className="flex justify-around">
+                          <div className="flex justify-around sm:ml-3">
                             <p className="text-lg">
                               {" "}
                               Lucros:{" "}
@@ -197,7 +197,7 @@ const Dashboard = () => {
                                   : profit}
                               </span>{" "}
                             </p>
-                            <p className="text-lg">
+                            <p className="text-lg sm:ml-7">
                               {" "}
                               Custos:{" "}
                               <span className=" font-bold text-rose-700">

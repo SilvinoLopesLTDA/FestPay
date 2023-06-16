@@ -12,6 +12,8 @@ import { SpinnerImg } from "../../../components/loader/Loader";
 import PasswordCard from "../../../components/passwordCard/PasswordCard";
 import { deleteItem } from "../../../redux/features/shop/itemSlice";
 import { BsQrCodeScan } from "react-icons/bs";
+import { FaEdit } from "react-icons/fa";
+import { MdAddShoppingCart } from "react-icons/md";
 
 const ShopDetails = () => {
   const dispatch = useDispatch();
@@ -116,59 +118,79 @@ const ShopDetails = () => {
   return (
     <>
       <PasswordCard password={shop.password} />
-      <div className="flex justify-center items-center h-full flex-col">
-        <div className="bg-slate-900 w-4/5 my-16">
+      <div className="flex justify-center items-center h-full flex-col ">
+        <div className="bg-slate-900 w-4/5 my-16 sm:flex sm:flex-col">
           {isLoading && <SpinnerImg />}
-          <div className="flex flex-between">
+          <div className="flex flex-between sm:flex-col">
             <div className="flex justify-center align-center flex-col float-left p-5 w-full">
               <h2 className="bg-slate-700 p-9 align-center text-3xl font-semibold mb-5 text-center rounded">
                 {shop.name}
               </h2>
-              <div className="flex justify-around bg-slate-950/50 p-6">
-                <p className="text-lg font-medium">
+              <div className="flex justify-around bg-slate-950/50 p-6 sm:w-full sm:flex-col sm:text-center">
+                <p className="text-lg font-medium sm:text-md sm:ml-0">
                   {" "}
                   Lucros:{" "}
-                  <span className="text-green-500 font-bold text-2xl">
+                  <span className="text-green-500 font-bold text-2xl sm:text-xl">
                     {"R$"}
-                    {shop.profit === null || undefined || "" ? "0" : shop.profit}
+                    {shop.profit === null || undefined || ""
+                      ? "0"
+                      : shop.profit}
                   </span>{" "}
                 </p>
-                <p className="text-lg font-medium ml-4">
+                <p className="text-lg font-medium ml-4 sm:text-md sm:ml-0 sm:my-3">
                   {" "}
                   Custos:{" "}
-                  <span className="text-rose-700 font-bold text-2xl">
+                  <span className="text-rose-700 font-bold text-2xl sm:text-xl">
                     {"R$"}
                     {shop.cost === null || undefined || "" ? "0" : shop.cost}
                   </span>
                 </p>
                 <Link to="/buyitem">
-                  <button className="text-lg font-medium p-2 bg-violet-700 rounded">
+                  <button className="text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2">
                     <BsQrCodeScan size={25} color="white" />
                   </button>
                 </Link>
               </div>
             </div>
-            <div className="flex flex-col float-right p-5 text-white">
+            <div className="flex flex-col float-right p-5 text-white sm:flex-row">
               <Link to={`/edit-shop/${id}`}>
-                <button className="flex px-24 py-3 bg-indigo-800 rounded-sm text-lg font-semibold">
-                  <h2> Editar </h2>
+                <button className="flex px-24 py-3 bg-indigo-800 rounded-sm text-lg font-semibold sm:p-4">
+                  <FaEdit
+                    size={22}
+                    color="white"
+                    title="Editar"
+                    className="ml-1 lg:hidden"
+                  />
+                  <h2 className="sm:hidden"> Editar </h2>
                 </button>
               </Link>
               <button
                 onClick={() => confirmDelete(id)}
-                className="flex px-20 py-3 bg-red-800 rounded-sm text-lg font-semibold mt-6"
+                className="flex px-20 py-3 bg-red-800 rounded-sm text-lg font-semibold mt-6 sm:p-4 sm:mt-0 sm:mx-8"
               >
-                <h2 className="px-2"> Deletar </h2>
+                <FaTrashAlt
+                  size={20}
+                  color="white"
+                  title="Editar"
+                  className="mx-1 lg:hidden"
+                />
+                <h2 className="px-2 sm:hidden"> Deletar </h2>
               </button>
               <Link to={`/add-item/${id}`}>
-                <button className="flex w-60 px-14 py-3 bg-violet-900 rounded-sm text-lg font-semibold mt-6">
-                  <h2>Adicionar Item</h2>
+                <button className="flex w-full px-14 py-3 bg-violet-900 rounded-sm text-lg font-semibold mt-6 sm:p-4 sm:mt-0">
+                  <MdAddShoppingCart
+                    size={20}
+                    color="white"
+                    title="Editar"
+                    className="ml-1 lg:hidden"
+                  />
+                  <h2 className="sm:hidden">Adicionar Item</h2>
                 </button>
               </Link>
             </div>
           </div>
           <div className="px-5 py-2 w-full text-center">
-            <h2 className="text-3xl font-semibold"> Itens da Barraca </h2>
+            <h2 className="text-3xl font-semibold sm:text-2xl"> Itens da Barraca </h2>
           </div>
 
           <div className="m-5">
@@ -222,7 +244,7 @@ const ShopDetails = () => {
               Criado em: {created.toLocaleString("pt-BR")}
             </code>
             <br />
-            <code className="font-medium">
+            <code className="font-medium sm:mt-4">
               Ultima Atualização: {updated.toLocaleString("pt-BR")}
             </code>
           </div>

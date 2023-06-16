@@ -8,7 +8,7 @@ const ShopCard = ({ shop, isLoading }) => {
 
   return (
     <div
-      className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full my-8`}
+      className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full my-8 sm:gap-4`}
     >
       {isLoading && <SpinnerImg />}
       {!isLoading && shop.length === 0 ? (
@@ -22,7 +22,7 @@ const ShopCard = ({ shop, isLoading }) => {
           return (
             <div
               key={_id}
-              className="bg-slate-950/50 drop-shadow-4xl w-10/12 p-5 my-5 rounded"
+              className="bg-slate-950/50 drop-shadow-4xl w-10/12 p-5 my-5 rounded sm:mx-5 sm:col-start-1 sm:col-span-4"
             >
               <h2 className="bg-slate-900 p-2 text-lg font-semibold mb-5 text-center">
                 {name}

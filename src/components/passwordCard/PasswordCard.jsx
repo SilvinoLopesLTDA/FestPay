@@ -35,7 +35,7 @@ const PasswordCard = ({password}) => {
               onChange={setOtp}
               numInputs={4}
               renderInput={(props) => <input {...props} />}
-              inputStyle={"mx-3 text-5xl text-violet-800 rounded"}
+              inputStyle={"mx-3 text-5xl text-violet-800 rounded sm:text-4xl"}
             />
             <div
               className={`${styles.btn_action} flex space-x-10 mt-8 text-md`}

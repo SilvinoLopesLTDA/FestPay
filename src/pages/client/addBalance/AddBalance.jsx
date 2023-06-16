@@ -91,12 +91,12 @@ const Client = () => {
               <span className="text-violet-700 font-bold">Recarga</span>
             </h2>
             <Link to="/clients">
-              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium">
+              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium sm:mt-2">
                 Voltar
               </button>
             </Link>
           </div>
-          <p className="mb-3 text-lg"> - Insira os dados do cliente abaixo </p>
+          <p className="mb-3 text-lg sm:mt-5"> - Insira os dados do cliente abaixo </p>
           <form
             className="flex flex-col"
             onSubmit={(e) => {
