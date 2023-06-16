@@ -152,7 +152,7 @@ const ShopDetails = () => {
                 </Link>
               </div>
             </div>
-            <div className="flex flex-col float-right p-5 text-white sm:flex-row">
+            <div className="flex flex-col float-right p-5 text-white sm:flex-row sm:justify-center">
               <Link to={`/edit-shop/${id}`}>
                 <button className="flex px-24 py-3 bg-indigo-800 rounded-sm text-lg font-semibold sm:p-4">
                   <FaEdit
@@ -166,7 +166,7 @@ const ShopDetails = () => {
               </Link>
               <button
                 onClick={() => confirmDelete(id)}
-                className="flex px-20 py-3 bg-red-800 rounded-sm text-lg font-semibold mt-6 sm:p-4 sm:mt-0 sm:mx-8"
+                className="flex px-20 py-3 bg-red-800 rounded-sm text-lg font-semibold mt-6 sm:p-4 sm:mt-0 sm:mx-4"
               >
                 <FaTrashAlt
                   size={20}
