@@ -26,6 +26,27 @@ const ShopEdit = () => {
     setShop({ ...shop, [name]: value });
   };
 
+  const handlePriceChange = (e) => {
+    const { name, value } = e.target;
+    const filteredValue = value.replace(/[^0-9.,]/g, "");
+    const dotFilter = filteredValue.replace(",", ".");
+    const decimalCount = dotFilter.split(".").length - 1;
+    let cleanedValue = dotFilter;
+    if (decimalCount > 1) {
+      const lastIndex = dotFilter.lastIndexOf(".");
+      cleanedValue =
+        dotFilter.substring(0, lastIndex) + dotFilter.substring(lastIndex + 1);
+    }
+    handleInputChange({ target: { name, value: cleanedValue } });
+  };
+
+  const handlePwdChange = (e) => {
+    const { name, value } = e.target;
+    let filteredValue = value.replace(/\D/g, '');
+    filteredValue = filteredValue.substring(0, 4);
+    handleInputChange({ target: { name, value: filteredValue } });
+  };
+
   const saveEditShop = async () => {
     const formData = {
       name: name,
@@ -105,11 +126,11 @@ const ShopEdit = () => {
             </label>
             <input
               type="password"
-              placeholder="4582"
+              placeholder="1234"
               name="password"
               id="password"
               value={shop?.password}
-              onChange={handleInputChange}
+              onChange={handlePwdChange}
               className={
                 isSubmitted && shop?.password === ""
                   ? `${styles.highlight}`
@@ -125,7 +146,7 @@ const ShopEdit = () => {
               name="cost"
               id="cost"
               value={shop?.cost}
-              onChange={handleInputChange}
+              onChange={handlePriceChange}
               className={
                 isSubmitted && shop?.cost === "" ? `${styles.highlight}` : ""
               }
@@ -137,7 +158,7 @@ const ShopEdit = () => {
               name="profit"
               id="profit"
               value={shop?.profit}
-              onChange={handleInputChange}
+              onChange={handlePriceChange}
               className={
                 isSubmitted && shop?.profit === "" ? `${styles.highlight}` : ""
               }

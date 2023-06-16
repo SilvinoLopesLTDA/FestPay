@@ -31,6 +31,20 @@ const AddItem = () => {
     setItem({ ...item, [name]: value });
   };
 
+  const handlePriceChange = (e) => {
+    const { name, value } = e.target;
+    const filteredValue = value.replace(/[^0-9.,]/g, "");
+    const dotFilter = filteredValue.replace(",", ".");
+    const decimalCount = dotFilter.split(".").length - 1;
+    let cleanedValue = dotFilter;
+    if (decimalCount > 1) {
+      const lastIndex = dotFilter.lastIndexOf(".");
+      cleanedValue =
+        dotFilter.substring(0, lastIndex) + dotFilter.substring(lastIndex + 1);
+    }
+    handleInputChange({ target: { name, value: cleanedValue } });
+  };
+
   const saveItems = async () => {
     event.preventDefault();
     const formData = {
@@ -117,7 +131,7 @@ const AddItem = () => {
               name="price"
               id="price"
               value={item?.price}
-              onChange={handleInputChange}
+              onChange={handlePriceChange}
               className={
                 isSubmitted && item?.price === "" ? `${styles.highlight}` : ""
               }
