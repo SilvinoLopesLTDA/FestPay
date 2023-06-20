@@ -16,7 +16,7 @@ const BuyItem = () => {
         <div className="flex justify-between mb-3">
           <h2 className="text-2xl font-semibold">
             Bem-vindo ao{" "}
-            <span className="text-violet-700 font-bold">Caixa</span>
+            <span className="text-violet-700 font-bold">Caixa de Pagamento</span>
           </h2>
           <Link to={`/details-shop/${_id}`}>
             <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium">
@@ -24,7 +24,7 @@ const BuyItem = () => {
             </button>
           </Link>
         </div>
-        <p className="mb-3 text-lg"> - Adicione os dados do cliente abaixo </p>
+        <p className="mb-3 text-lg"> - Confira os dados do pagamento e do cliente logo abaixo </p>
         <QrCodeReader />
       </div>
     </div>

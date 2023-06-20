@@ -28,7 +28,7 @@ const ShopDetails = () => {
 
   const created = new Date(shop.createdAt);
   const updated = new Date(shop.updatedAt);
-
+    console.log(shop);
   const shortenText = (text, n) => {
     if (text.length > n) {
       const shortenedText = text.substring(0, n).concat("...");

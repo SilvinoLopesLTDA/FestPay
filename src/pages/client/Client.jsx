@@ -33,6 +33,10 @@ const Client = () => {
     setClient({ ...client, [name]: value });
   };
 
+  const resetForm = () => {
+    setClient(initialState);
+  };
+
   const saveClient = async () => {
     event.preventDefault();
     const formData = {
@@ -56,6 +60,7 @@ const Client = () => {
       paymentMethod.trim() !== "" &&
       balance.trim() !== ""
     ) {
+      resetForm();
       navigate("/clients");
     }
   };
@@ -85,6 +90,7 @@ const Client = () => {
             client={client}
             handleInputChange={handleInputChange}
             saveClient={saveClient}
+            resetForm={resetForm}
             required={"*"}
           />
         </div>

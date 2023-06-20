@@ -60,19 +60,37 @@ const Dashboard = () => {
   const dataByDate = {};
 
   sortedShops.forEach((shop) => {
+    const updatedAt = format(new Date(shop.updatedAt), "dd/MM/yyyy");
     const createdAt = format(new Date(shop.createdAt), "dd/MM/yyyy");
+
     if (!dataByDate[createdAt]) {
       dataByDate[createdAt] = {
+        cost: shop.cost || 0,
+        profit: shop.profit || 0,
+      };
+    } else {
+      dataByDate[createdAt].cost += shop.cost || 0;
+    }
+
+    if (!dataByDate[updatedAt]) {
+      dataByDate[updatedAt] = {
         profit: shop.profit || 0,
         cost: shop.cost || 0,
       };
     } else {
-      dataByDate[createdAt].profit += shop.profit || 0;
-      dataByDate[createdAt].cost += shop.cost || 0;
+      dataByDate[updatedAt].profit += shop.profit || 0;
     }
   });
 
-  const labels = Object.keys(dataByDate);
+  const dates = Object.keys(dataByDate);
+  dates.sort((a, b) => {
+    const dateA = new Date(a.split("/").reverse().join("-"));
+    const dateB = new Date(b.split("/").reverse().join("-"));
+    return dateA - dateB;
+  });
+  const labels = dates;
+  console.log(labels);
+  console.log(dataByDate);
   const profitsDated = labels.map((date) => dataByDate[date].profit);
   const costsDated = labels.map((date) => dataByDate[date].cost);
 
@@ -100,7 +118,7 @@ const Dashboard = () => {
       },
       title: {
         display: true,
-        text: "Lucros e Custos Diários"
+        text: "Lucros e Custos Diários",
       },
     },
   };
@@ -113,7 +131,7 @@ const Dashboard = () => {
       },
       title: {
         display: true,
-        text: "Valores totais das Barracas"
+        text: "Valores totais das Barracas",
       },
     },
   };
@@ -176,7 +194,7 @@ const Dashboard = () => {
                       um Ponto de venda!
                     </p>
                   ) : (
-                    currentItems.map((shop) => {
+                    sortedShops.map((shop) => {
                       const { _id, name, profit, cost } = shop;
                       return (
                         <div

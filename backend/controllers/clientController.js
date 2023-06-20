@@ -41,7 +41,7 @@ const saveBase64ImageToCloudinary = async (base64String, fileName) => {
 
 // Register Client
 const registerClient = asyncHandler(async (req, res) => {
-  const { name, phone, email, paymentMethod, balance } = req.body;
+  const { name, phone, email, paymentMethod, balance, qrCode } = req.body;
 
   // Validation
   if (!name || !email || !paymentMethod || !balance) {
@@ -49,7 +49,7 @@ const registerClient = asyncHandler(async (req, res) => {
     throw new Error("Preencha os campos corretamente.");
   }
 
-  // Check if client already exist
+  // Check if client already exists
   const clientExists = await Client.findOne({ email });
 
   if (clientExists) {
@@ -64,10 +64,11 @@ const registerClient = asyncHandler(async (req, res) => {
     email,
     paymentMethod,
     balance,
+    qrCode,
   });
 
   if (client) {
-    const { _id, name, phone, paymentMethod, qrCode } = client;
+    const { _id, name, phone, paymentMethod } = client;
 
     // Salve a imagem no Cloudinary
     const fileName = `${name}-${email}`;
@@ -134,11 +135,11 @@ const registerClient = asyncHandler(async (req, res) => {
 
 // Get all Clients
 const getClients = asyncHandler(async (req, res) => {
-  const client = await Client.find();
-  res.status(200).json(client);
+  const clients = await Client.find();
+  res.status(200).json(clients);
 });
 
-// Get  a single Client
+// Get a single Client
 const getClient = asyncHandler(async (req, res) => {
   const client = await Client.findById(req.params.id);
   // If client doesn't exist
@@ -163,7 +164,7 @@ const deleteClient = asyncHandler(async (req, res) => {
 
 // Update Client
 const updateClient = asyncHandler(async (req, res) => {
-  const { name, phone, email, paymentMethod, balance } = req.body;
+  const { name, phone, email, paymentMethod, balance, qrCode } = req.body;
   const { id } = req.params;
   const client = await Client.findById(id);
 
@@ -182,6 +183,7 @@ const updateClient = asyncHandler(async (req, res) => {
       email,
       paymentMethod,
       balance,
+      qrCode,
     },
     {
       new: true,

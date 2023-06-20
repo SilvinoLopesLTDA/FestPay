@@ -66,6 +66,12 @@ const qrCodePurchase = asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-unused-vars
     const { qrCodeData, purchaseAmount, email, name } = req.body;
 
+    // Validation
+    if (!name || !email || !purchaseAmount) {
+      res.status(400);
+      throw new Error("Preencha os campos corretamente.");
+    }
+
     // Encontre o cliente correspondente no banco de dados
     const client = await Client.findOne({ email: email });
     if (!client) {

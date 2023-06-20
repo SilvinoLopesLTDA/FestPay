@@ -49,19 +49,7 @@ const AddShop = () => {
       setSubmittedShops([...submittedShops, newShop]);
       setShop(initialState);
       dispatch(getShops());
-    }
-
-    if (
-      name &&
-      password &&
-      profit &&
-      cost &&
-      name.trim() !== "" &&
-      password.trim() !== "" &&
-      profit.trim() !== "" &&
-      cost.trim() !== ""
-    ) {
-      navigate("/shops");
+      navigate("/shops")
     }
   };
 

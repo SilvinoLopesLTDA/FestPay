@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "../../../pages/client/Client.module.scss";
 
-const FormClient = ({ client, handleInputChange, saveClient, required }) => {
+const FormClient = ({ client, handleInputChange, saveClient, resetForm, required }) => {
   const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -19,6 +19,7 @@ const FormClient = ({ client, handleInputChange, saveClient, required }) => {
       client.balance
     ) {
       saveClient(client);
+      resetForm();
       navigate("/clients");
     } else {
       navigate("/clients");
@@ -141,6 +142,7 @@ FormClient.propTypes = {
   client: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   handleInputChange: PropTypes.func.isRequired,
   saveClient: PropTypes.func.isRequired,
+  resetForm: PropTypes.func.isRequired,
   required: PropTypes.string.isRequired,
 };
 

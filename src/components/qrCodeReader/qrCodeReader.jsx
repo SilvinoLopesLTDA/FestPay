@@ -37,7 +37,6 @@ const QrCodeReader = () => {
   };
 
   const handleResult = (result) => {
-    console.log(result);
     if (result && result.text) {
       const { email } = JSON.parse(result.text);
       setShop((prevState) => ({
@@ -78,6 +77,7 @@ const QrCodeReader = () => {
     ) {
       navigate(`/details-shop/${_id}`);
       setQrscan("No result");
+      window.location.reload();
     }
   };
 
