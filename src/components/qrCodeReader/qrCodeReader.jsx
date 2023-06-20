@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import QrReader from "react-qr-scanner";
 import Loader from "../loader/Loader";
 import {
+  getShop,
   purchaseQRCode,
   selectIsLoading,
 } from "../../redux/features/shop/shopSlice";
@@ -24,11 +25,12 @@ const QrCodeReader = () => {
   const { shop } = useSelector((state) => state.shop);
   const { _id } = shop;
   const { email, purchaseAmount } = shopInitial;
+  console.log(shop.name);
 
   const handleScan = (data) => {
     if (isReadingEnabled && data) {
       setQrscan(data);
-      handleResult(data)
+      handleResult(data);
     }
   };
 
@@ -57,6 +59,10 @@ const QrCodeReader = () => {
     }));
   };
 
+  useEffect(() => {
+    dispatch(getShop(_id));
+  }, [dispatch, _id]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const amount = parseFloat(purchaseAmount);
@@ -77,7 +83,6 @@ const QrCodeReader = () => {
     ) {
       navigate(`/details-shop/${_id}`);
       setQrscan("No result");
-      window.location.reload();
     }
   };
 
@@ -87,9 +92,21 @@ const QrCodeReader = () => {
         {isLoading && <Loader />}
         <form onSubmit={handleSubmit} className="flex flex-col w-full">
           <label htmlFor="name">Nome do Ponto de Venda:</label>
-          <input type="text" id="name" value={shop.name} className="cursor-not-allowed" disabled />
+          <input
+            type="text"
+            id="name"
+            value={shop.name}
+            className="cursor-not-allowed"
+            disabled
+          />
           <label htmlFor="email">Email:</label>
-          <input type="text" id="email" value={email} className="cursor-not-allowed" disabled />
+          <input
+            type="text"
+            id="email"
+            value={email}
+            className="cursor-not-allowed"
+            disabled
+          />
           <label htmlFor="purchaseAmount">Valor da compra:</label>
           <input
             type="text"
