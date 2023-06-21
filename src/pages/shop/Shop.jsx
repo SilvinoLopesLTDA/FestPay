@@ -22,7 +22,7 @@ const Shop = () => {
 
   return (
     <div>
-      <PasswordCard password={"1234"} />
+      <PasswordCard componentId="shop" password={"1234"} />
       <ShopContainer shop={shop} isLoading={isLoading} />
     </div>
   );

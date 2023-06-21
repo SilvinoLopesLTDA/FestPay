@@ -117,7 +117,7 @@ const ShopDetails = () => {
 
   return (
     <>
-      <PasswordCard password={shop.password} />
+      <PasswordCard componentId={shop.name} password={shop.password} />
       <div className="flex justify-center items-center h-full flex-col ">
         <div className="bg-slate-900 w-4/5 my-16 sm:flex sm:flex-col">
           {isLoading && <SpinnerImg />}

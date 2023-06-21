@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import OtpInput from "react-otp-input";
 import styles from "./PasswordCard.module.scss";
 import { MdOutlinePassword } from "react-icons/md";
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 
-const PasswordCard = ({password}) => {
+const PasswordCard = ({ password, componentId }) => {
   const [otp, setOtp] = useState("");
   const [showOTP, setShowOTP] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
 
   const handlePassword = () => {
     if (otp === password) {
       setShowOTP(false);
+      const currentTime = new Date().getTime();
+      localStorage.setItem(
+        `${componentId}_passwordValidUntil`,
+        currentTime + 12 * 60 * 60 * 1000
+      );
     } else {
       setOtp("");
     }
@@ -19,6 +25,23 @@ const PasswordCard = ({password}) => {
   const handleClear = () => {
     setOtp("");
   };
+
+  useEffect(() => {
+    const passwordValidUntil = localStorage.getItem(
+      `${componentId}_passwordValidUntil`
+    );
+    if (passwordValidUntil) {
+      const currentTime = new Date().getTime();
+      if (currentTime < parseInt(passwordValidUntil)) {
+        setIsPasswordValid(true);
+        setShowOTP(false);
+      } else {
+        setIsPasswordValid(false);
+        setShowOTP(true);
+        localStorage.removeItem(`${componentId}_passwordValidUntil`);
+      }
+    }
+  }, [componentId]);
 
   return (
     <>
@@ -58,12 +81,18 @@ const PasswordCard = ({password}) => {
           </div>
         </div>
       )}
+      {!showOTP && !isPasswordValid && (
+        <div>
+          <p>A senha expirou. Por favor, insira novamente.</p>
+        </div>
+      )}
     </>
   );
 };
 
 PasswordCard.propTypes = {
-    password: PropTypes.string,
-  };
+  password: PropTypes.string,
+  componentId: PropTypes.string.isRequired, // Identificador exclusivo para
+};
 
 export default PasswordCard;
