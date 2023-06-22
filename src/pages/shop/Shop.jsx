@@ -1,4 +1,3 @@
-import PasswordCard from "../../components/passwordCard/PasswordCard";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";

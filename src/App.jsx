@@ -15,22 +15,14 @@ import ShopDetails from "./pages/shop/shopDetails/ShopDetails";
 import ShopEdit from "./pages/shop/shopEdit/ShopEdit";
 import AddItem from "./pages/shop/addItem/AddItem";
 import BuyItem from "./pages/shop/buyItem/BuyItem";
+import Welcome from "./pages/welcome/welcome";
 
 function App() {
   return (
     <Router>
       <ToastContainer theme="dark" />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Sidebar>
-              <Layout>
-                <Dashboard />
-              </Layout>
-            </Sidebar>
-          }
-        />
+        <Route path="/" element={<Welcome />} />
         <Route
           path="/shops"
           element={
@@ -107,6 +99,16 @@ function App() {
             <Sidebar>
               <Layout>
                 <AddBalance />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <Sidebar>
+              <Layout>
+                <Dashboard />
               </Layout>
             </Sidebar>
           }

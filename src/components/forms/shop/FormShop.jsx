@@ -97,18 +97,6 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
             isSubmitted && shop?.cost === "" ? `${styles.highlight}` : ""
           }
         />
-        <label htmlFor="profit">Lucro</label>
-        <input
-          type="text"
-          placeholder="40"
-          name="profit"
-          id="profit"
-          value={shop?.profit}
-          onChange={handlePriceChange}
-          className={
-            isSubmitted && shop?.profit === "" ? `${styles.highlight}` : ""
-          }
-        />
         <button
           type="submit"
           className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"

@@ -1,9 +1,5 @@
 import Swal from "sweetalert2";
-import {
-  deleteShop,
-  getShop,
-  getShops,
-} from "../../../redux/features/shop/shopSlice";
+import { getShop } from "../../../redux/features/shop/shopSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -44,41 +40,6 @@ const ShopDetails = () => {
       console.log(message);
     }
   }, [dispatch, id, isError, message]);
-
-  const delShop = async (id) => {
-    await dispatch(deleteShop(id));
-    await dispatch(getShops());
-  };
-
-  const confirmDelete = (id) => {
-    Swal.fire({
-      title: "Tem certeza?",
-      text: "Deseja excluir permanentemente esse item?",
-      icon: "warning",
-      width: "50em",
-      showCancelButton: true,
-      confirmButtonColor: "#EF233C",
-      cancelButtonColor: "#2B2D42",
-      confirmButtonText: "Sim, Excluir",
-      cancelButtonText: "Não, Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        delShop(id);
-        navigate("/shops");
-        Swal.fire({
-          icon: "success",
-          title: "Item Excluido",
-          text: "Esse item foi excluida com sucesso!",
-        });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({
-          icon: "info",
-          title: "Ação Cancelada",
-          text: "Não se preocupe, seu item está securo :)",
-        });
-      }
-    });
-  };
 
   const delItem = async (itemId) => {
     await dispatch(deleteItem(itemId));
@@ -123,34 +84,9 @@ const ShopDetails = () => {
           {isLoading && <SpinnerImg />}
           <div className="flex flex-between sm:flex-col">
             <div className="flex justify-center align-center flex-col float-left p-5 w-full">
-              <h2 className="bg-slate-700 p-9 align-center text-3xl font-semibold mb-5 text-center rounded">
+              <h2 className="bg-slate-700 p-11 align-center text-3xl font-semibold mb-5 text-center rounded">
                 {shop.name}
               </h2>
-              <div className="flex justify-around bg-slate-950/50 p-6 sm:w-full sm:flex-col sm:text-center">
-                <p className="text-lg font-medium sm:text-md sm:ml-0">
-                  {" "}
-                  Lucros:{" "}
-                  <span className="text-green-500 font-bold text-2xl sm:text-xl">
-                    {"R$"}
-                    {shop.profit === null || undefined || ""
-                      ? "0"
-                      : shop.profit}
-                  </span>{" "}
-                </p>
-                <p className="text-lg font-medium ml-4 sm:text-md sm:ml-0 sm:my-3">
-                  {" "}
-                  Custos:{" "}
-                  <span className="text-rose-700 font-bold text-2xl sm:text-xl">
-                    {"R$"}
-                    {shop.cost === null || undefined || "" ? "0" : shop.cost}
-                  </span>
-                </p>
-                <Link to="/buyitem">
-                  <button className="text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2">
-                    <BsQrCodeScan size={25} color="white" />
-                  </button>
-                </Link>
-              </div>
             </div>
             <div className="flex flex-col float-right p-5 text-white sm:flex-row sm:justify-center">
               <Link to={`/edit-shop/${id}`}>
@@ -164,20 +100,8 @@ const ShopDetails = () => {
                   <h2 className="sm:hidden"> Editar </h2>
                 </button>
               </Link>
-              <button
-                onClick={() => confirmDelete(id)}
-                className="flex px-20 py-3 bg-red-800 rounded-sm text-lg font-semibold mt-6 sm:p-4 sm:mt-0 sm:mx-4"
-              >
-                <FaTrashAlt
-                  size={20}
-                  color="white"
-                  title="Editar"
-                  className="mx-1 lg:hidden"
-                />
-                <h2 className="px-2 sm:hidden"> Deletar </h2>
-              </button>
               <Link to={`/add-item/${id}`}>
-                <button className="flex w-full px-14 py-3 bg-violet-900 rounded-sm text-lg font-semibold mt-6 sm:p-4 sm:mt-0">
+                <button className="flex w-full px-14 py-3 bg-violet-900 rounded-sm text-lg font-semibold mt-5 sm:p-4 sm:mt-0">
                   <MdAddShoppingCart
                     size={20}
                     color="white"
@@ -190,7 +114,10 @@ const ShopDetails = () => {
             </div>
           </div>
           <div className="px-5 py-2 w-full text-center">
-            <h2 className="text-3xl font-semibold sm:text-2xl"> Itens da Barraca </h2>
+            <h2 className="text-3xl font-semibold sm:text-2xl">
+              {" "}
+              Itens da Barraca{" "}
+            </h2>
           </div>
 
           <div className="m-5">
@@ -238,15 +165,20 @@ const ShopDetails = () => {
               </table>
             )}
           </div>
-
-          <div className="flex flex-col p-5 text-slate-500 border-t border-slate-800">
-            <code className="font-medium">
-              Criado em: {created.toLocaleString("pt-BR")}
-            </code>
-            <br />
-            <code className="font-medium sm:mt-4">
-              Ultima Atualização: {updated.toLocaleString("pt-BR")}
-            </code>
+          <div className="flex justify-between p-5 border-t border-slate-800">
+            <div className="flex flex-col text-slate-500 text-sm font-medium">
+              <code>Criado em: {created.toLocaleString("pt-BR")}</code>
+              <br />
+              <code>Ultima Atualização: {updated.toLocaleString("pt-BR")}</code>
+            </div>
+            <div className="flex justify-around bg-slate-950/50 p-6 sm:w-full sm:flex-col sm:text-center">
+              <Link to="/buyitem">
+                <button className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2">
+                  <BsQrCodeScan size={25} color="white" />
+                  <p> Escanear</p>
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
