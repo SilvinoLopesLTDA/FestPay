@@ -23,6 +23,7 @@ const createShop = asyncHandler(async (req, res) => {
 
   // Create Shop
   const shop = await Shop.create({
+    user: req.user.id,
     name,
     password,
     profit,
@@ -61,7 +62,7 @@ const createItem = asyncHandler(async (req, res) => {
 
 // Get all Shops
 const getShops = asyncHandler(async (req, res) => {
-  const shops = await Shop.find().sort("-createdAt");
+  const shops = await Shop.find({ user: req.user.id }).sort("-createdAt");
   res.status(200).json(shops);
 });
 
@@ -72,6 +73,11 @@ const getShop = asyncHandler(async (req, res) => {
   if (!shop) {
     res.status(404);
     throw new Error("Ponto de venda não encontrado.");
+  }
+
+  if (shop.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("Usuário não Autorizado.");
   }
 
   res.status(200).json(shop);
@@ -86,6 +92,11 @@ const deleteShop = asyncHandler(async (req, res) => {
     throw new Error("Ponto de venda não encontrado.");
   }
 
+  if (shop.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error({ message: "Ponto de venda Deletado com Sucesso." });
+  }
+
   await shop.remove();
   res.status(200).json(shop);
 });
@@ -93,13 +104,17 @@ const deleteShop = asyncHandler(async (req, res) => {
 // Delete Item
 const deleteItem = asyncHandler(async (req, res) => {
   const itemId = req.params.id;
-  console.log(itemId);
 
   const shop = await Shop.findOne({ "items._id": itemId });
-  console.log(shop);
+
   if (!shop) {
     res.status(404);
     throw new Error("Ponto de venda não encontrado.");
+  }
+
+  if (shop.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error({ message: "Ponto de venda Deletado com Sucesso." });
   }
 
   // Filtrar os itens do shop, excluindo o item com o ID especificado
@@ -110,7 +125,6 @@ const deleteItem = asyncHandler(async (req, res) => {
 
   res.status(200).json(updatedShop);
 });
-
 
 // Update Shop
 const updateShop = asyncHandler(async (req, res) => {

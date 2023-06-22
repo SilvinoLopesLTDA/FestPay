@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const protect = require("../middleWare/authMiddleware");
 const {
   registerClient,
   getClients,
@@ -9,10 +9,10 @@ const {
   updateClient,
 } = require("../controllers/clientController");
 
-router.post("/register", registerClient);
-router.get("/", getClients);
-router.get("/:id", getClient);
-router.delete("/:id", deleteClient);
-router.patch("/:id", updateClient);
+router.post("/register", protect, registerClient);
+router.get("/", protect, getClients);
+router.get("/:id", protect, getClient);
+router.delete("/:id", protect, deleteClient);
+router.patch("/:id", protect, updateClient);
 
 module.exports = router;

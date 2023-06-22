@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const errorHandler = require("./middleware/errorMiddleware");
 // const path = require("path");
 
+const userRoute = require("./routes/userRoute");
 const clientRoute = require("./routes/clientRoute");
 const shopRoute = require("./routes/shopRoute");
 const qrCodeRoute = require("./routes/qrCodeRoute");
@@ -30,6 +31,7 @@ app.options("*", cors());
 // app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes Middleware
+app.use("/api/user", userRoute);
 app.use("/api/clients", clientRoute);
 app.use("/api/shops", shopRoute);
 app.use("/api/qrCode", qrCodeRoute);

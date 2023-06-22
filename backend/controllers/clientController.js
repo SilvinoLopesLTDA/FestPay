@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Client = require("../models/clientModel");
 const nodemailer = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
+const QRCode = require("qrcode");
 
 // Configuração do Cloudinary
 cloudinary.config({
@@ -39,9 +40,20 @@ const saveBase64ImageToCloudinary = async (base64String, fileName) => {
   }
 };
 
+// Função para gerar o QR Code
+const generateQRCode = async (data) => {
+  try {
+    const qrCode = await QRCode.toDataURL(data);
+    return qrCode;
+  } catch (error) {
+    console.error("Erro ao gerar o QR Code:", error);
+    throw error;
+  }
+};
+
 // Register Client
 const registerClient = asyncHandler(async (req, res) => {
-  const { name, phone, email, paymentMethod, balance, qrCode } = req.body;
+  const { name, phone, email, paymentMethod, balance } = req.body;
 
   // Validation
   if (!name || !email || !paymentMethod || !balance) {
@@ -57,28 +69,39 @@ const registerClient = asyncHandler(async (req, res) => {
     throw new Error("O cliente já está cadastrado!");
   }
 
-  // Create new client
-  const client = await Client.create({
+  // Generate QR Code
+  const qrCodeData = {
     name,
     phone,
     email,
     paymentMethod,
     balance,
+  };
+  const qrCode = await generateQRCode(JSON.stringify(qrCodeData));
+
+  // Salve a imagem no Cloudinary
+  const fileName = `${name}-${email}`;
+  const cloudinaryImageUrl = await saveBase64ImageToCloudinary(
     qrCode,
+    fileName
+  );
+
+  // Create new client
+  const client = await Client.create({
+    user: req.user.id,
+    name,
+    phone,
+    email,
+    paymentMethod,
+    balance,
+    qrCode: cloudinaryImageUrl,
   });
 
   if (client) {
     const { _id, name, phone, paymentMethod } = client;
 
-    // Salve a imagem no Cloudinary
-    const fileName = `${name}-${email}`;
-    const cloudinaryImageUrl = await saveBase64ImageToCloudinary(
-      qrCode,
-      fileName
-    );
-
     const mailOptions = {
-      from: "FestPay 🎉 <festpay@gmx.com>",
+      from: "FestPay 🎉 <festpay49@gmail.com>",
       to: email,
       subject: "Seja bem-vindo(a) à festa!",
       text: "Ficamos muito felizes de ter você por aqui! Este é o seu QR Code pré-pago, onde você irá utilizar como uma ficha, mas, digital! Qualquer problema ou falta de saldo procure o Guichê mais perto; é um prazer te ter aqui!",
@@ -135,7 +158,7 @@ const registerClient = asyncHandler(async (req, res) => {
 
 // Get all Clients
 const getClients = asyncHandler(async (req, res) => {
-  const clients = await Client.find();
+  const clients = await Client.find({ user: req.user.id });
   res.status(200).json(clients);
 });
 
@@ -147,6 +170,11 @@ const getClient = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Client não encontrado.");
   }
+  // Match product with User
+  if (client.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("Usuário não autorizado!");
+  }
   res.status(200).json(client);
 });
 
@@ -156,7 +184,12 @@ const deleteClient = asyncHandler(async (req, res) => {
   // If client doesn't exist
   if (!client) {
     res.status(404);
-    throw new Error("Client não encontrado.");
+    throw new Error("Cliente não encontrado.");
+  }
+  // Match product with User
+  if (client.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error({ message: "Cliente Deletado com Sucesso." });
   }
   await client.remove();
   res.status(200).json(client);
@@ -172,6 +205,12 @@ const updateClient = asyncHandler(async (req, res) => {
   if (!client) {
     res.status(404);
     throw new Error("Cliente não encontrado.");
+  }
+
+  // Match product to the User
+  if (client.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error({ message: "Cliente Deletado com Sucesso." });
   }
 
   // Update Client

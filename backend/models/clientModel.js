@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
-const QRCode = require("qrcode");
 
 mongoose.set("strictQuery", false);
 
 const clientSchema = mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     name: {
       type: String,
       required: true,
@@ -35,27 +39,6 @@ const clientSchema = mongoose.Schema(
     timestamps: true,
   }
 );
-
-clientSchema.pre("save", async function (next) {
-  try {
-    const qrCodeData = {
-      name: this.name,
-      phone: this.phone,
-      email: this.email,
-      paymentMethod: this.paymentMethod,
-      balance: this.balance,
-    };
-    this.qrCode = await generateQRCode(JSON.stringify(qrCodeData));
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
-async function generateQRCode(data) {
-  const qrCode = await QRCode.toDataURL(data);
-  return qrCode;
-}
 
 const Client = mongoose.model("Client", clientSchema);
 module.exports = Client;

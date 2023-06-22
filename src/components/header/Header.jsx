@@ -1,9 +1,16 @@
+import { useDispatch, useSelector } from "react-redux";
+import { LogoutUser } from "../../services/authService";
+import { SET_LOGIN, selectName } from "../../redux/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const name = useSelector(selectName);
 
-  const Logout = () => {
+  const Logout = async () => {
+    await LogoutUser();
+    await dispatch(SET_LOGIN(false));
     navigate("/");
   };
 
@@ -12,7 +19,7 @@ const Header = () => {
       <div className="flex justify-between">
         <h3 className="my-3 text-2xl">
           <span className="font-semibold">Bem vindo(a) de volta, </span>
-          <span className="text-violet-500 font-bold"> User_Placeholder </span>
+          <span className="text-violet-500 font-bold"> {name} </span>
           <span className="font-semibold">!</span>
         </h3>
         <button

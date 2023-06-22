@@ -1,4 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import axios from "axios";
+import { getLoginStatus } from "./services/authService";
+import { SET_LOGIN } from "./redux/features/auth/authSlice";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import Forgot from "./pages/auth/Forgot";
+import Reset from "./pages/auth/Reset";
 import Sidebar from "./components/sidebar/Sidebar";
 import Layout from "./components/layout/Layout";
 import { ToastContainer } from "react-toastify";
@@ -15,13 +24,30 @@ import ShopDetails from "./pages/shop/shopDetails/ShopDetails";
 import ShopEdit from "./pages/shop/shopEdit/ShopEdit";
 import AddItem from "./pages/shop/addItem/AddItem";
 import BuyItem from "./pages/shop/buyItem/BuyItem";
-import Welcome from "./pages/welcome/welcome";
+import Welcome from "./pages/welcome/Welcome";
+
+axios.defaults.withCredentials = true;
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function loginStatus() {
+      const status = await getLoginStatus();
+      dispatch(SET_LOGIN(status));
+    }
+    loginStatus();
+  }, [dispatch]);
+
   return (
     <Router>
       <ToastContainer theme="dark" />
       <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot" element={<Forgot />} />
+        <Route path="/resetpassword/:resetToken" element={<Reset />} />
         <Route path="/" element={<Welcome />} />
         <Route
           path="/shops"

@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
+const protect = require("../middleWare/authMiddleware");
 const {
   qrCodeReader,
   qrCodePurchase,
   qrCodeRecharge,
 } = require("../controllers/qrCodeController");
 
-router.post("/read", qrCodeReader);
-router.post("/purchase", qrCodePurchase);
-router.post("/recharge", qrCodeRecharge);
+router.post("/read", protect, qrCodeReader);
+router.post("/purchase", protect, qrCodePurchase);
+router.post("/recharge", protect, qrCodeRecharge);
 
 module.exports = router;
