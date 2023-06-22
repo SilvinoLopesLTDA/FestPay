@@ -172,10 +172,11 @@ const ShopDetails = () => {
               <code>Ultima Atualização: {updated.toLocaleString("pt-BR")}</code>
             </div>
             <div className="flex justify-around bg-slate-950/50 p-6 sm:w-full sm:flex-col sm:text-center">
+              <p> Valor Total: </p>
+              <p> Quant. Itens: </p>
               <Link to="/buyitem">
                 <button className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2">
                   <BsQrCodeScan size={25} color="white" />
-                  <p> Escanear</p>
                 </button>
               </Link>
             </div>

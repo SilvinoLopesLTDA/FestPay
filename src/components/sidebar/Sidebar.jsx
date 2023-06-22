@@ -5,7 +5,8 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import menu from "../../data/sidebar";
 import SidebarItem from "./SidebarItem";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "/assets/Logo-2.png";
 import { useEffect } from "react";
 
 const Sidebar = ({ children }) => {
@@ -35,11 +36,9 @@ const Sidebar = ({ children }) => {
             className={`${styles.logo}`}
             style={{ display: isOpen ? "block" : "none" }}
           >
-            <GiGamepadCross
-              size={35}
-              style={{ cursor: "pointer" }}
-              onClick={goHome}
-            />
+            <Link to="/">
+              <img src={Logo} alt="FestPay Logo" />
+            </Link>
           </div>
           <div
             className={`${styles.bars} ${styles.isClosed}`}
