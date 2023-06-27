@@ -12,6 +12,7 @@ import {
 const initialState = {
   name: "",
   price: "",
+  quantity: "",
 };
 
 const AddItem = () => {
@@ -23,8 +24,7 @@ const AddItem = () => {
   const isLoading = useSelector(selectIsLoading);
 
   const { id } = useParams();
-  const { name, price } = item;
-  console.log(item);
+  const { name, price, quantity } = item;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,6 +51,7 @@ const AddItem = () => {
       id: id,
       name: name,
       price: price,
+      quantity: quantity
     };
     console.log(formData);
     await dispatch(createItem(formData));
@@ -134,6 +135,22 @@ const AddItem = () => {
               onChange={handlePriceChange}
               className={
                 isSubmitted && item?.price === "" ? `${styles.highlight}` : ""
+              }
+            />
+
+            <label htmlFor="quantity">
+              {" "}
+              Quantidade
+            </label>
+            <input
+              type="text"
+              placeholder="10"
+              name="quantity"
+              id="quantity"
+              value={item?.quantity}
+              onChange={handleInputChange}
+              className={
+                isSubmitted && item?.quantity === "" ? `${styles.highlight}` : ""
               }
             />
             <button

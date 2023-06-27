@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import Card from "../../components/card/Card";
 import styles from "./auth.module.scss";
-import { AiOutlineMail } from "react-icons/ai";
 import { useState } from "react";
 import { forgotPassword, validateEmail } from "../../services/authService";
 import { toast } from "react-toastify";
@@ -29,25 +28,14 @@ const Forgot = () => {
   };
 
   return (
-    <div className={`${styles.auth_square}`}>
+    <div className={`${styles.auth}`}>
       <Card>
-        <div className={styles.form_square}>
-          <div className="--flex-center">
-            <AiOutlineMail size={35} color="#999" />
-          </div>
+        <div className={styles.form}>
           <h2> Esqueceu a Senha ? </h2>
-          <p
-            style={{
-              textAlign: "center",
-              fontSize: " 1.6em",
-              marginTop: "1rem",
-            }}
-          >
-            Siga os passos para redefinir a sua senha{" "}
-          </p>
+          <p className="text-slate-400/75 text-lg">Siga os passos para redefinir a sua senha </p>
           <form onSubmit={forgot}>
             <div className={styles.fields}>
-              <label htmlFor="email"> Email </label>
+              <label htmlFor="email" className="text-slate-500/75"> Email </label>
               <input
                 type="email"
                 placeholder="exemplo@gmail.com"
@@ -60,16 +48,16 @@ const Forgot = () => {
             </div>
             <button
               type="submit"
-              className={`--btn --btn-primary --btn-block ${styles.btn_square}`}
+              className="w-full text-white py-2 text-lg font-semibold rounded bg-violet-700 mt-6"
             >
               {" "}
               Recuperar Senha{" "}
             </button>
             <div className={styles.links}>
-              <p>
-                <Link to="/"> {"< "}Voltar </Link>
+              <p className="text-slate-500/75">
+                <Link to="/login"> {"< "}Voltar </Link>
               </p>
-              <p>
+              <p className="text-slate-500/75">
                 <Link to="/login"> Entrar{" >"} </Link>
               </p>
             </div>

@@ -92,7 +92,7 @@ const PasswordCard = ({ password, componentId }) => {
 
 PasswordCard.propTypes = {
   password: PropTypes.string,
-  componentId: PropTypes.string.isRequired, // Identificador exclusivo para
+  componentId: PropTypes.string,
 };
 
 export default PasswordCard;

@@ -6,10 +6,12 @@ import { useEffect } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { SpinnerImg } from "../../../components/loader/Loader";
 import PasswordCard from "../../../components/passwordCard/PasswordCard";
-import { deleteItem } from "../../../redux/features/shop/itemSlice";
-import { BsQrCodeScan } from "react-icons/bs";
+import { deleteItem, updateItem } from "../../../redux/features/shop/itemSlice";
+import { BsPlus, BsQrCodeScan } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
+import { AiOutlineMinus } from "react-icons/ai";
+import { useState } from "react";
 
 const ShopDetails = () => {
   const dispatch = useDispatch();
@@ -20,10 +22,70 @@ const ShopDetails = () => {
     (state) => state.shop
   );
 
-  const item = shop.items;
+  const item = shop?.items ?? [];
+
+  let totalValue = 0;
+  let totalQuantity = 0;
+
+  item.forEach((itemData) => {
+    totalValue += itemData.quantity * itemData.price;
+    totalQuantity += itemData.quantity;
+  });
+  const [quantityValues, setQuantityValues] = useState({
+    item: {
+      quantity: item.quantity,
+    },
+  });
 
   const created = new Date(shop.createdAt);
   const updated = new Date(shop.updatedAt);
+
+
+  const increaseQuantity = async (itemId) => {
+    const itemToUpdate = { ...item.find((item) => item._id === itemId) };
+    const updatedQuantity = itemToUpdate.quantity + 1;
+
+    if (updatedQuantity >= 0) {
+      const updateData = {
+        name: itemToUpdate.name,
+        price: itemToUpdate.price,
+        quantity: updatedQuantity,
+      };
+      const formData = {
+        id: id,
+        formData: updateData,
+      };
+
+      setQuantityValues((prevState) => ({
+        ...prevState,
+        [itemId]: updatedQuantity,
+      }));
+      await dispatch(updateItem(formData));
+    }
+  };
+
+  const decreaseQuantity = async (itemId) => {
+    const itemToUpdate = { ...item.find((item) => item._id === itemId) };
+    const updatedQuantity = itemToUpdate.quantity - 1;
+
+    if (updatedQuantity >= 0) {
+      const updateData = {
+        name: itemToUpdate.name,
+        price: itemToUpdate.price,
+        quantity: updatedQuantity,
+      };
+      const formData = {
+        id: id,
+        formData: updateData,
+      };
+
+      setQuantityValues((prevState) => ({
+        ...prevState,
+        [itemId]: updatedQuantity,
+      }));
+      await dispatch(updateItem(formData));
+    }
+  };
 
   const shortenText = (text, n) => {
     if (text.length > n) {
@@ -115,8 +177,7 @@ const ShopDetails = () => {
           </div>
           <div className="px-5 py-2 w-full text-center">
             <h2 className="text-3xl font-semibold sm:text-2xl">
-              {" "}
-              Itens da Barraca{" "}
+              Itens da Barraca
             </h2>
           </div>
 
@@ -132,12 +193,15 @@ const ShopDetails = () => {
                     <th className="py-2"> s/n </th>
                     <th> Nome </th>
                     <th> Preço </th>
+                    <th> Quant. </th>
                     <th> Ações </th>
                   </tr>
                 </thead>
                 <tbody>
                   {item?.map((item, index) => {
-                    const { _id, name, price } = item;
+                    const { _id, name, price, quantity } = item;
+                    const itemQuant = quantity || 0;
+
                     return (
                       <tr
                         key={_id}
@@ -148,6 +212,30 @@ const ShopDetails = () => {
                         <td>
                           {"R$"}
                           {price}
+                        </td>
+                        <td className="w-14">
+                          <div className="flex justify-center">
+                            <button
+                              className="p-1 mr-3 bg-indigo-700 text-white-950"
+                              onClick={() => increaseQuantity(_id)}
+                            >
+                              <BsPlus color="white" size={25} />
+                            </button>
+
+                            <input
+                              type="text"
+                              disabled
+                              value={quantityValues[item._id] || itemQuant}
+                              className="text-center"
+                            />
+
+                            <button
+                              className="p-1 ml-3 bg-indigo-700 text-white-950"
+                              onClick={() => decreaseQuantity(_id)}
+                            >
+                              <AiOutlineMinus color="white" size={25} />
+                            </button>
+                          </div>
                         </td>
                         <td className="flex justify-center align-center py-3">
                           <FaTrashAlt
@@ -171,9 +259,21 @@ const ShopDetails = () => {
               <br />
               <code>Ultima Atualização: {updated.toLocaleString("pt-BR")}</code>
             </div>
-            <div className="flex justify-around bg-slate-950/50 p-6 sm:w-full sm:flex-col sm:text-center">
-              <p> Valor Total: </p>
-              <p> Quant. Itens: </p>
+            <div className="flex justify-around bg-slate-950/50 rounded w-90 p-6 sm:w-full sm:flex-col sm:text-center">
+              <span className="text-lg flex mt-1">
+                <p>
+                  Valor Total:{" "}
+                  <span className="text-indigo-600/75 font-bold">
+                    R${totalValue.toFixed(2)}
+                  </span>
+                </p>
+                <p className="mx-4">
+                  Quant. Itens:{" "}
+                  <span className="text-indigo-400 font-bold">
+                    {totalQuantity}
+                  </span>
+                </p>
+              </span>
               <Link to="/buyitem">
                 <button className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2">
                   <BsQrCodeScan size={25} color="white" />

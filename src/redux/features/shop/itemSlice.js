@@ -86,7 +86,7 @@ export const updateItem = createAsyncThunk(
   "item/updateItem",
   async ({ id, formData }, thunkAPI) => {
     try {
-      return await shopService.updateShop(id, formData);
+      return await shopService.updateItem(id, formData);
     } catch (error) {
       const message =
         (error.response &&
@@ -178,7 +178,7 @@ const itemSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        toast.success("Item Atualizado com sucesso!");
+        // toast.success("Item Atualizado com sucesso!");
       })
       .addCase(updateItem.rejected, (state, action) => {
         state.isLoading = false;

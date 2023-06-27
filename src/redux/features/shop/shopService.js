@@ -69,6 +69,21 @@ const updateShop = async (id, formData) => {
   return response.data;
 };
 
+// Update  Item
+const updateItem = async (id, formData) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.patch(
+    `${API_URL}/update-item/${id}`,
+    formData,
+    config
+  );
+  return response.data;
+};
+
 const purchaseQRCode = async (formData) => {
   const config = {
     headers: {
@@ -87,6 +102,7 @@ const shopService = {
   deleteItem,
   getShop,
   updateShop,
+  updateItem,
   purchaseQRCode,
 };
 

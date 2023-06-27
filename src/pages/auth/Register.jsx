@@ -73,22 +73,19 @@ const Register = () => {
       {isLoading && <Loader />}
       <Card>
         <div className={styles.form}>
-          <span className={styles.register} style={{ color: "#0a1930" }}>
-            <Link to="/"> {"< "}Voltar </Link>
-          </span>
-          <h2> Conecte-se e Gerencie</h2>
-          <span className={styles.register}>
-            <p>
-              Já tem uma conta ?
-              <Link to="/login" style={{ color: "#EF233C", fontWeight: "600" }}>
-                {" "}
-                Entre aqui{" "}
-              </Link>
-            </p>
-          </span>
+          <h2> Crie sua conta</h2>
+          <p className="text-slate-400/75 text-lg">
+            Comece agora a ter controle da festa
+            <div className={styles.register}>
+              <Link to="/login">Já tem uma conta? <span className="font-semibold">Entre aqui</span></Link>
+            </div>
+          </p>
           <form onSubmit={register}>
-            <div className={styles.fields} style={{ marginTop: "5.5em" }}>
-              <label htmlFor="name"> Nome </label>
+            <div className={styles.fields}>
+              <label htmlFor="name" className="text-slate-500/75">
+                {" "}
+                Nome{" "}
+              </label>
               <input
                 type="text"
                 placeholder="Matheus..."
@@ -100,7 +97,10 @@ const Register = () => {
               />
             </div>
             <div className={styles.fields}>
-              <label htmlFor="email"> Email </label>
+              <label htmlFor="email" className="text-slate-500/75">
+                {" "}
+                Email{" "}
+              </label>
               <input
                 type="email"
                 placeholder="exemplo@gmail.com"
@@ -112,7 +112,10 @@ const Register = () => {
               />
             </div>
             <div className={styles.fields}>
-              <label htmlFor="password"> Senha </label>
+              <label htmlFor="password" className="text-slate-500/75">
+                {" "}
+                Senha{" "}
+              </label>
               <input
                 type="password"
                 placeholder="******"
@@ -124,7 +127,10 @@ const Register = () => {
               />
             </div>
             <div className={styles.fields}>
-              <label htmlFor="password2"> Confirmar Senha </label>
+              <label htmlFor="password2" className="text-slate-500/75">
+                {" "}
+                Confirmar Senha{" "}
+              </label>
               <input
                 type="password"
                 placeholder="******"
@@ -135,7 +141,10 @@ const Register = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <button type="submit" className="--btn --btn-primary --btn-block">
+            <button
+              type="submit"
+              className="w-full text-white py-2 text-lg font-semibold rounded bg-violet-700 mt-6"
+            >
               {" "}
               Criar Conta{" "}
             </button>

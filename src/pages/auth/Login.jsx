@@ -60,25 +60,23 @@ const Login = () => {
       {isLoading && <Loader />}
       <Card>
         <div className={styles.form}>
-          <span className={styles.register} style={{ color: "#0a1930" }}>
-            <Link to="/"> {"< "}Voltar </Link>
-          </span>
-          <h2> Conecte-se e Gerencie </h2>
-          <span className={styles.register}>
-            <p>
-              Não tem uma conta ainda ?
-              <Link
-                to="/register"
-                style={{ color: "#EF233C", fontWeight: "600" }}
-              >
+          <h2> Entre em sua Conta </h2>
+          <p className="text-slate-400/75 text-lg">
+            Aqui e onde você gerencia a festa
+            <div className={styles.register}>
+              <Link to="/register">
                 {" "}
-                Registre-se aqui{" "}
+                Não tem uma Conta?
+                <span className="font-semibold"> Registre-se aqui</span>{" "}
               </Link>
-            </p>
-          </span>
+            </div>
+          </p>
           <form onSubmit={login}>
-            <div className={styles.fields} style={{ marginTop: "7em" }}>
-              <label htmlFor="email"> Email </label>
+            <div className={styles.fields}>
+              <label htmlFor="email" className="text-slate-500/75">
+                {" "}
+                Email{" "}
+              </label>
               <input
                 type="email"
                 placeholder="exemplo@gmail.com"
@@ -90,7 +88,10 @@ const Login = () => {
               />
             </div>
             <div className={styles.fields}>
-              <label htmlFor="password"> Senha </label>
+              <label htmlFor="password" className="text-slate-500/75">
+                {" "}
+                Senha{" "}
+              </label>
               <input
                 type="password"
                 placeholder="******"
@@ -100,18 +101,14 @@ const Login = () => {
                 value={password}
                 onChange={handleInputChange}
               />
-              <p>
-                Esqueceu a Senha?
-                <Link
-                  to="/forgot"
-                  style={{ color: "#EF233C", fontWeight: "600" }}
-                >
-                  {" "}
-                  Reedefina{" "}
-                </Link>
+              <p className="text-center text-slate-400/75 font-semibold hover:text-indigo-500/75">
+                <Link to="/forgot">Esqueceu a Senha?</Link>
               </p>
             </div>
-            <button type="submit" className="--btn --btn-primary --btn-block">
+            <button
+              type="submit"
+              className="w-full text-white py-2 text-lg font-semibold rounded bg-violet-700 mt-6"
+            >
               {" "}
               Entrar{" "}
             </button>

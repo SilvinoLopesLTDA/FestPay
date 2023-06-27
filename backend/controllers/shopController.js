@@ -34,7 +34,7 @@ const createShop = asyncHandler(async (req, res) => {
 });
 
 const createItem = asyncHandler(async (req, res) => {
-  const { name, price } = req.body;
+  const { name, price, quantity } = req.body;
   const id = req.params.id;
 
   if (!name || !price) {
@@ -52,6 +52,7 @@ const createItem = asyncHandler(async (req, res) => {
   const newItem = {
     name,
     price: parseFloat(price),
+    quantity,
   };
 
   shop.items.push(newItem);
@@ -149,6 +150,28 @@ const updateShop = asyncHandler(async (req, res) => {
   res.status(200).json(updatedShop);
 });
 
+// Update Item
+const updateItem = asyncHandler(async (req, res) => {
+  const { name, price, quantity} = req.body;
+  const { id } = req.params;
+  const shop = await Shop.findById(id);
+
+  if (!shop) {
+    res.status(404);
+    throw new Error("Ponto de venda não encontrado.");
+  }
+
+  // Atualize os campos do shop
+  shop.items.name = name;
+  shop.items.price = price;
+  shop.items.quantity = quantity;
+
+  // Salve o shop atualizado no banco de dados
+  const updatedItem = await shop.save();
+
+  res.status(200).json(updatedItem);
+});
+
 module.exports = {
   createShop,
   createItem,
@@ -157,4 +180,5 @@ module.exports = {
   deleteShop,
   deleteItem,
   updateShop,
+  updateItem,
 };

@@ -1,3 +1,155 @@
-.auth_square {
-  background-color: aliceblue;
+.auth {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(../../../public/assets/auth.svg);
+  background-position:center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  .form {
+    animation: slide-up 0.5s ease;
+    width: 100%;
+
+    h2 {
+      color: #fff;
+      font-size: 3em;
+      text-align: start;
+    }
+
+    form {
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        display: flex;
+        font-size: 1.3rem;
+        width: 21em;
+        font-weight: 300;
+        padding: .6rem;
+        margin: 0.8rem auto;
+        border: 1px solid rgb(51 65 85);
+        color: #fff;
+        border-bottom: 3px solid rgb(51 65 85);
+        background: rgb(30 41 59);
+        border-radius: 3px;
+        outline: none;
+
+        &:focus {
+          outline: none;
+          box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+          border-bottom: 3px solid #55c57a;
+        }
+
+        &:focus:invalid {
+          border-bottom: 3px solid #ff7730;
+        }
+      }
+
+      label {
+        font-size: 1.2em;
+        font-weight: 600;
+      }
+
+      .links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2em;
+      }
+
+      .fields {
+        margin-top: 2em;
+      }
+
+      .btn{
+        margin-top: 1.8em;
+      }
+    }
+    .register {
+      &:hover {
+        color: rgba(99, 101, 241, 0.75);
+      }
+    }
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(-5rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes slide-down {
+  0% {
+    transform: translateY(5rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .img {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .auth,
+  .auth_square {
+    // Forgot and Reset Form
+    .form_square {
+      padding: 1.8em;
+      width: 40em;
+
+      .btn_square {
+        width: 21.3em;
+      }
+
+      .links {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
+        width: 36.4em;
+      }
+
+      form {
+        width: 100%;
+      }
+
+      h2 {
+        width: 9.2em;
+      }
+    }
+
+    // Login and Register Form
+    .form {
+      padding: 2.85em;
+
+      form {
+        max-width: 350px;
+        width: 100%;
+        display: table;
+
+        .fields {
+          max-width: 90em;
+        }
+
+        button {
+          max-width: 70em;
+        }
+      }
+
+      p {
+        width: 17em;
+      }
+
+      h2 {
+        width: 7em;
+      }
+    }
+  }
 }

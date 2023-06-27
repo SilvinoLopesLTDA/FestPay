@@ -13,6 +13,10 @@ const itemSchema = mongoose.Schema({
   price: {
     type: Number,
   },
+  quantity: {
+    type: Number,
+    default: 0
+  }
 });
 
 const shopSchema = mongoose.Schema(

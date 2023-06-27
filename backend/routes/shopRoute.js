@@ -8,6 +8,7 @@ const {
   deleteShop,
   deleteItem,
   updateShop,
+  updateItem,
 } = require("../controllers/shopController");
 const protect = require("../middleware/authMiddleware");
 
@@ -18,5 +19,6 @@ router.get("/:id", protect, getShop);
 router.delete("/:id", protect, deleteShop);
 router.delete("/delete-item/:id", protect, deleteItem);
 router.patch("/:id", protect, updateShop);
+router.patch("/update-item/:id", protect, updateItem);
 
 module.exports = router;

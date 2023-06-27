@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import Card from "../../components/card/Card";
 import styles from "./auth.module.scss";
-import { MdPassword } from "react-icons/md";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { resetPassword } from "../../services/authService";
@@ -49,16 +48,17 @@ const Reset = () => {
   };
 
   return (
-    <div className={`${styles.auth_square}`}>
+    <div className={`${styles.auth}`}>
       <Card>
-        <div className={styles.form_square}>
-          <div className="--flex-center">
-            <MdPassword size={35} color="#999" />
-          </div>
+        <div className={styles.form}>
           <h2> Mude a senha </h2>
+          <p className="text-slate-400/75 text-lg">Siga os passos para redefinir a sua senha </p>
           <form onSubmit={reset}>
             <div className={styles.fields}>
-              <label htmlFor="password"> Nova Senha </label>
+              <label htmlFor="password" className="text-slate-500/75">
+                {" "}
+                Nova Senha{" "}
+              </label>
               <input
                 type="password"
                 placeholder="******"
@@ -70,7 +70,10 @@ const Reset = () => {
               />
             </div>
             <div className={styles.fields}>
-              <label htmlFor="password2"> Confirmar Nova Senha </label>
+              <label htmlFor="password2" className="text-slate-500/75">
+                {" "}
+                Confirmar Nova Senha{" "}
+              </label>
               <input
                 type="password"
                 placeholder="******"
@@ -83,16 +86,16 @@ const Reset = () => {
             </div>
             <button
               type="submit"
-              className={`--btn --btn-primary --btn-block ${styles.btn_square}`}
+              className="w-full text-white py-2 text-lg font-semibold rounded bg-violet-700 mt-6"
             >
               {" "}
               Alterar Senha
             </button>
             <div className={styles.links}>
-              <p>
+              <p className="text-slate-500/75">
                 <Link to="/"> {"< "}Voltar</Link>
               </p>
-              <p>
+              <p className="text-slate-500/75">
                 <Link to="/login"> Entrar{" >"} </Link>
               </p>
             </div>
