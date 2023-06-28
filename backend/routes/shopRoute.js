@@ -19,6 +19,6 @@ router.get("/:id", protect, getShop);
 router.delete("/:id", protect, deleteShop);
 router.delete("/delete-item/:id", protect, deleteItem);
 router.patch("/:id", protect, updateShop);
-router.patch("/update-item/:id", protect, updateItem);
+router.patch("/update-item/:shopId/:itemId", protect, updateItem);
 
 module.exports = router;

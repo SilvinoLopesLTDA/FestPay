@@ -150,27 +150,32 @@ const updateShop = asyncHandler(async (req, res) => {
   res.status(200).json(updatedShop);
 });
 
-// Update Item
 const updateItem = asyncHandler(async (req, res) => {
-  const { name, price, quantity} = req.body;
-  const { id } = req.params;
-  const shop = await Shop.findById(id);
+  const { name, price, quantity } = req.body;
+  const { shopId, itemId } = req.params;
 
+  // Encontre o Shop pelo ID
+  const shop = await Shop.findById(shopId);
   if (!shop) {
     res.status(404);
     throw new Error("Ponto de venda não encontrado.");
   }
 
-  // Atualize os campos do shop
-  shop.items.name = name;
-  shop.items.price = price;
-  shop.items.quantity = quantity;
+  const item = shop.items.find((item) => item._id.toString() === itemId);
+  if (!item) {
+    res.status(404);
+    throw new Error("Item não encontrado.");
+  }
 
-  // Salve o shop atualizado no banco de dados
-  const updatedItem = await shop.save();
+  item.name = name;
+  item.price = price;
+  item.quantity = quantity;
 
-  res.status(200).json(updatedItem);
+  const updatedShop = await shop.save();
+
+  res.status(200).json(updatedShop);
 });
+
 
 module.exports = {
   createShop,

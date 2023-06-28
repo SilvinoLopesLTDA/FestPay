@@ -17,6 +17,8 @@ const ShopDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [quantityValues, setQuantityValues] = useState({});
+
   const { id } = useParams();
   const { shop, isLoading, isError, message } = useSelector(
     (state) => state.shop
@@ -31,17 +33,11 @@ const ShopDetails = () => {
     totalValue += itemData.quantity * itemData.price;
     totalQuantity += itemData.quantity;
   });
-  const [quantityValues, setQuantityValues] = useState({
-    item: {
-      quantity: item.quantity,
-    },
-  });
 
   const created = new Date(shop.createdAt);
   const updated = new Date(shop.updatedAt);
 
-
-  const increaseQuantity = async (itemId) => {
+  const increaseQuantity = async (shopId, itemId) => {
     const itemToUpdate = { ...item.find((item) => item._id === itemId) };
     const updatedQuantity = itemToUpdate.quantity + 1;
 
@@ -52,19 +48,22 @@ const ShopDetails = () => {
         quantity: updatedQuantity,
       };
       const formData = {
-        id: id,
+        shopId: shopId,
+        itemId: itemId,
         formData: updateData,
       };
+
+      await dispatch(updateItem(formData));
+      await dispatch(getShop(id));
 
       setQuantityValues((prevState) => ({
         ...prevState,
         [itemId]: updatedQuantity,
       }));
-      await dispatch(updateItem(formData));
     }
   };
 
-  const decreaseQuantity = async (itemId) => {
+  const decreaseQuantity = async (shopId, itemId) => {
     const itemToUpdate = { ...item.find((item) => item._id === itemId) };
     const updatedQuantity = itemToUpdate.quantity - 1;
 
@@ -75,15 +74,18 @@ const ShopDetails = () => {
         quantity: updatedQuantity,
       };
       const formData = {
-        id: id,
+        shopId: shopId,
+        itemId: itemId,
         formData: updateData,
       };
+
+      await dispatch(updateItem(formData));
+      await dispatch(getShop(id));
 
       setQuantityValues((prevState) => ({
         ...prevState,
         [itemId]: updatedQuantity,
       }));
-      await dispatch(updateItem(formData));
     }
   };
 
@@ -217,7 +219,7 @@ const ShopDetails = () => {
                           <div className="flex justify-center">
                             <button
                               className="p-1 mr-3 bg-indigo-700 text-white-950"
-                              onClick={() => increaseQuantity(_id)}
+                              onClick={() => increaseQuantity(id, _id)}
                             >
                               <BsPlus color="white" size={25} />
                             </button>
@@ -225,13 +227,13 @@ const ShopDetails = () => {
                             <input
                               type="text"
                               disabled
-                              value={quantityValues[item._id] || itemQuant}
+                              value={quantityValues[_id] || itemQuant}
                               className="text-center"
                             />
 
                             <button
                               className="p-1 ml-3 bg-indigo-700 text-white-950"
-                              onClick={() => decreaseQuantity(_id)}
+                              onClick={() => decreaseQuantity(id, _id)}
                             >
                               <AiOutlineMinus color="white" size={25} />
                             </button>
