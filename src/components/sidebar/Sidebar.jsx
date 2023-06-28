@@ -1,11 +1,10 @@
 import PropTypes from "prop-types";
 import styles from "./Sidebar.module.scss";
-import { GiGamepadCross } from "react-icons/gi";
 import { HiMenuAlt3 } from "react-icons/hi";
 import menu from "../../data/sidebar";
 import SidebarItem from "./SidebarItem";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from "/assets/Logo-2.png";
 import { useEffect } from "react";
 
@@ -18,12 +17,6 @@ const Sidebar = ({ children }) => {
       setIsOpen(false);
     }
   }, []);
-
-  const navigate = useNavigate();
-
-  const goHome = () => {
-    navigate("/");
-  };
 
   return (
     <div className={`${styles.layout}`}>
@@ -46,12 +39,10 @@ const Sidebar = ({ children }) => {
           >
             <HiMenuAlt3 onClick={toggle} />
           </div>
-          <div className={`${styles.logo} ${styles.small_devices}`}>
-            <GiGamepadCross
-              size={35}
-              style={{ cursor: "pointer" }}
-              onClick={goHome}
-            />
+          <div className={` ${styles.small_devices}`}>
+            <Link to="/">
+              <img src={Logo} alt="FestPay Logo" />
+            </Link>
           </div>
         </div>
         {menu.map((item, index) => {

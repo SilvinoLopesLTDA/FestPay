@@ -20,23 +20,25 @@ const Welcome = () => {
           <img src={Logo} alt="FestPay Logo" />
         </span>
         <span className="mt-12">
-          <ShowOnLogout>
-            <button
-              className={`${styles.btn} px-5 py-2 mx-5 border-2 rounded-lg text-lg font-semibold hover:text-slate-950 drop-shadow-Cxl`}
-            >
-              <Link to="/login">Entrar</Link>
-            </button>
-          </ShowOnLogout>
-          <ShowOnLogout>
-            <button
-              className={`${styles.register} px-5 py-2 text-lg font-semibold text-slate-950 rounded-lg`}
-            >
-              <Link to="/register">Cadastrar-se</Link>
-            </button>
-          </ShowOnLogout>
+          <div className={`${styles.logoff_btn} flex`}>
+            <ShowOnLogout>
+              <button
+                className={`${styles.btn} px-5 py-2 mx-5 border-2 rounded-lg text-lg font-semibold hover:text-slate-950 drop-shadow-Cxl`}
+              >
+                <Link to="/login">Entrar</Link>
+              </button>
+            </ShowOnLogout>
+            <ShowOnLogout>
+              <button
+                className={`${styles.register} px-5 py-2 text-lg font-semibold text-slate-950 rounded-lg`}
+              >
+                <Link to="/register">Cadastrar-se</Link>
+              </button>
+            </ShowOnLogout>
+          </div>
           <ShowOnLogin>
             <button
-              className={`${styles.btn} px-5 py-2 mx-5 border-2 rounded-lg text-lg font-semibold hover:text-slate-950 drop-shadow-Cxl`}
+              className={`${styles.btn} ${styles.btn_sm}  px-5 py-2 mx-5 border-2 rounded-lg text-lg font-semibold hover:text-slate-950 drop-shadow-Cxl`}
             >
               <Link to="/shops">Entre em nosso aplicativo!</Link>
             </button>

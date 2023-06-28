@@ -4,8 +4,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url(../../../public/assets/auth.svg);
-  background-position:center;
+  background-image: url(/assets/auth.svg);
+  background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 
@@ -27,7 +27,7 @@
         font-size: 1.3rem;
         width: 21em;
         font-weight: 300;
-        padding: .6rem;
+        padding: 0.6rem;
         margin: 0.8rem auto;
         border: 1px solid rgb(51 65 85);
         color: #fff;
@@ -62,7 +62,7 @@
         margin-top: 2em;
       }
 
-      .btn{
+      .btn {
         margin-top: 1.8em;
       }
     }
@@ -98,57 +98,20 @@
 }
 
 @media screen and (max-width: 600px) {
-  .auth,
-  .auth_square {
-    // Forgot and Reset Form
-    .form_square {
-      padding: 1.8em;
-      width: 40em;
-
-      .btn_square {
-        width: 21.3em;
-      }
-
-      .links {
-        display: flex;
-        justify-content: space-between;
-        margin: 5px 0;
-        width: 36.4em;
-      }
-
-      form {
-        width: 100%;
-      }
-
-      h2 {
-        width: 9.2em;
-      }
-    }
-
-    // Login and Register Form
+  .auth {
     .form {
-      padding: 2.85em;
-
       form {
-        max-width: 350px;
-        width: 100%;
-        display: table;
-
-        .fields {
-          max-width: 90em;
+        input {
+          max-width: 350px;
+          width: 100%;
+          display: table;
         }
-
-        button {
-          max-width: 70em;
-        }
-      }
-
-      p {
-        width: 17em;
       }
 
       h2 {
         width: 7em;
+        line-height: 1.2em;
+        margin-bottom: 1em;
       }
     }
   }

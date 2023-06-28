@@ -4,7 +4,6 @@ const nodemailer = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
 const QRCode = require("qrcode");
 
-// Configuração do Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
@@ -25,7 +24,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Função para salvar a imagem em base64 no Cloudinary
 const saveBase64ImageToCloudinary = async (base64String, fileName) => {
   try {
     const result = await cloudinary.uploader.upload(base64String, {
@@ -33,14 +31,13 @@ const saveBase64ImageToCloudinary = async (base64String, fileName) => {
       public_id: fileName,
       overwrite: true,
     });
-    return result.secure_url; // Retorna a URL da imagem salva no Cloudinary
+    return result.secure_url;
   } catch (error) {
     console.error("Erro ao salvar a imagem no Cloudinary:", error);
     throw error;
   }
 };
 
-// Função para gerar o QR Code
 const generateQRCode = async (data) => {
   try {
     const qrCode = await QRCode.toDataURL(data);
@@ -51,17 +48,14 @@ const generateQRCode = async (data) => {
   }
 };
 
-// Register Client
 const registerClient = asyncHandler(async (req, res) => {
   const { name, phone, email, paymentMethod, balance } = req.body;
 
-  // Validation
   if (!name || !email || !paymentMethod || !balance) {
     res.status(400);
     throw new Error("Preencha os campos corretamente.");
   }
 
-  // Check if client already exists
   const clientExists = await Client.findOne({ email });
 
   if (clientExists) {
@@ -69,7 +63,6 @@ const registerClient = asyncHandler(async (req, res) => {
     throw new Error("O cliente já está cadastrado!");
   }
 
-  // Generate QR Code
   const qrCodeData = {
     name,
     phone,
@@ -79,14 +72,12 @@ const registerClient = asyncHandler(async (req, res) => {
   };
   const qrCode = await generateQRCode(JSON.stringify(qrCodeData));
 
-  // Salve a imagem no Cloudinary
   const fileName = `${name}-${email}`;
   const cloudinaryImageUrl = await saveBase64ImageToCloudinary(
     qrCode,
     fileName
   );
 
-  // Create new client
   const client = await Client.create({
     user: req.user.id,
     name,
@@ -100,11 +91,19 @@ const registerClient = asyncHandler(async (req, res) => {
   if (client) {
     const { _id, name, phone, paymentMethod } = client;
 
+    const resetUrl = `${process.env.FRONTEND_URL}/clientinfo/${_id}`;
+
     const mailOptions = {
       from: "FestPay 🎉 <festpay49@gmail.com>",
       to: email,
       subject: "Seja bem-vindo(a) à festa!",
-      text: "Ficamos muito felizes de ter você por aqui! Este é o seu QR Code pré-pago, onde você irá utilizar como uma ficha, mas, digital! Qualquer problema ou falta de saldo procure o Guichê mais perto; é um prazer te ter aqui!",
+      text: `
+        Ficamos muito felizes de ter você por aqui! Este é o seu QR Code pré-pago, onde você irá utilizar como uma ficha, mas, digital! Qualquer problema ou falta de saldo procure o Guichê mais perto; é um prazer te ter aqui! 
+        
+        Deseja saber o seu saldo atual? acesse o link abaixo:
+
+        ${resetUrl}
+      `,
       attachments: [
         {
           filename: "qr-code.jpg",

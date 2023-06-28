@@ -25,6 +25,7 @@ import ShopEdit from "./pages/shop/shopEdit/ShopEdit";
 import AddItem from "./pages/shop/addItem/AddItem";
 import BuyItem from "./pages/shop/buyItem/BuyItem";
 import Welcome from "./pages/welcome/Welcome";
+import ClientInfo from "./pages/client/info/ClientInfo";
 
 axios.defaults.withCredentials = true;
 
@@ -129,6 +130,7 @@ function App() {
             </Sidebar>
           }
         />
+        <Route path="/clientinfo/:id" element={<ClientInfo />} />
         <Route
           path="/dashboard"
           element={

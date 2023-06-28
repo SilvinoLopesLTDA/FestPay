@@ -156,12 +156,14 @@ a {
     display: none;
   }
 
+  .top_section {
+    padding: 0;
+  }
+
   .small_devices {
     display: block;
-    svg {
-      margin: 0;
-      position: relative;
-      left: -0.1em;
+    img {
+      width: 100%;
     }
   }
 }

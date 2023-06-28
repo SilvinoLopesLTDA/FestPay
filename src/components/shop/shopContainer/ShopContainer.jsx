@@ -10,7 +10,7 @@ const ShopContainer = ({ shop }) => {
 
   return (
     <div className="flex justify-center items-center h-full flex-col">
-      <div className="bg-slate-900 w-4/5 my-16">
+      <div className="bg-slate-900 w-4/5 my-16 rounded-xl sm:w-11/12">
         <div className="flex justify-between items-center mx-10 my-7 sm:flex-col">
           <h3 className="text-2xl font-semibold mt-6">
             {" "}

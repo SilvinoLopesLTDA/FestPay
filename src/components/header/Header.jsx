@@ -16,8 +16,8 @@ const Header = () => {
 
   return (
     <div className="px-10 pt-5">
-      <div className="flex justify-between">
-        <h3 className="my-3 text-2xl">
+      <div className="flex justify-between sm:flex-col">
+        <h3 className="my-3 text-2xl sm:text-center">
           <span className="font-semibold">Bem vindo(a) de volta, </span>
           <span className="text-violet-500 font-bold"> {name} </span>
           <span className="font-semibold">!</span>

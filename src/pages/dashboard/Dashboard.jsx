@@ -162,7 +162,7 @@ const Dashboard = () => {
       <div className="flex justify-center items-center">
         {isLoading && <Loader />}
         <div className={styles.content}>
-          <h3 className="text-2xl font-semibold mb-10">
+          <h3 className="text-2xl font-semibold mb-10 sm:text-center">
             Dashboard do
             <span className="text-violet-700 font-bold"> FestPay</span>
           </h3>
