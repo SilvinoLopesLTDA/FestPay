@@ -11,7 +11,6 @@ import {
 
 const initialState = {
   email: "",
-  purchaseAmount: "",
 };
 
 const QrCodeReader = () => {
@@ -24,7 +23,15 @@ const QrCodeReader = () => {
 
   const { shop } = useSelector((state) => state.shop);
   const { _id } = shop;
-  const { email, purchaseAmount } = shopInitial;
+  let totalValue = 0;
+
+  const item = shop?.items ?? [];
+
+  item.forEach((itemData) => {
+    totalValue += itemData.quantity * itemData.price;
+  });
+
+  const { email } = shopInitial;
   console.log(shop.name);
 
   const handleScan = (data) => {
@@ -52,12 +59,6 @@ const QrCodeReader = () => {
     setIsReadingEnabled(true);
   };
 
-  const handlePurchaseAmountChange = (event) => {
-    setShop((prevState) => ({
-      ...prevState,
-      purchaseAmount: event.target.value,
-    }));
-  };
 
   useEffect(() => {
     dispatch(getShop(_id));
@@ -65,21 +66,16 @@ const QrCodeReader = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const amount = parseFloat(purchaseAmount);
     const formData = {
       name: shop.name,
       email: email,
-      purchaseAmount: amount,
+      purchaseAmount: totalValue,
     };
     console.log(formData);
     dispatch(purchaseQRCode(formData));
     if (
-      shop.name &&
       email &&
-      purchaseAmount &&
-      shop.name.trim() !== "" &&
-      email.trim() !== "" &&
-      purchaseAmount.trim() !== ""
+      email.trim() !== "" 
     ) {
       navigate(`/details-shop/${_id}`);
       setQrscan("No result");
@@ -99,6 +95,16 @@ const QrCodeReader = () => {
             className="cursor-not-allowed"
             disabled
           />
+
+          <label htmlFor="purchaseAmount">Valor da compra:</label>
+          <input
+            type="text"
+            id="purchaseAmount"
+            value={`R$ ${totalValue}`}
+            className="cursor-not-allowed"
+            disabled
+          />
+
           <label htmlFor="email">Email:</label>
           <input
             type="text"
@@ -107,13 +113,7 @@ const QrCodeReader = () => {
             className="cursor-not-allowed"
             disabled
           />
-          <label htmlFor="purchaseAmount">Valor da compra:</label>
-          <input
-            type="text"
-            id="purchaseAmount"
-            value={purchaseAmount}
-            onChange={handlePurchaseAmountChange}
-          />
+
           <label>Aproxime o QRcode</label>
           <div className="flex justify-center border-4 border-indigo-900">
             <QrReader

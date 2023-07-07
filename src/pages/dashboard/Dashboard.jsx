@@ -45,6 +45,29 @@ const Dashboard = () => {
     }
   }, [dispatch, isError, message]);
 
+  const formatNumber = (number) => {
+    if (number === null || number === undefined || isNaN(number)) {
+      return "0";
+    }
+
+    const formattedNumber = Number(number).toFixed(2).toString();
+
+    const parts = formattedNumber.split(".");
+    const integerPart = parts[0];
+    const decimalPart = parts[1];
+
+    let formattedIntegerPart = "";
+    for (let i = 0; i < integerPart.length; i++) {
+      formattedIntegerPart += integerPart[i];
+      const remainingDigits = integerPart.length - (i + 1);
+      if (remainingDigits > 0 && remainingDigits % 3 === 0) {
+        formattedIntegerPart += ".";
+      }
+    }
+
+    return ` ${formattedIntegerPart},${decimalPart}`;
+  };
+
   const profits = Array.isArray(shop) ? shop.map((item) => item.profit) : [];
   const costs = Array.isArray(shop) ? shop.map((item) => item.cost) : [];
 
@@ -204,23 +227,19 @@ const Dashboard = () => {
                           <h2 className="bg-slate-900 p-3 text-lg font-semibold mb-5 text-center">
                             {name}
                           </h2>
-                          <div className="flex justify-around sm:ml-3">
+                          <div className="flex flex-col text-center sm:ml-3">
                             <p className="text-lg">
                               {" "}
                               Lucros:{" "}
                               <span className="font-bold text-green-500">
-                                R$
-                                {profit === null || undefined || ""
-                                  ? "0"
-                                  : profit}
+                                R${formatNumber(profit)}
                               </span>{" "}
                             </p>
                             <p className="text-lg sm:ml-7">
                               {" "}
                               Custos:{" "}
                               <span className=" font-bold text-rose-700">
-                                R$
-                                {cost === null || undefined || "" ? "0" : cost}
+                                R${formatNumber(cost)}
                               </span>{" "}
                             </p>
                           </div>

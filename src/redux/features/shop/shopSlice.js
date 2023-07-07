@@ -179,9 +179,10 @@ const shopSlice = createSlice({
         toast.error(action.payload);
       })
 
-      .addCase(getShop.pending, (state) => {
-        state.isLoading = true;
-      })
+      // .addCase(getShop.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      
       .addCase(getShop.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;

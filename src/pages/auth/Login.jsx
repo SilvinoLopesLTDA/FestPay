@@ -62,7 +62,7 @@ const Login = () => {
         <div className={styles.form}>
           <h2> Entre em sua Conta </h2>
           <p className="text-slate-400/75 text-lg">
-            Aqui e onde você gerencia a festa
+            Aqui é onde você gerencia a festa
             <div className={styles.register}>
               <Link to="/register">
                 {" "}

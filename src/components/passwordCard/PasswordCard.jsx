@@ -26,6 +26,11 @@ const PasswordCard = ({ password, componentId }) => {
     setOtp("");
   };
 
+  const handleInputChange = (value) => {
+    const sanitizedValue = value.replace(/\D/g, "");
+    setOtp(sanitizedValue);
+  };
+
   useEffect(() => {
     const passwordValidUntil = localStorage.getItem(
       `${componentId}_passwordValidUntil`
@@ -49,16 +54,21 @@ const PasswordCard = ({ password, componentId }) => {
         <div className={`${styles.wrapper} flex items-center`}>
           <div className={styles.container}>
             <MdOutlinePassword size={28} className="text-violet-700" />
+            {!showOTP && !isPasswordValid && (
+              <div className="text-center">
+                <p>A senha expirou. Por favor, insira novamente.</p>
+              </div>
+            )}
             <h4 className="text-2xl font-semibold mb-6">
-              {" "}
-              Confirme a <span className="text-violet-700">Senha</span>{" "}
+              Confirme a <span className="text-violet-700">Senha</span>
             </h4>
             <OtpInput
               value={otp}
-              onChange={setOtp}
+              onChange={handleInputChange}
               numInputs={4}
               renderInput={(props) => <input {...props} />}
               inputStyle={"mx-3 text-5xl text-violet-800 rounded sm:text-4xl"}
+              inputMode="numeric" // Exibe o teclado numérico em dispositivos móveis
             />
             <div
               className={`${styles.btn_action} flex space-x-10 mt-8 text-md`}
@@ -67,23 +77,16 @@ const PasswordCard = ({ password, componentId }) => {
                 className="bg-slate-700 px-3 py-1 rounded-sm"
                 onClick={handleClear}
               >
-                {" "}
-                Limpar{" "}
+                Limpar
               </button>
               <button
                 className="bg-violet-900 px-3 py-1 rounded-sm"
                 onClick={handlePassword}
               >
-                {" "}
-                Entrar{" "}
+                Entrar
               </button>
             </div>
           </div>
-        </div>
-      )}
-      {!showOTP && !isPasswordValid && (
-        <div>
-          <p>A senha expirou. Por favor, insira novamente.</p>
         </div>
       )}
     </>

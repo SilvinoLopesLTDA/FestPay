@@ -13,6 +13,8 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { AiOutlineMinus } from "react-icons/ai";
 import { useState } from "react";
 
+import styles from "./ShopDetails.module.scss";
+
 const ShopDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,6 +27,29 @@ const ShopDetails = () => {
   );
 
   const item = shop?.items ?? [];
+
+  const formatNumber = (number) => {
+    if (number === null || number === undefined || isNaN(number)) {
+      return "0";
+    }
+
+    const formattedNumber = Number(number).toFixed(2).toString();
+
+    const parts = formattedNumber.split(".");
+    const integerPart = parts[0];
+    const decimalPart = parts[1];
+
+    let formattedIntegerPart = "";
+    for (let i = 0; i < integerPart.length; i++) {
+      formattedIntegerPart += integerPart[i];
+      const remainingDigits = integerPart.length - (i + 1);
+      if (remainingDigits > 0 && remainingDigits % 3 === 0) {
+        formattedIntegerPart += ".";
+      }
+    }
+
+    return ` ${formattedIntegerPart},${decimalPart}`;
+  };
 
   let totalValue = 0;
   let totalQuantity = 0;
@@ -143,47 +168,49 @@ const ShopDetails = () => {
   return (
     <>
       <PasswordCard componentId={shop.name} password={shop.password} />
-      <div className="flex justify-center items-center h-full flex-col ">
-        <div className="bg-slate-900 w-4/5 my-16 sm:flex sm:flex-col">
+      <div
+        className={` ${styles.items_list} flex justify-center items-center h-full flex-col `}
+      >
+        <div className="bg-slate-900 w-11/12 my-16 sm:flex sm:flex-col">
           {isLoading && <SpinnerImg />}
           <div className="flex flex-between sm:flex-col">
             <div className="flex justify-center align-center flex-col float-left p-5 w-full">
-              <h2 className="bg-slate-700 p-11 align-center text-3xl font-semibold mb-5 text-center rounded">
+              <h2 className="bg-slate-700 p-11 align-center text-3xl font-semibold text-center rounded">
                 {shop.name}
               </h2>
             </div>
-            <div className="flex flex-col float-right p-5 text-white sm:flex-row sm:justify-center">
+            <div className="flex flex-col float-right px-5 text-white mt-5 sm:justify-center sm:text-center md:flex-row">
               <Link to={`/edit-shop/${id}`}>
-                <button className="flex px-24 py-3 bg-indigo-800 rounded-sm text-lg font-semibold sm:p-4">
+                <button className="flex px-24 py-3 bg-indigo-800 rounded-sm text-lg font-semibold sm:p-5 sm:justify-center">
                   <FaEdit
                     size={22}
                     color="white"
                     title="Editar"
-                    className="ml-1 lg:hidden"
+                    className="lg:hidden"
                   />
                   <h2 className="sm:hidden"> Editar </h2>
                 </button>
               </Link>
               <Link to={`/add-item/${id}`}>
-                <button className="flex w-full px-14 py-3 bg-violet-900 rounded-sm text-lg font-semibold mt-5 sm:p-4 sm:mt-0">
+                <button className="flex w-full px-14 py-3 bg-violet-900 rounded-sm text-lg font-semibold mt-5 md:mt-0 sm:ml-3 sm:p-4 sm:justify-center">
                   <MdAddShoppingCart
                     size={20}
                     color="white"
                     title="Editar"
-                    className="ml-1 lg:hidden"
+                    className="mr-3 mt-1 lg:hidden"
                   />
-                  <h2 className="sm:hidden">Adicionar Item</h2>
+                  <h2>Adicionar Item</h2>
                 </button>
               </Link>
             </div>
           </div>
-          <div className="px-5 py-2 w-full text-center">
+          <div className="px-5 py-2 w-full text-center mt-7">
             <h2 className="text-3xl font-semibold sm:text-2xl">
               Itens da Barraca
             </h2>
           </div>
 
-          <div className="m-5">
+          <div className={`${styles.table} m-5`}>
             {!isLoading && item?.length === 0 ? (
               <p className="p-4 text-center">
                 Nenhum item cadastrado. Por favor, adicione um item!
@@ -219,23 +246,23 @@ const ShopDetails = () => {
                           <div className="flex justify-center">
                             <button
                               className="p-1 mr-3 bg-indigo-700 text-white-950"
-                              onClick={() => increaseQuantity(id, _id)}
+                              onClick={() => decreaseQuantity(id, _id)}
                             >
-                              <BsPlus color="white" size={25} />
+                              <AiOutlineMinus color="white" size={25} />
                             </button>
 
                             <input
                               type="text"
                               disabled
                               value={quantityValues[_id] || itemQuant}
-                              className="text-center"
+                              className="text-center w-32"
                             />
 
                             <button
                               className="p-1 ml-3 bg-indigo-700 text-white-950"
-                              onClick={() => decreaseQuantity(id, _id)}
+                              onClick={() => increaseQuantity(id, _id)}
                             >
-                              <AiOutlineMinus color="white" size={25} />
+                              <BsPlus color="white" size={25} />
                             </button>
                           </div>
                         </td>
@@ -255,21 +282,16 @@ const ShopDetails = () => {
               </table>
             )}
           </div>
-          <div className="flex justify-between p-5 border-t border-slate-800">
-            <div className="flex flex-col text-slate-500 text-sm font-medium">
-              <code>Criado em: {created.toLocaleString("pt-BR")}</code>
-              <br />
-              <code>Ultima Atualização: {updated.toLocaleString("pt-BR")}</code>
-            </div>
+          <div className="flex justify-between p-5 border-t border-slate-800 sm:flex-col">
             <div className="flex justify-around bg-slate-950/50 rounded w-90 p-6 sm:w-full sm:flex-col sm:text-center">
-              <span className="text-lg flex mt-1">
+              <span className="text-lg flex mt-1 sm:flex-col">
                 <p>
                   Valor Total:{" "}
                   <span className="text-indigo-600/75 font-bold">
-                    R${totalValue.toFixed(2)}
+                    R${formatNumber(totalValue)}
                   </span>
                 </p>
-                <p className="mx-4">
+                <p className="mx-4 sm:my-5">
                   Quant. Itens:{" "}
                   <span className="text-indigo-400 font-bold">
                     {totalQuantity}
@@ -277,10 +299,17 @@ const ShopDetails = () => {
                 </p>
               </span>
               <Link to="/buyitem">
-                <button className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2">
+                <button className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2 sm:w-full sm:justify-center">
                   <BsQrCodeScan size={25} color="white" />
                 </button>
               </Link>
+            </div>
+            <div className="flex flex-col text-slate-500 p-6 text-sm font-medium">
+              <code className="sm:my-6">Criado em: {created.toLocaleString("pt-BR")}</code>
+              <br />
+              <code>
+                Ultima Atualização: {updated.toLocaleString("pt-BR")}
+              </code>
             </div>
           </div>
         </div>
