@@ -22,5 +22,30 @@ const tokenShema = mongoose.Schema({
   },
 });
 
+const ClientTokenShema = mongoose.Schema({
+  clientId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Client",
+  },
+  token: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+  },
+  expiresAt: {
+    type: Date,
+    required: true,
+  },
+});
+
 const Token = mongoose.model("Token", tokenShema);
-module.exports = Token;
+const ClientToken = mongoose.model("ClientToken", ClientTokenShema);
+
+module.exports = {
+  Token,
+  ClientToken
+};

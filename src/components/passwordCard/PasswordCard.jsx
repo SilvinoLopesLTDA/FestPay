@@ -66,9 +66,9 @@ const PasswordCard = ({ password, componentId }) => {
               value={otp}
               onChange={handleInputChange}
               numInputs={4}
-              renderInput={(props) => <input {...props} />}
-              inputStyle={"mx-3 text-5xl text-violet-800 rounded sm:text-4xl"}
-              inputMode="numeric" // Exibe o teclado numérico em dispositivos móveis
+              renderInput={(props) => <input {...props} type="number"/>}
+              inputStyle={` mx-3 text-5xl text-violet-800 rounded sm:text-4xl`}
+              inputMode="numeric"
             />
             <div
               className={`${styles.btn_action} flex space-x-10 mt-8 text-md`}

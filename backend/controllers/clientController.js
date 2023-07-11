@@ -1,8 +1,13 @@
 const asyncHandler = require("express-async-handler");
 const Client = require("../models/clientModel");
+const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
 const QRCode = require("qrcode");
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+};
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -88,6 +93,16 @@ const registerClient = asyncHandler(async (req, res) => {
     qrCode: cloudinaryImageUrl,
   });
 
+  const token = generateToken(client._id);
+
+  res.cookie("token", token, {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 86400), // 1 day
+    sameSite: "none",
+    secure: true,
+  });
+
   if (client) {
     const { _id, name, phone, paymentMethod } = client;
 
@@ -148,11 +163,27 @@ const registerClient = asyncHandler(async (req, res) => {
       paymentMethod,
       balance,
       qrCode,
+      token,
     });
   } else {
     res.status(400);
     throw new Error("Dados de usuário inválidos!");
   }
+});
+
+// Get Client Token Status
+const ClientToken = asyncHandler(async (req, res) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.json(false);
+  }
+
+  const verified = jwt.verify(token, process.env.JWT_SECRET);
+
+  if (verified) {
+    return res.json(true);
+  }
+  return res.json(false);
 });
 
 // Get all Clients
@@ -233,6 +264,7 @@ const updateClient = asyncHandler(async (req, res) => {
 
 module.exports = {
   registerClient,
+  ClientToken,
   getClients,
   getClient,
   deleteClient,
