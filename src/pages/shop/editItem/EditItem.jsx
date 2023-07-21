@@ -1,30 +1,48 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import styles from "../../client/Client.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../../../components/loader/Loader";
 import {
-  createItem,
+  getItem,
   selectIsLoading,
+  selectItem,
+  updateItem,
 } from "../../../redux/features/shop/itemSlice";
 
-const initialState = {
-  name: "",
-  price: "",
-  quantity: "",
-};
-
-const AddItem = () => {
+const EditItem = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [item, setItem] = useState(initialState);
+  const shop = useSelector(selectItem); // Renomear para 'shop' para refletir a estrutura de dados
+
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  let { state } = useLocation();
+  const shopId = state.id;
   const isLoading = useSelector(selectIsLoading);
 
   const { id } = useParams();
-  const { name, price, quantity } = item;
+
+  const [item, setItem] = useState({
+    name: "",
+    price: "",
+    quantity: "",
+  });
+
+  useEffect(() => {
+    dispatch(getItem(shopId));
+  }, [dispatch, shopId]);
+
+  useEffect(() => {
+    // Atualizar o estado 'item' com os valores corretos ao carregar o 'shop' retornado pela API
+    if (shop && shop.items) {
+      const selectedItem = shop.items.find((itemData) => itemData._id === id);
+      if (selectedItem) {
+        setItem(selectedItem);
+      }
+    }
+  }, [shop, id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,37 +63,24 @@ const AddItem = () => {
     handleInputChange({ target: { name, value: cleanedValue } });
   };
 
-  const saveItems = async () => {
-    event.preventDefault();
-    const formData = {
-      id: id,
-      name: name,
-      price: price,
-      quantity: quantity,
-    };
-
-    await dispatch(createItem(formData));
-
-    if (name && price && name.trim() !== "" && price.trim() !== "") {
-      navigate(`/details-shop/${id}`);
-    }
-  };
-
   const saveItemData = () => {
-    const itemData = {
-      ...item,
+    const formData = {
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
     };
 
-    saveItems(JSON.stringify(itemData));
+    dispatch(updateItem({ shopId: shopId, itemId: id, formData })).then(() => {
+      navigate(`/details-shop/${shopId}`);
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitted(true);
 
-    if (item.name && item.price) {
-      saveItems(item);
-      navigate(`/add-item/${id}`);
+    if (item.name && item.price && item.quantity) {
+      saveItemData();
     } else {
       navigate(`/add-item/${id}`);
     }
@@ -103,7 +108,6 @@ const AddItem = () => {
             onSubmit={(e) => {
               e.preventDefault();
               handleSubmit(e);
-              saveItems(e);
             }}
           >
             <label htmlFor="name">
@@ -162,7 +166,7 @@ const AddItem = () => {
               onClick={saveItemData}
             >
               {" "}
-              Criar Item
+              Editar Item
             </button>
           </form>
         </div>
@@ -171,4 +175,4 @@ const AddItem = () => {
   );
 };
 
-export default AddItem;
+export default EditItem;

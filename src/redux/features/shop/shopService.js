@@ -84,6 +84,21 @@ const updateItem = async (shopId, itemId, formData) => {
   return response.data;
 };
 
+// Purchase  Item
+const purchaseItem = async (shopId, cartData) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.post(
+    `${API_URL}/buy-item/${shopId}`,
+    cartData,
+    config
+  );
+  return response.data;
+};
+
 const purchaseQRCode = async (formData) => {
   const config = {
     headers: {
@@ -103,6 +118,7 @@ const shopService = {
   getShop,
   updateShop,
   updateItem,
+  purchaseItem,
   purchaseQRCode,
 };
 

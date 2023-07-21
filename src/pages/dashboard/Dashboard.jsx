@@ -112,8 +112,6 @@ const Dashboard = () => {
     return dateA - dateB;
   });
   const labels = dates;
-  console.log(labels);
-  console.log(dataByDate);
   const profitsDated = labels.map((date) => dataByDate[date].profit);
   const costsDated = labels.map((date) => dataByDate[date].cost);
 

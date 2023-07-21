@@ -35,6 +35,11 @@ const getClient = async (id) => {
   return response.data;
 };
 
+const getClientInfo = async (id) => {
+  const response = await axios.get(`${API_URL}/client-info/${id}`);
+  return response.data;
+};
+
 // Update Client
 const updateClient = async (id, formData) => {
   const response = await axios.patch(`${API_URL}/${id}`, formData);
@@ -57,6 +62,7 @@ const clientService = {
   getClients,
   deleteClient,
   getClient,
+  getClientInfo,
   updateClient,
   rechargeClient,
 };

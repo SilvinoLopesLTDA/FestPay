@@ -87,6 +87,25 @@ export const getClient = createAsyncThunk(
   }
 );
 
+// Get a CLient
+export const getClientInfo = createAsyncThunk(
+  "clients/getClientInfo",
+  async (id, thunkAPI) => {
+    try {
+      return await clientService.getClientInfo(id);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Update Client
 export const updateClient = createAsyncThunk(
   "clients/updateClient",
@@ -190,6 +209,22 @@ const clientSlice = createSlice({
         state.client = action.payload;
       })
       .addCase(getClient.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+
+      .addCase(getClientInfo.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getClientInfo.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.client = action.payload;
+      })
+      .addCase(getClientInfo.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

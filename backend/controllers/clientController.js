@@ -106,7 +106,7 @@ const registerClient = asyncHandler(async (req, res) => {
   if (client) {
     const { _id, name, phone, paymentMethod } = client;
 
-    const resetUrl = `${process.env.FRONTEND_URL}/clientinfo/${_id}`;
+    const resetUrl = `${process.env.FRONTEND_URL}/client-info/${_id}`;
 
     const mailOptions = {
       from: "FestPay 🎉 <festpay49@gmail.com>",
@@ -208,6 +208,21 @@ const getClient = asyncHandler(async (req, res) => {
   res.status(200).json(client);
 });
 
+// Get Client Info
+const getClientInfo = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const client = await Client.findById(id);
+
+  // If client doesn't exist
+  if (!client) {
+    res.status(404);
+    throw new Error("Cliente não encontrado.");
+  }
+
+  res.status(200).json(client);
+});
+
 // Delete Client
 const deleteClient = asyncHandler(async (req, res) => {
   const client = await Client.findById(req.params.id);
@@ -267,6 +282,7 @@ module.exports = {
   ClientToken,
   getClients,
   getClient,
+  getClientInfo,
   deleteClient,
   updateClient,
 };

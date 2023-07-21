@@ -22,6 +22,14 @@ const PasswordCard = ({ password, componentId }) => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handlePassword();
+    } else if (event.key === "Backspace") {
+      setOtp((prevOtp) => prevOtp.slice(0, -1));
+    }
+  };
+
   const handleClear = () => {
     setOtp("");
   };
@@ -66,9 +74,16 @@ const PasswordCard = ({ password, componentId }) => {
               value={otp}
               onChange={handleInputChange}
               numInputs={4}
-              renderInput={(props) => <input {...props} type="number"/>}
-              inputStyle={` mx-3 text-5xl text-violet-800 rounded sm:text-4xl`}
-              inputMode="numeric"
+              renderInput={(props) => (
+                <input
+                  {...props}
+                  type="number"
+                  onKeyDown={handleKeyDown}
+                  inputMode="tel"
+                />
+              )}
+              inputStyle={`mx-3 text-5xl text-violet-800 rounded sm:text-4xl`}
+              inputMode="tel"
             />
             <div
               className={`${styles.btn_action} flex space-x-10 mt-8 text-md`}

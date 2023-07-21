@@ -100,6 +100,24 @@ export const updateItem = createAsyncThunk(
   }
 );
 
+export const purchaseItem = createAsyncThunk(
+  "item/purchaseItem",
+  async ({ shopId, cartData }, thunkAPI) => {
+    try {
+      return await shopService.purchaseItem(shopId, cartData);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const itemSlice = createSlice({
   name: "item",
   initialState,
@@ -178,9 +196,23 @@ const itemSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        // toast.success("Item Atualizado com sucesso!");
       })
       .addCase(updateItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+
+      .addCase(purchaseItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(purchaseItem.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+      })
+      .addCase(purchaseItem.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -188,8 +220,6 @@ const itemSlice = createSlice({
       });
   },
 });
-
-// export const {  } = itemSlice.actions;
 
 export const selectIsLoading = (state) => state.item.isLoading;
 export const selectItem = (state) => state.item.item;

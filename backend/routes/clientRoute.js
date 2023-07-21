@@ -8,12 +8,14 @@ const {
   deleteClient,
   updateClient,
   ClientToken,
+  getClientInfo,
 } = require("../controllers/clientController");
 
 router.post("/register", protect, registerClient);
 router.get("/", protect, getClients);
-router.get("/clienttoken", protect, ClientToken);
+router.get("/client-token", protect, ClientToken);
 router.get("/:id", protect, getClient);
+router.get("/client-info/:id", getClientInfo);
 router.delete("/:id", protect, deleteClient);
 router.patch("/:id", protect, updateClient);
 

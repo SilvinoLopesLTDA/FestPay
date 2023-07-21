@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { getLoginStatus } from "./services/authService";
 import { SET_LOGIN } from "./redux/features/auth/authSlice";
@@ -26,6 +26,7 @@ import AddItem from "./pages/shop/addItem/AddItem";
 import BuyItem from "./pages/shop/buyItem/BuyItem";
 import Welcome from "./pages/welcome/Welcome";
 import ClientInfo from "./pages/client/info/ClientInfo";
+import EditItem from "./pages/shop/editItem/EditItem";
 
 axios.defaults.withCredentials = true;
 
@@ -40,6 +41,8 @@ function App() {
     loginStatus();
   }, [dispatch]);
 
+  const [resetQuantity, setResetQuantity] = useState(null);
+
   return (
     <Router>
       <ToastContainer theme="dark" />
@@ -48,7 +51,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot" element={<Forgot />} />
-        <Route path="/resetpassword/:resetToken" element={<Reset />} />
+        <Route path="/reset-password/:resetToken" element={<Reset />} />
         <Route path="/" element={<Welcome />} />
         <Route
           path="/shops"
@@ -75,7 +78,7 @@ function App() {
           element={
             <Sidebar>
               <Layout>
-                <ShopDetails />
+                <ShopDetails handleResetQuantityValues={setResetQuantity} />
               </Layout>
             </Sidebar>
           }
@@ -101,11 +104,21 @@ function App() {
           }
         />
         <Route
-          path="/buyitem"
+          path="/edit-item/:id"
           element={
             <Sidebar>
               <Layout>
-                <BuyItem />
+                <EditItem />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/buy-item"
+          element={
+            <Sidebar>
+              <Layout>
+                <BuyItem resetQuantity={resetQuantity} />
               </Layout>
             </Sidebar>
           }
@@ -130,7 +143,7 @@ function App() {
             </Sidebar>
           }
         />
-        <Route path="/clientinfo/:id" element={<ClientInfo />} />
+        <Route path="/client-info/:id" element={<ClientInfo />} />
         <Route
           path="/dashboard"
           element={

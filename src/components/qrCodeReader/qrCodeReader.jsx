@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import QrReader from "react-qr-scanner";
 import Loader from "../loader/Loader";
 import {
@@ -8,12 +8,14 @@ import {
   purchaseQRCode,
   selectIsLoading,
 } from "../../redux/features/shop/shopSlice";
+import { useNavigate } from "react-router-dom";
+import { purchaseItem } from "../../redux/features/shop/itemSlice";
 
 const initialState = {
   email: "",
 };
 
-const QrCodeReader = () => {
+const QrCodeReader = ({ quantityValues }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [, setQrscan] = useState("Sem Resultados");
@@ -28,11 +30,27 @@ const QrCodeReader = () => {
   const item = shop?.items ?? [];
 
   item.forEach((itemData) => {
-    totalValue += itemData.quantity * itemData.price;
+    const itemQuantInput = parseInt(quantityValues[itemData._id] || 0, 10);
+    const itemValue = itemQuantInput * itemData.price;
+    totalValue += itemValue;
   });
 
+  const updateItemQuantities = async () => {
+    const updatedItems = item
+      .map((itemData) => ({
+        itemId: itemData._id,
+        quantity: itemData.quantity - (quantityValues[itemData._id] || 0),
+      }))
+      .filter((itemData) => itemData.quantity > 0);
+
+    const cartData = {
+      cart: updatedItems,
+    };
+
+    await dispatch(purchaseItem({ shopId: _id, cartData }));
+  };
+
   const { email } = shopInitial;
-  console.log(shop.name);
 
   const handleScan = (data) => {
     if (isReadingEnabled && data) {
@@ -59,7 +77,6 @@ const QrCodeReader = () => {
     setIsReadingEnabled(true);
   };
 
-
   useEffect(() => {
     dispatch(getShop(_id));
   }, [dispatch, _id]);
@@ -67,16 +84,14 @@ const QrCodeReader = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = {
-      name: shop.name,
+      name: shop?.name,
       email: email,
       purchaseAmount: totalValue,
     };
-    console.log(formData);
+
     dispatch(purchaseQRCode(formData));
-    if (
-      email &&
-      email.trim() !== "" 
-    ) {
+    if (email && email.trim() !== "") {
+      updateItemQuantities();
       navigate(`/details-shop/${_id}`);
       setQrscan("No result");
     }
@@ -91,7 +106,7 @@ const QrCodeReader = () => {
           <input
             type="text"
             id="name"
-            value={shop.name}
+            value={shop?.name}
             className="cursor-not-allowed"
             disabled
           />
@@ -133,6 +148,10 @@ const QrCodeReader = () => {
       </div>
     </div>
   );
+};
+
+QrCodeReader.propTypes = {
+  quantityValues: PropTypes.object.isRequired,
 };
 
 export default QrCodeReader;

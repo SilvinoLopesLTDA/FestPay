@@ -9,14 +9,16 @@ const itemSchema = mongoose.Schema({
   },
   name: {
     type: String,
+    required: true,
   },
   price: {
     type: Number,
+    required: true,
   },
   quantity: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 });
 
 const shopSchema = mongoose.Schema(

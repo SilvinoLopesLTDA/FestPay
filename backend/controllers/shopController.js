@@ -176,6 +176,41 @@ const updateItem = asyncHandler(async (req, res) => {
   res.status(200).json(updatedShop);
 });
 
+const purchaseItem = asyncHandler(async (req, res) => {
+  const { shopId } = req.params;
+  const { cart } = req.body;
+
+  if (!req.user) {
+    res.status(401);
+    throw new Error("Usuário não autenticado.");
+  }
+
+  const shop = await Shop.findById(shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Ponto de venda não encontrado.");
+  }
+
+  for (const cartItem of cart) {
+    const { itemId, quantity } = cartItem;
+    const item = shop.items.find((item) => item._id.toString() === itemId);
+    if (!item) {
+      res.status(404);
+      throw new Error(`Item com ID ${itemId} não encontrado.`);
+    }
+
+    if (item.quantity < quantity) {
+      res.status(400);
+      throw new Error(`Quantidade insuficiente para o item com ID ${itemId}.`);
+    }
+
+    item.quantity = quantity;
+  }
+
+  const updatedShop = await shop.save();
+
+  res.status(200).json(updatedShop);
+});
 
 module.exports = {
   createShop,
@@ -186,4 +221,5 @@ module.exports = {
   deleteItem,
   updateShop,
   updateItem,
+  purchaseItem,
 };

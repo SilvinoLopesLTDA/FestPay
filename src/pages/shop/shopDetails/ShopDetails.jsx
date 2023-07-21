@@ -2,31 +2,34 @@ import Swal from "sweetalert2";
 import { getShop } from "../../../redux/features/shop/shopSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { SpinnerImg } from "../../../components/loader/Loader";
 import PasswordCard from "../../../components/passwordCard/PasswordCard";
-import { deleteItem, updateItem } from "../../../redux/features/shop/itemSlice";
+import { deleteItem } from "../../../redux/features/shop/itemSlice";
 import { BsPlus, BsQrCodeScan } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
 import { AiOutlineMinus } from "react-icons/ai";
-import { useState } from "react";
-
 import styles from "./ShopDetails.module.scss";
 
 const ShopDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [quantityValues, setQuantityValues] = useState({});
-
   const { id } = useParams();
   const { shop, isLoading, isError, message } = useSelector(
     (state) => state.shop
   );
 
   const item = shop?.items ?? [];
+
+  const [quantityValues, setQuantityValues] = useState(() => {
+    const initialValues = {};
+    item.forEach((itemData) => {
+      initialValues[itemData._id] = 0;
+    });
+    return initialValues;
+  });
 
   const formatNumber = (number) => {
     if (number === null || number === undefined || isNaN(number)) {
@@ -55,63 +58,39 @@ const ShopDetails = () => {
   let totalQuantity = 0;
 
   item.forEach((itemData) => {
-    totalValue += itemData.quantity * itemData.price;
-    totalQuantity += itemData.quantity;
+    const itemQuantInput = parseInt(quantityValues[itemData._id] || 0, 10);
+    const itemValue = itemQuantInput * itemData.price;
+
+    totalValue += itemValue;
+    totalQuantity += itemQuantInput;
   });
 
   const created = new Date(shop.createdAt);
   const updated = new Date(shop.updatedAt);
 
-  const increaseQuantity = async (shopId, itemId) => {
-    const itemToUpdate = { ...item.find((item) => item._id === itemId) };
-    const updatedQuantity = itemToUpdate.quantity + 1;
+  const increaseQuantity = (itemId) => {
+    const itemData = item.find((item) => item._id === itemId);
+    if (!itemData) return;
 
-    if (updatedQuantity >= 0) {
-      const updateData = {
-        name: itemToUpdate.name,
-        price: itemToUpdate.price,
-        quantity: updatedQuantity,
-      };
-      const formData = {
-        shopId: shopId,
-        itemId: itemId,
-        formData: updateData,
-      };
+    const currentQuantity = quantityValues[itemId] || 0;
+    const newQuantity = currentQuantity + 1;
 
-      await dispatch(updateItem(formData));
-      await dispatch(getShop(id));
-
-      setQuantityValues((prevState) => ({
-        ...prevState,
-        [itemId]: updatedQuantity,
+    if (newQuantity <= itemData.quantity) {
+      setQuantityValues((prevValues) => ({
+        ...prevValues,
+        [itemId]: newQuantity,
       }));
     }
   };
 
-  const decreaseQuantity = async (shopId, itemId) => {
-    const itemToUpdate = { ...item.find((item) => item._id === itemId) };
-    const updatedQuantity = itemToUpdate.quantity - 1;
-
-    if (updatedQuantity >= 0) {
-      const updateData = {
-        name: itemToUpdate.name,
-        price: itemToUpdate.price,
-        quantity: updatedQuantity,
+  const decreaseQuantity = (itemId) => {
+    setQuantityValues((prevValues) => {
+      const currentQuantity = prevValues[itemId] || 0;
+      return {
+        ...prevValues,
+        [itemId]: Math.max(0, currentQuantity - 1),
       };
-      const formData = {
-        shopId: shopId,
-        itemId: itemId,
-        formData: updateData,
-      };
-
-      await dispatch(updateItem(formData));
-      await dispatch(getShop(id));
-
-      setQuantityValues((prevState) => ({
-        ...prevState,
-        [itemId]: updatedQuantity,
-      }));
-    }
+    });
   };
 
   const shortenText = (text, n) => {
@@ -132,7 +111,7 @@ const ShopDetails = () => {
 
   const delItem = async (itemId) => {
     await dispatch(deleteItem(itemId));
-    await dispatch(getShop(id)); // Buscar o shop atualizado após a exclusão do item
+    await dispatch(getShop(id));
   };
 
   const confirmDeleteItem = (itemId) => {
@@ -152,14 +131,14 @@ const ShopDetails = () => {
         navigate(`/details-shop/${id}`);
         Swal.fire({
           icon: "success",
-          title: "Item Excluido",
-          text: "Esse item foi excluida com sucesso!",
+          title: "Item Excluído",
+          text: "Esse item foi excluído com sucesso!",
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire({
           icon: "info",
           title: "Ação Cancelada",
-          text: "Não se preocupe, seu item está securo :)",
+          text: "Não se preocupe, seu item está seguro :)",
         });
       }
     });
@@ -223,14 +202,13 @@ const ShopDetails = () => {
                     <th> Nome </th>
                     <th> Preço </th>
                     <th> Quant. </th>
+                    <th> Quant. Compra </th>
                     <th> Ações </th>
                   </tr>
                 </thead>
                 <tbody>
                   {item?.map((item, index) => {
                     const { _id, name, price, quantity } = item;
-                    const itemQuant = quantity || 0;
-
                     return (
                       <tr
                         key={_id}
@@ -242,39 +220,59 @@ const ShopDetails = () => {
                           {"R$"}
                           {price}
                         </td>
-                        <td className="w-14">
+                        <td className={quantity <= 5 ? `${styles.low}` : ""}>
+                          {quantity}
+                        </td>
+                        <td className="w-12">
                           <div className="flex justify-center">
                             <button
                               className="p-1 mr-3 bg-indigo-700 text-white-950"
-                              onClick={() => decreaseQuantity(id, _id)}
+                              onClick={() => decreaseQuantity(_id)}
                             >
                               <AiOutlineMinus color="white" size={25} />
                             </button>
-
                             <input
                               type="text"
                               disabled
-                              value={quantityValues[_id] || itemQuant}
+                              min={0}
+                              value={quantityValues[_id] || 0}
+                              onChange={(e) => {
+                                const value = parseInt(e.target.value, 10);
+                                setQuantityValues((prevValues) => ({
+                                  ...prevValues,
+                                  [_id]: value >= 0 ? value : 0,
+                                }));
+                              }}
                               className="text-center w-32"
                             />
-
                             <button
                               className="p-1 ml-3 bg-indigo-700 text-white-950"
-                              onClick={() => increaseQuantity(id, _id)}
+                              onClick={() => increaseQuantity(_id)}
                             >
                               <BsPlus color="white" size={25} />
                             </button>
                           </div>
                         </td>
-                        <td className="flex justify-center align-center py-3">
-                          <FaTrashAlt
-                            style={{ cursor: "pointer" }}
-                            size={20}
-                            color="white"
-                            onClick={() => confirmDeleteItem(_id)}
-                            title="Deletar"
-                          />
+                        <td
+                          className={`${styles.icons} flex justify-center align-center py-3`}
+                        >
+                          <span className="flex">
+                            <FaTrashAlt
+                              style={{
+                                cursor: "pointer",
+                                marginRight: ".75rem",
+                              }}
+                              size={20}
+                              color="white"
+                              onClick={() => confirmDeleteItem(_id)}
+                              title="Deletar"
+                            />
+                            <Link to={`/edit-item/${_id}`} state={{ id: id }}>
+                              <FaEdit size={22} color="white" title="Editar" />
+                            </Link>
+                          </span>
                         </td>
+                        <td></td>
                       </tr>
                     );
                   })}
@@ -283,7 +281,7 @@ const ShopDetails = () => {
             )}
           </div>
           <div className="flex justify-between p-5 border-t border-slate-800 sm:flex-col">
-            <div className="flex justify-around bg-slate-950/50 rounded w-90 p-6 sm:w-full sm:flex-col sm:text-center">
+            <div className="flex items-center justify-around bg-slate-950/50 rounded w-90 p-6 sm:w-full sm:flex-col sm:text-center">
               <span className="text-lg flex mt-1 sm:flex-col">
                 <p>
                   Valor Total:{" "}
@@ -294,22 +292,22 @@ const ShopDetails = () => {
                 <p className="mx-4 sm:my-5">
                   Quant. Itens:{" "}
                   <span className="text-indigo-400 font-bold">
-                    {totalQuantity}
+                    {totalQuantity || 0}
                   </span>
                 </p>
               </span>
-              <Link to="/buyitem">
+              <Link to={"/buy-item"} state={{ quantityValues: quantityValues }}>
                 <button className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2 sm:w-full sm:justify-center">
                   <BsQrCodeScan size={25} color="white" />
                 </button>
               </Link>
             </div>
             <div className="flex flex-col text-slate-500 p-6 text-sm font-medium">
-              <code className="sm:my-6">Criado em: {created.toLocaleString("pt-BR")}</code>
-              <br />
-              <code>
-                Ultima Atualização: {updated.toLocaleString("pt-BR")}
+              <code className="sm:my-6">
+                Criado em: {created.toLocaleString("pt-BR")}
               </code>
+              <br />
+              <code>Última Atualização: {updated.toLocaleString("pt-BR")}</code>
             </div>
           </div>
         </div>
