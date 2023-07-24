@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
-const tokenSchema = mongoose.Schema({
-  userId: {
+const AdminTokenShema = mongoose.Schema({
+  adminId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "User",
+    ref: "Admin",
   },
   token: {
     type: String,
@@ -22,5 +22,5 @@ const tokenSchema = mongoose.Schema({
   },
 });
 
-const Token = mongoose.model("Token", tokenSchema);
-module.exports = Token;
+const AdminToken = mongoose.model("AdminToken", AdminTokenShema);
+module.exports = AdminToken;
