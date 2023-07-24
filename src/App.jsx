@@ -29,7 +29,7 @@ import ClientInfo from "./pages/client/info/ClientInfo";
 import EditItem from "./pages/shop/editItem/EditItem";
 import Manage from "./pages/manage/Manage";
 import AddAdmin from "./pages/manage/addAdmin/AddAdmin";
-import CreateAdminPassword from "./pages/manage/addAdmin/createAdminPassword";
+import CreateAdminPassword from "./pages/manage/addAdmin/CreateAdminPassword";
 
 axios.defaults.withCredentials = true;
 
