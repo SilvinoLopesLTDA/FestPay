@@ -40,7 +40,7 @@ const Welcome = () => {
             <button
               className={`${styles.btn} ${styles.btn_sm}  px-5 py-2 mx-5 border-2 rounded-lg text-lg font-semibold hover:text-slate-950 drop-shadow-Cxl`}
             >
-              <Link to="/shops">Entre em nosso aplicativo!</Link>
+              <Link to="/dashboard">Entre em nosso aplicativo!</Link>
             </button>
           </ShowOnLogin>
         </span>

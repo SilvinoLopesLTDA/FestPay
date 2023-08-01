@@ -93,10 +93,10 @@ const EditItem = () => {
         <div className={styles.content}>
           <div className="flex justify-between mb-3">
             <h2 className="text-2xl font-semibold">
-              Adicione um{" "}
+              Edite um{" "}
               <span className="text-violet-700 font-bold">Item</span>
             </h2>
-            <Link to={`/details-shop/${id}`}>
+            <Link to={`/details-shop/${shopId}`}>
               <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium">
                 Voltar
               </button>
@@ -112,7 +112,7 @@ const EditItem = () => {
           >
             <label htmlFor="name">
               {" "}
-              Nome<span className="text-red-600"> *</span>
+              Nome
             </label>
             <input
               type="text"
@@ -128,7 +128,7 @@ const EditItem = () => {
 
             <label htmlFor="price">
               {" "}
-              Preço <span className="text-red-600">*</span>
+              Preço
             </label>
             <input
               type="text"
@@ -144,7 +144,7 @@ const EditItem = () => {
 
             <label htmlFor="quantity">
               {" "}
-              Quantidade <span className="text-red-600">*</span>
+              Quantidade
             </label>
             <input
               type="text"

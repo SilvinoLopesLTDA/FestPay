@@ -27,6 +27,9 @@ import BuyItem from "./pages/shop/buyItem/BuyItem";
 import Welcome from "./pages/welcome/Welcome";
 import ClientInfo from "./pages/client/info/ClientInfo";
 import EditItem from "./pages/shop/editItem/EditItem";
+import Manage from "./pages/manage/Manage";
+import AddAdmin from "./pages/manage/addAdmin/AddAdmin";
+import CreateAdminPassword from "./pages/manage/addAdmin/CreateAdminPassword";
 
 axios.defaults.withCredentials = true;
 
@@ -53,6 +56,39 @@ function App() {
         <Route path="/forgot" element={<Forgot />} />
         <Route path="/reset-password/:resetToken" element={<Reset />} />
         <Route path="/" element={<Welcome />} />
+
+        <Route path="/resetpassword/:resetToken" element={<Reset />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Sidebar>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/manage"
+          element={
+            <Sidebar>
+              <Layout>
+                <Manage />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/add-admin"
+          element={
+            <Sidebar>
+              <Layout>
+                <AddAdmin />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route path="/create-password/:id" element={<CreateAdminPassword />} />
         <Route
           path="/shops"
           element={
@@ -144,16 +180,6 @@ function App() {
           }
         />
         <Route path="/client-info/:id" element={<ClientInfo />} />
-        <Route
-          path="/dashboard"
-          element={
-            <Sidebar>
-              <Layout>
-                <Dashboard />
-              </Layout>
-            </Sidebar>
-          }
-        />
         <Route
           path="/terms"
           element={

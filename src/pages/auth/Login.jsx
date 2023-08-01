@@ -47,7 +47,7 @@ const Login = () => {
       const data = await LoginUser(userData);
       await dispatch(SET_LOGIN(true));
       await dispatch(SET_NAME(data.name));
-      navigate("/shops");
+      navigate("/dashboard");
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

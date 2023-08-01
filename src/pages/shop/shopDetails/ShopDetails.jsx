@@ -272,7 +272,6 @@ const ShopDetails = () => {
                             </Link>
                           </span>
                         </td>
-                        <td></td>
                       </tr>
                     );
                   })}
