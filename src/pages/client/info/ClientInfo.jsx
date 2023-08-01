@@ -45,7 +45,7 @@ const ClientInfo = () => {
     (state) => state.client
   );
 
-  const [showQrCode, setShowQrCode] = useState(false); // Estado para controlar a exibição do QR Code
+  const [showQrCode, setShowQrCode] = useState(false);
 
   const handleShowQrCode = () => {
     setShowQrCode(true);

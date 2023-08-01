@@ -93,18 +93,8 @@ const registerClient = asyncHandler(async (req, res) => {
     qrCode: cloudinaryImageUrl,
   });
 
-  const token = generateToken(client._id);
-
-  res.cookie("token", token, {
-    path: "/",
-    httpOnly: true,
-    expires: new Date(Date.now() + 1000 * 86400), // 1 day
-    sameSite: "none",
-    secure: true,
-  });
-
   if (client) {
-    const { _id, name, phone, paymentMethod } = client;
+    const { _id, name, phone, email, paymentMethod, balance, qrCode } = client;
 
     const resetUrl = `${process.env.FRONTEND_URL}/client-info/${_id}`;
 
@@ -135,25 +125,25 @@ const registerClient = asyncHandler(async (req, res) => {
       console.log("Email enviado:", info.response);
     });
 
-    clientTwilio.messages
-      .create({
-        body: "Aqui está o seu QR Code!",
-        mediaUrl: cloudinaryImageUrl,
-        from: "whatsapp:+14155238886",
-        to: `whatsapp:${phone}`,
-      })
-      .then((message) => console.log(message.sid))
-      .catch((error) => console.error("Erro ao enviar a mensagem:", error));
+    // clientTwilio.messages
+    //   .create({
+    //     body: "Aqui está o seu QR Code!",
+    //     mediaUrl: cloudinaryImageUrl,
+    //     from: "whatsapp:+14155238886",
+    //     to: `whatsapp:${phone}`,
+    //   })
+    //   .then((message) => console.log(message.sid))
+    //   .catch((error) => console.error("Erro ao enviar a mensagem:", error));
 
-    clientTwilio.messages
-      .create({
-        body: "Aqui está o seu QR Code!",
-        mediaUrl: cloudinaryImageUrl,
-        from: "+14155238886",
-        to: phone,
-      })
-      .then((message) => console.log(message.sid))
-      .catch((error) => console.error("Erro ao enviar a mensagem:", error));
+    // clientTwilio.messages
+    //   .create({
+    //     body: "Aqui está o seu QR Code!",
+    //     mediaUrl: cloudinaryImageUrl,
+    //     from: "+14155238886",
+    //     to: phone,
+    //   })
+    //   .then((message) => console.log(message.sid))
+    //   .catch((error) => console.error("Erro ao enviar a mensagem:", error));
 
     res.status(201).json({
       _id,
@@ -163,7 +153,6 @@ const registerClient = asyncHandler(async (req, res) => {
       paymentMethod,
       balance,
       qrCode,
-      token,
     });
   } else {
     res.status(400);

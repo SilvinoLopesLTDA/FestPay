@@ -47,7 +47,6 @@ const deleteShop = async (id) => {
 
 // Delete a Shop
 const deleteItem = async (id) => {
-  console.log(id);
   const response = await axios.delete(`${API_URL}/delete-item/${id}`);
   return response.data;
 };

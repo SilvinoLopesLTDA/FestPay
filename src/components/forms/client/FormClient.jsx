@@ -3,7 +3,13 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "../../../pages/client/Client.module.scss";
 
-const FormClient = ({ client, handleInputChange, saveClient, resetForm, required }) => {
+const FormClient = ({
+  client,
+  handleInputChange,
+  saveClient,
+  resetForm,
+  required,
+}) => {
   const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -31,6 +37,40 @@ const FormClient = ({ client, handleInputChange, saveClient, resetForm, required
       ...client,
     };
     saveClient(JSON.stringify(clientData));
+  };
+
+  const handlePhoneInputChange = (e) => {
+    const rawPhoneNumber = e.target.value.replace(/[^\d]/g, "");
+    const formattedPhoneNumber = rawPhoneNumber.replace(
+      /^(\d{2})(\d{4,5})(\d{4})$/,
+      "($1) $2-$3"
+    );
+    handleInputChange({
+      target: {
+        name: "phone",
+        value: formattedPhoneNumber,
+      },
+    });
+  };
+
+  const handleBalanceInputChange = (e) => {
+    const balanceValue = e.target.value.replace(/[^\d,.]/g, "");
+
+    const formattedBalance = balanceValue.replace(/,/g, ".");
+
+    const dotIndex = formattedBalance.indexOf(".");
+    const hasMultipleDots =
+      dotIndex !== -1 && dotIndex !== formattedBalance.lastIndexOf(".");
+    if (hasMultipleDots) {
+      return;
+    }
+
+    handleInputChange({
+      target: {
+        name: "balance",
+        value: formattedBalance,
+      },
+    });
   };
 
   return (
@@ -64,7 +104,7 @@ const FormClient = ({ client, handleInputChange, saveClient, resetForm, required
           Email <span className="text-red-600">{required}</span>
         </label>
         <input
-          type="text"
+          type="email"
           placeholder="email@gmail.com"
           name="email"
           id="email"
@@ -73,22 +113,26 @@ const FormClient = ({ client, handleInputChange, saveClient, resetForm, required
           className={
             isSubmitted && client.email === "" ? `${styles.highlight}` : ""
           }
+          pattern="\S+@\S+\.\S+"
         />
 
         <label htmlFor="phone">
           {" "}
-          Tel <span className="text-red-600">{required}</span>
+          Telefone <span className="text-red-600">{required}</span>
         </label>
         <input
-          type="text"
-          placeholder="+55 00 91234-5678"
+          type="tel"
+          placeholder="(00) 91234-5678"
           name="phone"
           id="phone"
+          pattern="([0-9]{2})[0-9]{5}-[0-9]{4}"
           value={client.phone}
-          onChange={handleInputChange}
+          onChange={handlePhoneInputChange}
           className={
             isSubmitted && client.phone === "" ? `${styles.highlight}` : ""
           }
+          inputMode="numeric"
+          maxLength="15"
         />
 
         <label htmlFor="balance">
@@ -101,10 +145,11 @@ const FormClient = ({ client, handleInputChange, saveClient, resetForm, required
           name="balance"
           id="balance"
           value={client?.balance}
-          onChange={handleInputChange}
+          onChange={handleBalanceInputChange}
           className={
             isSubmitted && client?.balance === "" ? `${styles.highlight}` : ""
           }
+          inputMode="numeric"
         />
 
         <label htmlFor="paymentMethod">

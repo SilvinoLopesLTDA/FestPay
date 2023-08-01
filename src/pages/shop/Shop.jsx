@@ -4,17 +4,26 @@ import { useEffect } from "react";
 import ShopContainer from "../../components/shop/shopContainer/ShopContainer";
 import { getShops } from "../../redux/features/shop/shopSlice";
 import PasswordCard from "../../components/passwordCard/PasswordCard";
+import { useRedirectLoggedOutUser } from "../../customHook/useRedirectLoggedOutUser";
 
 const Shop = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("shouldReloadDashboard")) {
+      window.location.reload();
+      sessionStorage.removeItem("shouldReloadDashboard");
+    }
+  }, []);
+  useRedirectLoggedOutUser("/login");
 
   const { shop, isLoading, isError, message } = useSelector(
     (state) => state.shop
   );
 
   useEffect(() => {
-      dispatch(getShops());
-  
+    dispatch(getShops());
+
     if (isError) {
       console.log(message);
     }
@@ -32,4 +41,4 @@ Shop.propTypes = {
   shop: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
-export default Shop
+export default Shop;
