@@ -12,6 +12,8 @@ import {
   updateShop,
 } from "../../../redux/features/shop/shopSlice";
 import Swal from "sweetalert2";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import PassStyle from "../../../components/forms/shop/FormShop.module.scss"
 
 const ShopEdit = () => {
   const dispatch = useDispatch();
@@ -19,6 +21,7 @@ const ShopEdit = () => {
 
   const shopEdit = useSelector(selectShop);
   const [shop, setShop] = useState(shopEdit);
+  const [visible, setVisible] = useState(true);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -134,7 +137,7 @@ const ShopEdit = () => {
           }}
         >
           <label htmlFor="name">
-            Nome <span className="text-red-600">*</span>
+            Nome
           </label>
           <input
             type="text"
@@ -147,20 +150,32 @@ const ShopEdit = () => {
               isSubmitted && shop?.name === "" ? `${styles.highlight}` : ""
             }
           />
-          <label htmlFor="password">
-            Senha <span className="text-red-600">*</span>
-          </label>
+          <label htmlFor="password" className="text-slate-500/75">
+          {" "}
+          Senha{" "}
+        </label>
+        <div className="flex">
           <input
-            type="password"
-            placeholder="1234"
-            name="password"
+            type={visible ? "text" : "password"}
+            placeholder={visible ? "1234" : "****"}
+            required
+            className="w-full"
             id="password"
+            name="password"
             value={shop?.password}
             onChange={handlePwdChange}
-            className={
-              isSubmitted && shop?.password === "" ? `${styles.highlight}` : ""
-            }
           />
+          <div
+            className={PassStyle.toggleVisible}
+            onClick={() => setVisible(!visible)}
+          >
+            {visible ? (
+              <AiOutlineEye color="#0f172a" />
+            ) : (
+              <AiOutlineEyeInvisible color="#0f172a" />
+            )}
+          </div>
+        </div>
         </form>
           <div className="flex justify-between">
             <button
