@@ -29,7 +29,7 @@ import ClientInfo from "./pages/client/info/ClientInfo";
 import EditItem from "./pages/shop/editItem/EditItem";
 import Manage from "./pages/manage/Manage";
 import AddAdmin from "./pages/manage/addAdmin/AddAdmin";
-import Storage from "./pages/storage/Storage";
+// import Storage from "./pages/storage/Storage";
 import AdminLogin from "./pages/auth/AdminLogin";
 import EditAdmin from "./pages/manage/editAdmin/EditAdmin";
 
@@ -178,7 +178,7 @@ function App() {
             </Sidebar>
           }
         />
-        <Route
+        {/* <Route
           path="/storage"
           element={
             <Sidebar>
@@ -187,7 +187,7 @@ function App() {
               </Layout>
             </Sidebar>
           }
-        />
+        /> */}
         <Route
           path="/add-balance"
           element={
