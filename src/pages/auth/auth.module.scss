@@ -19,6 +19,19 @@
       text-align: start;
     }
 
+    .toggleVisible {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggleVisible svg{
+      position: absolute;
+      left: 60%;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
     form {
       input[type="text"],
       input[type="email"],
@@ -55,10 +68,6 @@
       .links {
         display: flex;
         justify-content: space-between;
-        margin-top: 2em;
-      }
-
-      .fields {
         margin-top: 2em;
       }
 

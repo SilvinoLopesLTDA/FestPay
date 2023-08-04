@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 export const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
-export const validateEmail = (email) => {
+export const validateAdminEmail = (email) => {
   return email.match(
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );

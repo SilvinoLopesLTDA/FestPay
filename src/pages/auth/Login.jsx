@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { LoginUser, validateEmail } from "../../services/authService";
 import { SET_LOGIN, SET_NAME } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const initialState = {
   email: "",
@@ -19,6 +20,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const { email, password } = formData;
+
+  const [visible, setVisible] = useState(true);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +62,9 @@ const Login = () => {
     <div className={`${styles.auth}`}>
       {isLoading && <Loader />}
       <Card>
+        <span style={{ color: "#94a3b8" }}>
+          <Link to="/"> {"← "}Voltar </Link>
+        </span>
         <div className={styles.form}>
           <h2> Entre em sua Conta </h2>
           <p className="text-slate-400/75 text-lg">
@@ -72,7 +78,7 @@ const Login = () => {
             </div>
           </p>
           <form onSubmit={login}>
-            <div className={styles.fields}>
+            <div className="mt-8">
               <label htmlFor="email" className="text-slate-500/75">
                 {" "}
                 Email{" "}
@@ -87,20 +93,32 @@ const Login = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className={styles.fields}>
+            <div className="mt-2">
               <label htmlFor="password" className="text-slate-500/75">
                 {" "}
                 Senha{" "}
               </label>
-              <input
-                type="password"
-                placeholder="******"
-                required
-                id="password"
-                name="password"
-                value={password}
-                onChange={handleInputChange}
-              />
+              <div className="flex">
+                <input
+                  type={visible ? "text" : "password"}
+                  placeholder={visible ? "123456" : "******"}
+                  required
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={handleInputChange}
+                />
+                <div
+                  className={styles.toggleVisible}
+                  onClick={() => setVisible(!visible)}
+                >
+                  {visible ? (
+                    <AiOutlineEye color="white" />
+                  ) : (
+                    <AiOutlineEyeInvisible color="white" />
+                  )}
+                </div>
+              </div>
               <p className="text-center text-slate-400/75 font-semibold hover:text-indigo-500/75">
                 <Link to="/forgot">Esqueceu a Senha?</Link>
               </p>

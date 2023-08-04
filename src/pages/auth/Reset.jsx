@@ -4,6 +4,7 @@ import styles from "./auth.module.scss";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { resetPassword } from "../../services/authService";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const initialState = {
   password: "",
@@ -13,6 +14,9 @@ const initialState = {
 const Reset = () => {
   const [formData, setFormData] = useState(initialState);
   const { password, password2 } = formData;
+
+  const [visible, setVisible] = useState(true);
+  const [visibleConfirm, setVisibleConfirm] = useState(true);
 
   const { resetToken } = useParams();
 
@@ -54,35 +58,53 @@ const Reset = () => {
           <h2> Mude a senha </h2>
           <p className="text-slate-400/75 text-lg">Siga os passos para redefinir a sua senha </p>
           <form onSubmit={reset}>
-            <div className={styles.fields}>
+          <div className="mt-7">
               <label htmlFor="password" className="text-slate-500/75">
                 {" "}
-                Nova Senha{" "}
+                Senha{" "}
               </label>
-              <input
-                type="password"
-                placeholder="******"
-                required
-                id="password"
-                name="password"
-                value={password}
-                onChange={handleInputChange}
-              />
+              <div className="flex">
+                <input
+                  type={visible ? "text" : "password"}
+                  placeholder={visible ? "123456" : "******"}
+                  required
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={handleInputChange}
+                />
+                <div className={styles.toggleVisible} onClick={() => setVisible(!visible)}>
+                  {visible ? (
+                    <AiOutlineEye color="white" />
+                  ) : (
+                    <AiOutlineEyeInvisible color="white" />
+                  )}
+                </div>
+              </div>
             </div>
-            <div className={styles.fields}>
-              <label htmlFor="password2" className="text-slate-500/75">
+            <div className="mt-2">
+              <label htmlFor="password" className="text-slate-500/75">
                 {" "}
-                Confirmar Nova Senha{" "}
+                Senha{" "}
               </label>
-              <input
-                type="password"
-                placeholder="******"
-                required
-                id="password2"
-                name="password2"
-                value={password2}
-                onChange={handleInputChange}
-              />
+              <div className="flex">
+                <input
+                  type={visibleConfirm ? "text" : "password"}
+                  placeholder={visibleConfirm ? "123456" : "******"}
+                  required
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={handleInputChange}
+                />
+                <div className={styles.toggleVisible} onClick={() => setVisibleConfirm(!visibleConfirm)}>
+                  {visibleConfirm ? (
+                    <AiOutlineEye color="white" />
+                  ) : (
+                    <AiOutlineEyeInvisible color="white" />
+                  )}
+                </div>
+              </div>
             </div>
             <button
               type="submit"
