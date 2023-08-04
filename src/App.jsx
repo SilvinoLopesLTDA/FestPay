@@ -30,7 +30,7 @@ import EditItem from "./pages/shop/editItem/EditItem";
 import Manage from "./pages/manage/Manage";
 import AddAdmin from "./pages/manage/addAdmin/AddAdmin";
 // import Storage from "./pages/storage/Storage";
-import AdminLogin from "./pages/auth/AdminLogin";
+// import AdminLogin from "./pages/auth/AdminLogin";
 import EditAdmin from "./pages/manage/editAdmin/EditAdmin";
 
 axios.defaults.withCredentials = true;
@@ -97,7 +97,7 @@ function App() {
             </Sidebar>
           }
         />
-        <Route path="/:id" element={<AdminLogin />} />
+        {/* <Route path="/:id" element={<AdminLogin />} /> */}
         <Route
           path="/shops"
           element={
