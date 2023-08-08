@@ -19,12 +19,15 @@ export default {
       },
       screens: {
         '2xl': {'max': '1535px'},
+        '2xlS': {'min': '1535px'},
+        '3xlS': {'min': '1920px'},
         // => @media (max-width: 1535px) { ... }
   
         'xl': {'max': '1279px'},
         // => @media (max-width: 1279px) { ... }
   
-        'lg': {'min': '1023px'},
+        'lg': {'max': '1023px'},
+        'lgS': {'min': '1023px'},
         // => @media (max-width: 1023px) { ... }
   
         'md': {'max': '767px'},
