@@ -1,0 +1,49 @@
+.items_list {
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  height: 100vh; /* Define a altura da div para ocupar toda a altura da página */
+
+  .table {
+    padding: 5px;
+    overflow-x: auto;
+
+    .search {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+
+      .low {
+        color: red;
+      }
+
+      tr {
+        align-items: center;
+      }
+
+      th,
+      td {
+        vertical-align: middle; /* Centraliza verticalmente os elementos nas células */
+        text-align: center;
+        padding: 10px 15px;
+
+        &.icons {
+          height: 60px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          svg {
+            text-align: center;
+            cursor: pointer;
+            vertical-align: middle;
+            align-self: center;
+          }
+        }
+      }
+    }
+  }
+}

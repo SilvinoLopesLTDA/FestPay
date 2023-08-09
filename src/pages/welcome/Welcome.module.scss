@@ -1,0 +1,118 @@
+.banner {
+  margin-top: 0;
+  height: 100vh;
+  color: #fff;
+  background-image: url(../../../assets/festpay_bg.png);
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #121214;
+  h2 {
+    padding: 3em;
+    background: rgb(94, 23, 235);
+    background: linear-gradient(
+      90deg,
+      rgba(94, 23, 235, 1) 0%,
+      rgba(178, 46, 117, 1) 100%
+    );
+    display: inline-block;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .btn {
+    border: 2px solid #9f249f;
+    color: #9f249f;
+
+    &:hover {
+      background: rgb(94, 23, 235);
+      background: linear-gradient(
+        90deg,
+        rgba(94, 23, 235, 1) 0%,
+        rgba(178, 46, 117, 1) 100%
+      );
+      border: 2px solid #121214;
+    }
+  }
+
+  .register {
+    background: rgb(94, 23, 235);
+    background: linear-gradient(
+      90deg,
+      rgba(94, 23, 235, 1) 0%,
+      rgba(178, 46, 117, 1) 100%
+    );
+    border: 2px solid #121214;
+
+    &:hover {
+      border: 2px solid #9f249f;
+      color: #9f249f;
+      background: transparent;
+      box-shadow: 0 5px 35px rgba(167, 139, 250, 0.1);
+    }
+  }
+}
+
+.wrapper {
+  display: flex;
+  position: fixed;
+  justify-content: space-between;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #2e2e33;
+  padding: 0 10%;
+  backdrop-filter: blur(3px);
+  background-color: transparent;
+
+  .icon {
+    transition: 0.1s;
+    cursor: pointer;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.75);
+
+    img {
+      width: 30%;
+      height: auto;
+    }
+
+    &:hover {
+      transition: 0.1s;
+      opacity: 0.8;
+    }
+  }
+}
+
+@media (max-width: 850px) {
+  .wrapper {
+    padding: 5px 5%;
+    .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.1s;
+      cursor: pointer;
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.75);
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  .logoff_btn {
+    margin-top: -5%;
+  }
+
+  .register {
+    width: 10em;
+  }
+
+  .btn_sm {
+    width: 15em;
+    margin-top: -10%;
+  }
+}
