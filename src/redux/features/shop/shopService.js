@@ -108,6 +108,22 @@ const purchaseQRCode = async (formData) => {
   return response.data;
 };
 
+const registerPurchase = async (id, cart) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.post(`${API_URL}/purchase/${id}`, cart, config);
+  return response.data;
+};
+
+// Get all Purchases
+const getPurchases = async () => {
+  const response = await axios.get(`${API_URL}/get-purchases`);
+  return response.data;
+};
+
 const shopService = {
   createShop,
   createItem,
@@ -119,6 +135,8 @@ const shopService = {
   updateItem,
   purchaseItem,
   purchaseQRCode,
+  registerPurchase,
+  getPurchases,
 };
 
 export default shopService;

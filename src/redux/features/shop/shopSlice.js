@@ -124,6 +124,44 @@ export const purchaseQRCode = createAsyncThunk(
   }
 );
 
+// Register a Purchase
+export const registerPurchase = createAsyncThunk(
+  "shops/purchase",
+  async ({ id, cart }, thunkAPI) => {
+    try {
+      return await shopService.registerPurchase(id, cart);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Get all Purchases
+export const getPurchases = createAsyncThunk(
+  "shops/getAllPurchases",
+  async (_, thunkAPI) => {
+    try {
+      return await shopService.getPurchases();
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const shopSlice = createSlice({
   name: "shops",
   initialState,
@@ -220,6 +258,37 @@ const shopSlice = createSlice({
         toast.success("Compra realizada com sucesso!");
       })
       .addCase(purchaseQRCode.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+
+      .addCase(registerPurchase.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(registerPurchase.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+      })
+      .addCase(registerPurchase.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+
+      .addCase(getPurchases.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getPurchases.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.purchases = action.payload;
+      })
+      .addCase(getPurchases.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

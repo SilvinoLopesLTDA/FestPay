@@ -1,5 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const Shop = require("../models/shopModel");
+const Purchase = require("../models/purchaseModel");
+const Cost = require("../models/costModel");
+const mongoose = require("mongoose");
 
 // Create Shop
 const createShop = asyncHandler(async (req, res) => {
@@ -127,7 +130,6 @@ const deleteItem = asyncHandler(async (req, res) => {
   res.status(200).json(updatedShop);
 });
 
-// Update Shop
 const updateShop = asyncHandler(async (req, res) => {
   const { name, password, profit, cost } = req.body;
   const { id } = req.params;
@@ -138,16 +140,33 @@ const updateShop = asyncHandler(async (req, res) => {
     throw new Error("Ponto de venda não encontrado.");
   }
 
-  // Atualize os campos do shop
+  const newCost = parseFloat(cost);
+  const oldCost = shop.cost;
+  const costDifference = newCost - oldCost;
+
   shop.name = name;
   shop.password = password;
-  shop.profit = profit;
-  shop.cost = cost;
+  shop.profit = parseFloat(profit);
+  shop.cost = newCost;
 
-  // Salve o shop atualizado no banco de dados
-  const updatedShop = await shop.save();
+  if (costDifference !== 0) {
+    const transaction = new Cost({
+      user: req.user.id,
+      shop: shop._id,
+      costValue: Math.abs(costDifference),
+    });
 
-  res.status(200).json(updatedShop);
+    await transaction.save();
+
+    shop.costsUpdated.push(transaction);
+
+    const updatedShop = await shop.save();
+
+    res.status(200).json(updatedShop);
+  } else {
+    const updatedShop = await shop.save();
+    res.status(200).json(updatedShop);
+  }
 });
 
 const updateItem = asyncHandler(async (req, res) => {
@@ -212,6 +231,95 @@ const purchaseItem = asyncHandler(async (req, res) => {
   res.status(200).json(updatedShop);
 });
 
+const registerPurchase = asyncHandler(async (req, res) => {
+  const { cart } = req.body;
+  const { id } = req.params;
+
+  if (!cart || cart.length === 0) {
+    res.status(400);
+    throw new Error("O carrinho está vazio.");
+  }
+
+  const shop = await Shop.findById(id);
+
+  if (!shop) {
+    res.status(404);
+    throw new Error("Ponto de venda não encontrado.");
+  }
+
+  const purchaseItems = [];
+
+  for (const cartItem of cart) {
+    const itemId = mongoose.Types.ObjectId(cartItem.id);
+    const shopItem = shop.items.find((item) => item._id.equals(itemId));
+    if (!shopItem) {
+      res.status(400);
+      throw new Error(`Item com ID ${itemId} não encontrado na barraca.`);
+    }
+
+    purchaseItems.push({
+      id: shopItem._id,
+      name: shopItem.name,
+      price: shopItem.price,
+      quantity: cartItem.quantity,
+    });
+  }
+
+  const profitValue = purchaseItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
+  const newPurchase = new Purchase({
+    user: req.user.id,
+    shop: shop._id,
+    items: purchaseItems,
+    profitValue,
+  });
+
+  shop.profit += parseFloat(profitValue);
+
+  await newPurchase.save();
+
+  purchaseItems.forEach((item) => {
+    const shopItem = shop.items.find((shopItem) =>
+      shopItem._id.equals(item.id)
+    );
+    if (shopItem) {
+      shopItem.quantity -= item.quantity;
+      if (shopItem.quantity < 0) {
+        shopItem.quantity = 0;
+      }
+    }
+  });
+
+  // const updatedShop = await Shop.findByIdAndUpdate(
+  //   id,
+  //   { $push: { purchases: newPurchase } },
+  //   { new: true }
+  // );
+
+  shop.purchases.push(newPurchase);
+
+  const updatedShop = await shop.save();
+
+  res.status(200).json(updatedShop);
+});
+
+// Get all Purchases
+const getPurchases = asyncHandler(async (req, res) => {
+  const purchases = await Purchase.find({ user: req.user.id }).sort(
+    "-createdAt"
+  );
+  res.status(200).json(purchases);
+});
+
+// Get all Costs
+const getCosts = asyncHandler(async (req, res) => {
+  const costs = await Cost.find({ user: req.user.id }).sort("-createdAt");
+  res.status(200).json(costs);
+});
+
 module.exports = {
   createShop,
   createItem,
@@ -222,4 +330,7 @@ module.exports = {
   updateShop,
   updateItem,
   purchaseItem,
+  registerPurchase,
+  getPurchases,
+  getCosts,
 };

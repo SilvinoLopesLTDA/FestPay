@@ -49,6 +49,18 @@ const shopSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    purchases: [
+      {
+        type: mongoose.Schema.Types.Mixed,
+        ref: "Purchase",
+      },
+    ],
+    costsUpdated: [
+      {
+        type: mongoose.Schema.Types.Mixed,
+        ref: "Cost",
+      },
+    ],
   },
   {
     timestamps: true,
