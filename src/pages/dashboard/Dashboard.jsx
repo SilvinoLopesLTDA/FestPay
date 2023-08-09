@@ -258,8 +258,8 @@ const Dashboard = () => {
           </div>
           <div className="flex justify-center items-center h-full flex-col">
             <div className="w-full">
-              <div className="flex justify-between items-center mx-10 my-7">
-                <h3 className="text-2xl font-semibold mt-6">
+              <div className="flex justify-between items-center my-7">
+                <h3 className="text-2xl font-semibold mt-6 sm:mx-5 sm:text-center">
                   {" "}
                   Pontos de{" "}
                   <span className="text-violet-700 font-bold">Vendas</span>
