@@ -196,6 +196,4 @@ const adminSlice = createSlice({
 export const selectIsLoading = (state) => state.admin.isLoading;
 export const selectAdmin = (state) => state.admin.admin;
 
-console.log((state) => state.admin);
-
 export default adminSlice.reducer;

@@ -1,0 +1,12 @@
+.toggleVisible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .toggleVisible svg{
+    position: absolute;
+    left: 73%;
+    font-size: 1.5em;
+    cursor: pointer;
+  }

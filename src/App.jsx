@@ -29,7 +29,9 @@ import ClientInfo from "./pages/client/info/ClientInfo";
 import EditItem from "./pages/shop/editItem/EditItem";
 import Manage from "./pages/manage/Manage";
 import AddAdmin from "./pages/manage/addAdmin/AddAdmin";
-import CreateAdminPassword from "./pages/manage/addAdmin/CreateAdminPassword";
+// import Storage from "./pages/storage/Storage";
+// import AdminLogin from "./pages/auth/AdminLogin";
+import EditAdmin from "./pages/manage/editAdmin/EditAdmin";
 
 axios.defaults.withCredentials = true;
 
@@ -54,9 +56,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot" element={<Forgot />} />
-        <Route path="/reset-password/:resetToken" element={<Reset />} />
-        <Route path="/" element={<Welcome />} />
-
         <Route path="/resetpassword/:resetToken" element={<Reset />} />
         <Route
           path="/dashboard"
@@ -88,7 +87,17 @@ function App() {
             </Sidebar>
           }
         />
-        <Route path="/create-password/:id" element={<CreateAdminPassword />} />
+        <Route
+          path="/edit-admin/:id"
+          element={
+            <Sidebar>
+              <Layout>
+                <EditAdmin />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        {/* <Route path="/:id" element={<AdminLogin />} /> */}
         <Route
           path="/shops"
           element={
@@ -169,6 +178,16 @@ function App() {
             </Sidebar>
           }
         />
+        {/* <Route
+          path="/storage"
+          element={
+            <Sidebar>
+              <Layout>
+                <Storage />
+              </Layout>
+            </Sidebar>
+          }
+        /> */}
         <Route
           path="/add-balance"
           element={

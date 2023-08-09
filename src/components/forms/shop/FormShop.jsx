@@ -2,14 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "../../../pages/client/Client.module.scss";
+import PassStyle from "./FormShop.module.scss"
 import { useDispatch } from "react-redux";
 import { getShops } from "../../../redux/features/shop/shopSlice";
-// import { getShops } from "../../../redux/features/shop/shopSlice";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
 
   const handlePwdChange = (e) => {
     const { name, value } = e.target;
-    let filteredValue = value.replace(/\D/g, '');
+    let filteredValue = value.replace(/\D/g, "");
     filteredValue = filteredValue.substring(0, 4);
     handleInputChange({ target: { name, value: filteredValue } });
   };
@@ -69,20 +71,32 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
             isSubmitted && shop?.name === "" ? `${styles.highlight}` : ""
           }
         />
-        <label htmlFor="password">
-          Senha <span className="text-red-600">{required}</span>
+        <label htmlFor="password" className="text-slate-500/75">
+          {" "}
+          Senha{" "}<span className="text-red-600">{required}</span>
         </label>
-        <input
-          type="password"
-          placeholder="1234"
-          name="password"
-          id="password"
-          value={shop?.password}
-          onChange={handlePwdChange}
-          className={
-            isSubmitted && shop?.password === "" ? `${styles.highlight}` : ""
-          }
-        />
+        <div className="flex">
+          <input
+            type={visible ? "text" : "password"}
+            placeholder={visible ? "1234" : "****"}
+            required
+            className="w-full"
+            id="password"
+            name="password"
+            value={shop?.password}
+            onChange={handlePwdChange}
+          />
+          <div
+            className={PassStyle.toggleVisible}
+            onClick={() => setVisible(!visible)}
+          >
+            {visible ? (
+              <AiOutlineEye color="#0f172a" />
+            ) : (
+              <AiOutlineEyeInvisible color="#0f172a" />
+            )}
+          </div>
+        </div>
         <label htmlFor="cost">
           Custo <span className="text-red-600"> {required}</span>
         </label>

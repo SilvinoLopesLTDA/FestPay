@@ -248,11 +248,11 @@ const Dashboard = () => {
             Dashboard do
             <span className="text-violet-700 font-bold"> FestPay</span>
           </h3>
-          <div className="flex justify-between sm:flex-col">
-            <div className=" flex w-3/5 sm:w-full">
+          <div className="flex items-center justify-between sm:flex-col">
+            <div className="w-11/12 3xlS:w-5/12 sm:w-full">
               <Bar options={optionsBar} data={data} />
             </div>
-            <div className="w-1/3 sm:w-full">
+            <div className="w-5/12 3xlS:w-3/12 sm:w-full">
               <Pie data={PieData} options={optionsPie} />
             </div>
           </div>

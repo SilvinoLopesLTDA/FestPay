@@ -7,6 +7,7 @@ import { registerUser, validateEmail } from "../../services/authService";
 import { useDispatch } from "react-redux";
 import { SET_LOGIN, SET_NAME } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const initialState = {
   name: "",
@@ -21,6 +22,9 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const { name, email, password, password2 } = formData;
+
+  const [visible, setVisible] = useState(true);
+  const [visibleConfirm, setVisibleConfirm] = useState(true);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,16 +76,22 @@ const Register = () => {
     <div className={`${styles.auth}`}>
       {isLoading && <Loader />}
       <Card>
+        <span style={{ color: "#94a3b8" }}>
+          <Link to="/"> {"← "}Voltar </Link>
+        </span>
         <div className={styles.form}>
           <h2> Crie sua conta</h2>
           <p className="text-slate-400/75 text-lg">
             Comece agora a ter controle da festa
             <div className={styles.register}>
-              <Link to="/login">Já tem uma conta? <span className="font-semibold">Entre aqui</span></Link>
+              <Link to="/login">
+                Já tem uma conta?{" "}
+                <span className="font-semibold">Entre aqui</span>
+              </Link>
             </div>
           </p>
           <form onSubmit={register}>
-            <div className={styles.fields}>
+            <div className="mt-5">
               <label htmlFor="name" className="text-slate-500/75">
                 {" "}
                 Nome{" "}
@@ -96,7 +106,7 @@ const Register = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className={styles.fields}>
+            <div className="mt-2">
               <label htmlFor="email" className="text-slate-500/75">
                 {" "}
                 Email{" "}
@@ -111,35 +121,53 @@ const Register = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className={styles.fields}>
+            <div className="mt-2">
               <label htmlFor="password" className="text-slate-500/75">
                 {" "}
                 Senha{" "}
               </label>
-              <input
-                type="password"
-                placeholder="******"
-                required
-                id="password"
-                name="password"
-                value={password}
-                onChange={handleInputChange}
-              />
+              <div className="flex">
+                <input
+                  type={visible ? "text" : "password"}
+                  placeholder={visible ? "123456" : "******"}
+                  required
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={handleInputChange}
+                />
+                <div className={styles.toggleVisible} onClick={() => setVisible(!visible)}>
+                  {visible ? (
+                    <AiOutlineEye color="white" />
+                  ) : (
+                    <AiOutlineEyeInvisible color="white" />
+                  )}
+                </div>
+              </div>
             </div>
-            <div className={styles.fields}>
+            <div className="mt-2">
               <label htmlFor="password2" className="text-slate-500/75">
                 {" "}
                 Confirmar Senha{" "}
               </label>
-              <input
-                type="password"
-                placeholder="******"
-                required
-                id="password2"
-                name="password2"
-                value={password2}
-                onChange={handleInputChange}
-              />
+              <div className="flex">
+                <input
+                  type={visibleConfirm ? "text" : "password"}
+                  placeholder={visibleConfirm ? "123456" : "******"}
+                  required
+                  id="password2"
+                  name="password2"
+                  value={password2}
+                  onChange={handleInputChange}
+                />
+                <div className={styles.toggleVisible} onClick={() => setVisibleConfirm(!visibleConfirm)}>
+                  {visibleConfirm ? (
+                    <AiOutlineEye color="white" />
+                  ) : (
+                    <AiOutlineEyeInvisible color="white" />
+                  )}
+                </div>
+              </div>
             </div>
             <button
               type="submit"
