@@ -9,7 +9,6 @@ import PasswordCard from "../../../components/passwordCard/PasswordCard";
 import { deleteItem } from "../../../redux/features/shop/itemSlice";
 import { BsPlus, BsQrCodeScan } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
-import { MdAddShoppingCart } from "react-icons/md";
 import { AiOutlineMinus } from "react-icons/ai";
 import styles from "./ShopDetails.module.scss";
 
@@ -160,24 +159,12 @@ const ShopDetails = () => {
             </div>
             <div className="flex flex-col float-right px-5 text-white mt-5 sm:justify-center sm:text-center md:flex-row">
               <Link to={`/edit-shop/${id}`}>
-                <button className="flex px-24 py-3 bg-indigo-800 rounded-sm text-lg font-semibold sm:p-5 sm:justify-center">
-                  <FaEdit
-                    size={22}
-                    color="white"
-                    title="Editar"
-                    className="lg:hidden"
-                  />
-                  <h2 className="sm:hidden"> Editar </h2>
+                <button className="flex w-full px-14 py-3 bg-indigo-800 rounded-sm text-lg font-semibold mt-5 md:mt-0 sm:p-4 sm:justify-center">
+                  <h2> Editar </h2>
                 </button>
               </Link>
               <Link to={`/add-item/${id}`}>
                 <button className="flex w-full px-14 py-3 bg-violet-900 rounded-sm text-lg font-semibold mt-5 md:mt-0 sm:ml-3 sm:p-4 sm:justify-center">
-                  <MdAddShoppingCart
-                    size={20}
-                    color="white"
-                    title="Editar"
-                    className="mr-3 mt-1 lg:hidden"
-                  />
                   <h2>Adicionar Item</h2>
                 </button>
               </Link>
