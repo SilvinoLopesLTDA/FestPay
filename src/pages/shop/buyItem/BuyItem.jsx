@@ -8,6 +8,8 @@ const BuyItem = () => {
   const { shop, isLoading } = useSelector((state) => state.shop);
   let { state } = useLocation();
   const quantityValues = state.quantityValues;
+  const cart = state.cart
+  const CART_STORAGE_KEY = state.CART_STORAGE_KEY
   const { _id } = shop;
 
   return (
@@ -31,7 +33,7 @@ const BuyItem = () => {
           {" "}
           - Confira os dados do pagamento e do cliente logo abaixo{" "}
         </p>
-        <QrCodeReader quantityValues={quantityValues} />
+        <QrCodeReader quantityValues={quantityValues} cart={cart} CART_STORAGE_KEY={CART_STORAGE_KEY} />
       </div>
     </div>
   );

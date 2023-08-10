@@ -23,10 +23,24 @@
   border: 0.125em solid red;
 }
 
+.fade-in {
+  opacity: 0;
+  animation: fadeInAnimation 1s ease-in-out forwards;
+}
+
 @media screen and (max-width: 850px) {
   .content {
     width: 20em;
     padding: 2.5em;
     margin-top: 4em;
+  }
+}
+
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

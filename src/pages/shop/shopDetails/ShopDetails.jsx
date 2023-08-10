@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import { getShop } from "../../../redux/features/shop/shopSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { SpinnerImg } from "../../../components/loader/Loader";
@@ -11,6 +11,7 @@ import { BsPlus, BsQrCodeScan } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { AiOutlineMinus } from "react-icons/ai";
 import styles from "./ShopDetails.module.scss";
+import { format, isValid } from "date-fns";
 
 const ShopDetails = () => {
   const dispatch = useDispatch();
@@ -20,15 +21,52 @@ const ShopDetails = () => {
     (state) => state.shop
   );
 
+  const location = useLocation();
+  const showLoading = location.state?.showLoading || false;
+
   const item = shop?.items ?? [];
 
-  const [quantityValues, setQuantityValues] = useState(() => {
-    const initialValues = {};
-    item.forEach((itemData) => {
-      initialValues[itemData._id] = 0;
-    });
-    return initialValues;
-  });
+  const [quantityValues, setQuantityValues] = useState({});
+  const [cart, setCart] = useState({ cart: [] });
+
+  useEffect(() => {
+    if (shop?.items) {
+      const initialValues = {};
+      shop.items.forEach((itemData) => {
+        initialValues[itemData._id] = 0;
+      });
+      setQuantityValues(initialValues);
+    }
+  }, [shop?.items]);
+
+  const CART_STORAGE_KEY = "cart_data";
+
+  const getStoredCart = () => {
+    const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+    return storedCart ? JSON.parse(storedCart) : { cart: [] };
+  };
+
+  useEffect(() => {
+    setCart(getStoredCart());
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+  }, [cart]);
+
+  useEffect(() => {
+    const storedCart = getStoredCart();
+
+    setCart((prevCart) => ({
+      ...prevCart,
+      cart: [...prevCart.cart, ...storedCart.cart],
+    }));
+  }, []);
+
+  useEffect(() => {
+    const storedCart = getStoredCart();
+    setCart(storedCart);
+  }, []);
 
   const formatNumber = (number) => {
     if (number === null || number === undefined || isNaN(number)) {
@@ -57,7 +95,9 @@ const ShopDetails = () => {
   let totalQuantity = 0;
 
   item.forEach((itemData) => {
-    const itemQuantInput = parseInt(quantityValues[itemData._id] || 0, 10);
+    const itemId = itemData._id;
+
+    const itemQuantInput = parseInt(quantityValues[itemId] || 0, 10);
     const itemValue = itemQuantInput * itemData.price;
 
     totalValue += itemValue;
@@ -66,6 +106,14 @@ const ShopDetails = () => {
 
   const created = new Date(shop.createdAt);
   const updated = new Date(shop.updatedAt);
+
+  const createdFormatted = isValid(created)
+    ? format(created, "dd/MM/yy - HH:mm")
+    : "Data inválida";
+
+  const updatedFormatted = isValid(updated)
+    ? format(updated, "dd/MM/yy - HH:mm")
+    : "Data inválida";
 
   const increaseQuantity = (itemId) => {
     const itemData = item.find((item) => item._id === itemId);
@@ -79,15 +127,52 @@ const ShopDetails = () => {
         ...prevValues,
         [itemId]: newQuantity,
       }));
+
+      setCart((prevCart) => {
+        const existingCartItemIndex = prevCart.cart.findIndex(
+          (item) => item.id === itemId
+        );
+
+        if (existingCartItemIndex !== -1) {
+          const updatedCart = [...prevCart.cart];
+          updatedCart[existingCartItemIndex].quantity = newQuantity;
+          return { cart: updatedCart };
+        } else {
+          return {
+            cart: [...prevCart.cart, { id: itemId, quantity: newQuantity }],
+          };
+        }
+      });
     }
   };
 
   const decreaseQuantity = (itemId) => {
     setQuantityValues((prevValues) => {
       const currentQuantity = prevValues[itemId] || 0;
+      const newQuantity = Math.max(0, currentQuantity - 1);
+
+      setCart((prevCart) => {
+        const updatedCart = (prevCart.cart || []).map((item) =>
+          item.id === itemId ? { ...item, quantity: newQuantity } : item
+        );
+
+        const filteredCart = updatedCart.filter((item) => item.quantity > 0);
+
+        return { ...prevCart, cart: filteredCart };
+      });
+
+      const updatedCart = {
+        cart: cart.cart
+          .map((item) =>
+            item.id === itemId ? { ...item, quantity: newQuantity } : item
+          )
+          .filter((item) => item.quantity > 0),
+      };
+      setCart(updatedCart);
+
       return {
         ...prevValues,
-        [itemId]: Math.max(0, currentQuantity - 1),
+        [itemId]: newQuantity,
       };
     });
   };
@@ -150,7 +235,7 @@ const ShopDetails = () => {
         className={` ${styles.items_list} flex justify-center items-center h-full flex-col `}
       >
         <div className="bg-slate-900 w-11/12 my-16 sm:flex sm:flex-col">
-          {isLoading && <SpinnerImg />}
+          {isLoading && showLoading && <SpinnerImg />}
           <div className="flex flex-between sm:flex-col">
             <div className="flex justify-center align-center flex-col float-left p-5 w-full">
               <h2 className="bg-slate-700 p-11 align-center text-3xl font-semibold text-center rounded">
@@ -159,13 +244,13 @@ const ShopDetails = () => {
             </div>
             <div className="flex flex-col float-right px-5 text-white mt-5 sm:justify-center sm:text-center md:flex-row">
               <Link to={`/edit-shop/${id}`}>
-                <button className="flex w-full px-14 py-3 bg-indigo-800 rounded-sm text-lg font-semibold mt-5 md:mt-0 sm:p-4 sm:justify-center">
+                <button className="flex align-items justify-center w-full px-14 py-3 bg-indigo-800 rounded-sm text-lg font-semibold md:mt-0 sm:p-4 sm:justify-center">
                   <h2> Editar </h2>
                 </button>
               </Link>
               <Link to={`/add-item/${id}`}>
                 <button className="flex w-full px-14 py-3 bg-violet-900 rounded-sm text-lg font-semibold mt-5 md:mt-0 sm:ml-3 sm:p-4 sm:justify-center">
-                  <h2>Adicionar Item</h2>
+                  <h2 className="w-32">Adicionar Item</h2>
                 </button>
               </Link>
             </div>
@@ -177,7 +262,7 @@ const ShopDetails = () => {
           </div>
 
           <div className={`${styles.table} m-5`}>
-            {!isLoading && item?.length === 0 ? (
+            {!isLoading && !showLoading && item?.length === 0 ? (
               <p className="p-4 text-center">
                 Nenhum item cadastrado. Por favor, adicione um item!
               </p>
@@ -208,7 +293,7 @@ const ShopDetails = () => {
                           {price}
                         </td>
                         <td className={quantity <= 5 ? `${styles.low}` : ""}>
-                          {quantity}
+                          {quantity - quantityValues[_id]}
                         </td>
                         <td className="w-12">
                           <div className="flex justify-center">
@@ -282,18 +367,33 @@ const ShopDetails = () => {
                   </span>
                 </p>
               </span>
-              <Link to={"/buy-item"} state={{ quantityValues: quantityValues }}>
-                <button className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2 sm:w-full sm:justify-center">
-                  <BsQrCodeScan size={25} color="white" />
+              {totalQuantity > 0 ? (
+                <Link
+                  to={"/buy-item"}
+                  state={{
+                    quantityValues: quantityValues,
+                    cart: cart,
+                    CART_STORAGE_KEY: CART_STORAGE_KEY,
+                  }}
+                >
+                  <button className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2 sm:w-full sm:justify-center">
+                    <BsQrCodeScan size={26} color="white" className="mr-2.5" />
+                    Prosseguir à compra!
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2 sm:w-full sm:justify-center cursor-not-allowed"
+                  disabled
+                >
+                  Adicione um item para prosseguir!
                 </button>
-              </Link>
+              )}
             </div>
             <div className="flex flex-col text-slate-500 p-6 text-sm font-medium">
-              <code className="sm:my-6">
-                Criado em: {created.toLocaleString("pt-BR")}
-              </code>
+              <code className="sm:my-6">Criado em: {createdFormatted}</code>
               <br />
-              <code>Última Atualização: {updated.toLocaleString("pt-BR")}</code>
+              <code>Última Atualização: {updatedFormatted}</code>
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import Loader from "../loader/Loader";
 import {
   getShop,
   purchaseQRCode,
+  registerPurchase,
   selectIsLoading,
 } from "../../redux/features/shop/shopSlice";
 import { useNavigate } from "react-router-dom";
@@ -15,20 +16,18 @@ const initialState = {
   email: "",
 };
 
-const QrCodeReader = ({ quantityValues }) => {
+const QrCodeReader = ({ quantityValues, cart }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [, setQrscan] = useState("Sem Resultados");
   const [isReadingEnabled, setIsReadingEnabled] = useState(true);
   const [shopInitial, setShop] = useState(initialState);
   const isLoading = useSelector(selectIsLoading);
-
   const { shop } = useSelector((state) => state.shop);
   const { _id } = shop;
   let totalValue = 0;
-
   const item = shop?.items ?? [];
-
+  console.log(cart);
   item.forEach((itemData) => {
     const itemQuantInput = parseInt(quantityValues[itemData._id] || 0, 10);
     const itemValue = itemQuantInput * itemData.price;
@@ -90,6 +89,7 @@ const QrCodeReader = ({ quantityValues }) => {
     };
 
     dispatch(purchaseQRCode(formData));
+    dispatch(registerPurchase({ id: _id, cart }));
     if (email && email.trim() !== "") {
       updateItemQuantities();
       navigate(`/details-shop/${_id}`);
@@ -152,6 +152,7 @@ const QrCodeReader = ({ quantityValues }) => {
 
 QrCodeReader.propTypes = {
   quantityValues: PropTypes.object.isRequired,
+  cart: PropTypes.array,
 };
 
 export default QrCodeReader;

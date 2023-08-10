@@ -18,6 +18,7 @@ import { getShops } from "../../redux/features/shop/shopSlice";
 import { Bar } from "react-chartjs-2";
 import { format } from "date-fns";
 import { useRedirectLoggedOutUser } from "../../customHook/useRedirectLoggedOutUser";
+import printJS from "print-js";
 
 Chart.register(
   CategoryScale,
@@ -89,20 +90,11 @@ const Dashboard = () => {
     ? shop.map((item) => item.cost || 0)
     : [];
 
-  if (shop.createdAt) {
-    const createdAt = format(new Date(shop.createdAt), "dd/MM/yy");
-    const initialCostIndex = uniqueKeys.indexOf(createdAt);
-
-    if (initialCostIndex !== -1) {
-      initialCosts[initialCostIndex] -= shop.cost || 0;
-    }
-  }
-
   const totalInitialCost = initialCosts.reduce(
     (total, cost) => total + cost,
     0
   );
-
+  console.log(shop);
   const totalProfit = profits.reduce((acc, curr) => acc + curr, 0);
   const totalCost = totalInitialCost;
 
@@ -176,6 +168,15 @@ const Dashboard = () => {
 
   const uniqueKeys = Array.from(new Set(dates));
 
+  if (shop.createdAt) {
+    const createdAt = format(new Date(shop.createdAt), "dd/MM/yy");
+    const initialCostIndex = uniqueKeys.indexOf(createdAt);
+
+    if (initialCostIndex !== -1) {
+      initialCosts[initialCostIndex] -= shop.cost || 0;
+    }
+  }
+
   const profitsDated = uniqueKeys.map((date) => dataByDate[date]?.profit || 0);
   const costsDated = uniqueKeys.map((date) => dataByDate[date]?.cost || 0);
 
@@ -238,74 +239,92 @@ const Dashboard = () => {
     ],
   };
 
+  const handlePrint = () => {
+    printJS({
+      printable: "print-container",
+      type: "html",
+      header: "Dashboard do FestPay",
+    });
+  };
+
   return (
     <>
       <PasswordCard componentId="dashboard" password={"1234"} />
       <div className="flex justify-center items-center">
         {isLoading && <Loader />}
-        <div className={styles.content}>
-          <h3 className="text-2xl font-semibold mb-10 sm:text-center">
-            Dashboard do
-            <span className="text-violet-700 font-bold"> FestPay</span>
-          </h3>
-          <div className="flex items-center justify-between sm:flex-col">
-            <div className="w-11/12 3xlS:w-5/12 sm:w-full">
-              <Bar options={optionsBar} data={data} />
-            </div>
-            <div className="w-5/12 3xlS:w-3/12 sm:w-full">
-              <Pie data={PieData} options={optionsPie} />
-            </div>
+        <div className={`${styles.content}`}>
+          <div className="flex justify-between items-center mb-10">
+            <h3 className="text-2xl font-semibold sm:text-center">
+              Dashboard do
+              <span className="text-violet-700 font-bold"> FestPay</span>
+            </h3>
+            <button
+              className="px-4 py-2 text-white bg-violet-700 rounded"
+              onClick={handlePrint}
+            >
+              Imprimir Dashboard
+            </button>
           </div>
-          <div className="flex justify-center items-center h-full flex-col">
-            <div className="w-full">
-              <div className="flex justify-between items-center my-7">
-                <h3 className="text-2xl font-semibold mt-6 sm:mx-5 sm:text-center">
-                  {" "}
-                  Pontos de{" "}
-                  <span className="text-violet-700 font-bold">Vendas</span>
-                </h3>
+          <div id="print-container">
+            <div className="flex justify-between sm:flex-col">
+              <div className="flex w-3/5 sm:w-full">
+                <Bar options={optionsBar} data={data} />
               </div>
-              <div className="shop-container">
-                <div
-                  className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full my-8 sm:gap-4`}
-                >
-                  {isLoading && <SpinnerImg />}
-                  {!isLoading && shop.length === 0 ? (
-                    <p className={`${styles.placeholder} px-10`}>
-                      -- Nenhum ponto de venda cadastrado. Por favor, adicione
-                      um Ponto de venda!
-                    </p>
-                  ) : (
-                    sortedShops.map((shop) => {
-                      const { _id, name, profit, cost } = shop;
-                      return (
-                        <div
-                          key={_id}
-                          className="bg-slate-950/50 drop-shadow-4xl w-11/12 p-4 my-3 rounded sm:mx-5 sm:col-start-1 sm:col-span-4"
-                        >
-                          <h2 className="bg-slate-900 p-3 text-lg font-semibold mb-5 text-center">
-                            {name}
-                          </h2>
-                          <div className="flex flex-col text-center sm:ml-3">
-                            <p className="text-lg">
-                              {" "}
-                              Lucros:{" "}
-                              <span className="font-bold text-green-500">
-                                R${formatNumber(profit)}
-                              </span>{" "}
-                            </p>
-                            <p className="text-lg sm:ml-7">
-                              {" "}
-                              Custos:{" "}
-                              <span className=" font-bold text-rose-700">
-                                R${formatNumber(cost)}
-                              </span>{" "}
-                            </p>
+              <div className="w-1/3 sm:w-full">
+                <Pie data={PieData} options={optionsPie} />
+              </div>
+            </div>
+            <div className="flex justify-center items-center h-full flex-col">
+              <div className="w-full">
+                <div className="flex justify-between items-center mx-10 my-7">
+                  <h3 className="text-2xl font-semibold mt-6">
+                    {" "}
+                    Pontos de{" "}
+                    <span className="text-violet-700 font-bold">Vendas</span>
+                  </h3>
+                </div>
+                <div className="shop-container">
+                  <div
+                    className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full my-8 sm:gap-4`}
+                  >
+                    {isLoading && <SpinnerImg />}
+                    {!isLoading && shop.length === 0 ? (
+                      <p className={`${styles.placeholder} px-10`}>
+                        -- Nenhum ponto de venda cadastrado. Por favor, adicione
+                        um Ponto de venda!
+                      </p>
+                    ) : (
+                      sortedShops.map((shop) => {
+                        const { _id, name, profit, cost } = shop;
+                        return (
+                          <div
+                            key={_id}
+                            className="bg-slate-950/50 drop-shadow-4xl w-11/12 p-4 my-3 rounded sm:mx-5 sm:col-start-1 sm:col-span-4 fade-in"
+                          >
+                            <h2 className="bg-slate-900 p-3 text-lg font-semibold mb-5 text-center">
+                              {name}
+                            </h2>
+                            <div className="flex flex-col text-center sm:ml-3">
+                              <p className="text-lg">
+                                {" "}
+                                Lucros:{" "}
+                                <span className="font-bold text-green-500">
+                                  R${formatNumber(profit)}
+                                </span>{" "}
+                              </p>
+                              <p className="text-lg sm:ml-7">
+                                {" "}
+                                Custos:{" "}
+                                <span className=" font-bold text-rose-700">
+                                  R${formatNumber(cost)}
+                                </span>{" "}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })
-                  )}
+                        );
+                      })
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
