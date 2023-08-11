@@ -27,8 +27,6 @@ const initialState = {
 const QrCode = ({ handleCloseQrCode }) => {
   const clients = useSelector(selectClient);
   const client = clients[clients.length - 1];
-  console.log(clients);
-  console.log(client);
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.key === "Escape") {
@@ -132,23 +130,17 @@ const Client = () => {
       paymentMethod: paymentMethod,
       balance: balance,
     };
-    await dispatch(createClient(formData));
+    try {
+      const createdClient = await dispatch(createClient(formData));
 
-    if (
-      name &&
-      phone &&
-      email &&
-      paymentMethod &&
-      balance &&
-      name.trim() !== "" &&
-      phone.trim() !== "" &&
-      email.trim() !== "" &&
-      paymentMethod.trim() !== "" &&
-      balance.trim() !== ""
-    ) {
-      resetForm();
-      setShowQrCode(true);
-      navigate("/clients");
+      if (createClient.fulfilled.match(createdClient)) {
+        setShowQrCode(true);
+        resetForm();
+        navigate("/clients");
+      }
+    } catch (error) {
+      console.log("Erro ao criar cliente:", error);
+      setShowQrCode(false);
     }
   };
 
