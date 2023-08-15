@@ -27,7 +27,7 @@ app.use(
       "http://localhost:5173",
       "https://festpay.vercel.app",
       "https://festpay-kw22.onrender.com",
-      "https://festpay-git-dev-silvinolopesltda.vercel.app",
+      "https://festpay-dev.vercel.app",
       "https://festpay-dev-branch.onrender.com",
     ],
     credentials: true,
