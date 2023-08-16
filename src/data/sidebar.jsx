@@ -1,6 +1,7 @@
 import { MdSpaceDashboard } from "react-icons/md";
 import { BsPersonFillAdd, BsShop } from "react-icons/bs";
 import { AiOutlineControl } from 'react-icons/ai'
+import { TbDatabase } from 'react-icons/tb'
 
 const menu = [
   {
@@ -22,6 +23,11 @@ const menu = [
     title: "Guichê",
     icon: <BsPersonFillAdd />,
     path: "/clients",
+  },
+  {
+    title: "Almoxarifado",
+    icon: <TbDatabase />,
+    path: "/storage",
   },
 ];
 

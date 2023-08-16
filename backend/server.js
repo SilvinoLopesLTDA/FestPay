@@ -13,6 +13,7 @@ const adminRoute = require("./routes/adminRoute");
 const clientRoute = require("./routes/clientRoute");
 const shopRoute = require("./routes/shopRoute");
 const qrCodeRoute = require("./routes/qrCodeRoute");
+const workerRoute = require("./routes/workerRoute");
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.options("*", cors());
 // Routes Middleware
 app.use("/api/user", userRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/worker", workerRoute);
 app.use("/api/clients", clientRoute);
 app.use("/api/shops", shopRoute);
 app.use("/api/qrCode", qrCodeRoute);

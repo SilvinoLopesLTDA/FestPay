@@ -11,7 +11,7 @@ const initialState = {
   },
 };
 
-const authSlice = createSlice({
+const authAdminSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
@@ -30,10 +30,10 @@ const authSlice = createSlice({
   },
 });
 
-export const { SET_LOGIN, SET_NAME, SET_ADMIN } = authSlice.actions;
+export const { SET_LOGIN, SET_NAME, SET_ADMIN } = authAdminSlice.actions;
 
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 export const selectName = (state) => state.auth.name;
 export const selectAdmin = (state) => state.auth.admin;
 
-export default authSlice.reducer;
+export default authAdminSlice.reducer;

@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "../../../pages/client/Client.module.scss";
 import { useDispatch } from "react-redux";
-import { getAdmins } from "../../../redux/features/Admin/Actions/AdminSlice";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import PassStyle from "./FormAdmin.module.scss";
 import * as Components from "../../../pages/manage/addAdmin/Components";
+import { getWorkers } from "../../../redux/features/Worker/Actions/workerSlice";
 
-const FormAdmin = ({ admin, saveAdmin, handleInputChange, required }) => {
+const FormWorker = ({ worker, saveWorker, handleInputWorkerChange, required }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [, setIsSubmitted] = useState(false);
@@ -18,27 +18,27 @@ const FormAdmin = ({ admin, saveAdmin, handleInputChange, required }) => {
     const { name, value } = e.target;
     let filteredValue = value.replace(/\D/g, "");
     filteredValue = filteredValue.substring(0, 6);
-    handleInputChange({ target: { name, value: filteredValue } });
+    handleInputWorkerChange({ target: { name, value: filteredValue } });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitted(true);
 
-    if (admin.name && admin.email) {
-      saveAdmin(admin);
+    if (worker.name && worker.email) {
+      saveWorker(worker);
       navigate("/manage");
-      dispatch(getAdmins());
+      dispatch(getWorkers());
     } else {
       navigate("/add-admin");
     }
   };
 
-  const saveAdminData = () => {
-    const adminData = {
-      ...admin,
+  const saveWorkerData = () => {
+    const workerData = {
+      ...worker,
     };
-    saveAdmin(JSON.stringify(adminData));
+    saveWorker(JSON.stringify(workerData));
   };
 
   return (
@@ -54,8 +54,8 @@ const FormAdmin = ({ admin, saveAdmin, handleInputChange, required }) => {
               placeholder="Matheus..."
               name="name"
               id="name"
-              value={admin?.name}
-              onChange={handleInputChange}
+              value={worker?.name}
+              onChange={handleInputWorkerChange}
               className="w-full"
             />
           </div>
@@ -70,8 +70,8 @@ const FormAdmin = ({ admin, saveAdmin, handleInputChange, required }) => {
               placeholder="email@gmail.com"
               name="email"
               id="email"
-              value={admin?.email}
-              onChange={handleInputChange}
+              value={worker?.email}
+              onChange={handleInputWorkerChange}
               className="w-full"
             />
           </div>
@@ -87,7 +87,7 @@ const FormAdmin = ({ admin, saveAdmin, handleInputChange, required }) => {
               required
               id="password"
               name="password"
-              value={admin?.password}
+              value={worker?.password}
               onChange={handlePwdChange}
               className="w-full"
             />
@@ -103,17 +103,34 @@ const FormAdmin = ({ admin, saveAdmin, handleInputChange, required }) => {
             </div>
           </div>
         </div>
-        <Components.Button onClick={saveAdminData}>Salvar</Components.Button>
+        <div className={styles.input}>
+          <label htmlFor="func" className="flex justify-start my-3">
+            Função <span className="text-red-600 mx-2">{required}</span>
+          </label>
+          <select
+            name="func"
+            id="func"
+            className="w-full"
+            value={worker.func}
+            onChange={handleInputWorkerChange}
+          >
+            <option value="">Selecione a Função do Operário</option>
+            <option value="Caixa">Caixa</option>
+            <option value="Barraca">Barraca</option>
+            <option value="Almoxarifado">Almoxarifado</option>
+          </select>
+        </div>
+        <Components.Button onClick={saveWorkerData}>Salvar</Components.Button>
       </form>
     </div>
   );
 };
 
-FormAdmin.propTypes = {
-  admin: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  handleInputChange: PropTypes.func,
-  saveAdmin: PropTypes.func,
+FormWorker.propTypes = {
+  worker: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  handleInputWorkerChange: PropTypes.func,
+  saveWorker: PropTypes.func,
   required: PropTypes.string,
 };
 
-export default FormAdmin;
+export default FormWorker;

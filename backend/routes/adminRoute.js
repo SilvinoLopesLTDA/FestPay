@@ -2,17 +2,20 @@ const express = require("express");
 const router = express.Router();
 const {
   registerAdmin,
-  loginAdmin,
-  logout,
   getAdmins,
   getAdmin,
-  loginStatus,
   deleteAdmin,
   updateAdmin,
+  createPassword
+} = require("../controllers/adminController");
+const {
+  loginAdmin,
+  logout,
+  loginStatus,
   changePassword,
   forgotPassword,
   resetPassword,
-} = require("../controllers/adminController");
+} = require("../controllers/adminLogableController");
 const protect = require("../middleware/authMiddleware");
 
 router.post("/register", protect, registerAdmin);
@@ -20,6 +23,7 @@ router.get("/", protect, getAdmins);
 router.get("/:id", getAdmin);
 router.delete("/:id", protect, deleteAdmin);
 router.patch("/updateadmin/:id", updateAdmin);
+router.post("/createpassword/:id", createPassword);
 
 router.post("/login/:id", loginAdmin);
 router.get("/logout", logout);

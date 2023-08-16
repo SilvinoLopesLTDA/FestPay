@@ -242,7 +242,7 @@ const ShopDetails = () => {
                 {shop.name}
               </h2>
             </div>
-            <div className="flex flex-col float-right px-5 text-white mt-5 sm:justify-center sm:text-center md:flex-row">
+            <div className="flex text-center flex-col float-right px-5 text-white mt-5 sm:justify-center sm:text-center md:flex-row">
               <Link to={`/edit-shop/${id}`}>
                 <button className="flex align-items justify-center w-full px-14 py-3 bg-indigo-800 rounded-sm text-lg font-semibold md:mt-0 sm:p-4 sm:justify-center">
                   <h2> Editar </h2>

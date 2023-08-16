@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
-const adminShema = mongoose.Schema(
+const workerShema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -28,6 +28,10 @@ const adminShema = mongoose.Schema(
       type: String,
       minLength: [6, "A senha dever conter no minimo 6 caracteres"],
     },
+    func: {
+        type: String,
+        enum: ["Caixa", "Barraca", "Almoxarifado"],
+      },
   },
   {
     timestamps: true,
@@ -46,5 +50,5 @@ const adminShema = mongoose.Schema(
 //   next();
 // });
 
-const Admin = mongoose.model("Admin", adminShema);
-module.exports = Admin;
+const Worker = mongoose.model("Worker", workerShema);
+module.exports = Worker;

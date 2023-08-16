@@ -29,9 +29,10 @@ import ClientInfo from "./pages/client/info/ClientInfo";
 import EditItem from "./pages/shop/editItem/EditItem";
 import Manage from "./pages/manage/Manage";
 import AddAdmin from "./pages/manage/addAdmin/AddAdmin";
-// import Storage from "./pages/storage/Storage";
-// import AdminLogin from "./pages/auth/AdminLogin";
+import Storage from "./pages/storage/Storage";
+import AdminLogin from "./pages/auth/AdminLogin";
 import EditAdmin from "./pages/manage/editAdmin/EditAdmin";
+import EditWorker from "./pages/manage/editWorker/EditWorker";
 
 axios.defaults.withCredentials = true;
 
@@ -97,7 +98,17 @@ function App() {
             </Sidebar>
           }
         />
-        {/* <Route path="/:id" element={<AdminLogin />} /> */}
+        <Route
+          path="/edit-worker/:id"
+          element={
+            <Sidebar>
+              <Layout>
+                <EditWorker />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route path="/:id" element={<AdminLogin />} />
         <Route
           path="/shops"
           element={
@@ -178,7 +189,7 @@ function App() {
             </Sidebar>
           }
         />
-        {/* <Route
+        <Route
           path="/storage"
           element={
             <Sidebar>
@@ -187,7 +198,7 @@ function App() {
               </Layout>
             </Sidebar>
           }
-        /> */}
+        />
         <Route
           path="/add-balance"
           element={
