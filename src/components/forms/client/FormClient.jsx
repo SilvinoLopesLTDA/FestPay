@@ -24,19 +24,12 @@ const FormClient = ({
       client.paymentMethod &&
       client.balance
     ) {
-      saveClient(client);
       resetForm();
       navigate("/clients");
+      setIsSubmitted(false);
     } else {
-      navigate("/clients");
+      console.log("Preencha os campos corretamente!");
     }
-  };
-
-  const saveClientData = () => {
-    const clientData = {
-      ...client,
-    };
-    saveClient(JSON.stringify(clientData));
   };
 
   const handlePhoneInputChange = (e) => {
@@ -125,7 +118,6 @@ const FormClient = ({
           placeholder="(00) 91234-5678"
           name="phone"
           id="phone"
-          pattern="([0-9]{2})[0-9]{5}-[0-9]{4}"
           value={client.phone}
           onChange={handlePhoneInputChange}
           className={
@@ -173,7 +165,6 @@ const FormClient = ({
         <button
           className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
           type="submit"
-          onClick={saveClientData}
         >
           {" "}
           Criar Cliente

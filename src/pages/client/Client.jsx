@@ -43,25 +43,29 @@ const QrCode = ({ handleCloseQrCode }) => {
 
   const handlePrintQRCode = () => {
     const printWindow = window.open("", "_blank");
-    printWindow.document.write(
-      `<div style="display: flex; justify-content: center; align-items: center; height: 95vh; font-family: sans-serif">
-        <div style="background-color: #F3F4F6; border: 2px solid #E5E7EB; padding: 1rem; width: 400px;">
-          <div style="text-align: center">
-            <h1>FestPay</h1>
-            <h3>QrCode do Cliente</h3>
-            <hr />
-            <h2>Nome: ${client?.name}</h2>
-            <h3>Email: ${client?.email}</h3>
-            <h3>Telefone: ${client?.phone}</h3>
+    const img = new Image();
+    img.src = client?.qrCode;
+    img.onload = () => {
+      printWindow.document.write(
+        `<div style="display: flex; justify-content: center; align-items: center; height: 95vh; font-family: sans-serif">
+          <div style="background-color: #F3F4F6; border: 2px solid #E5E7EB; padding: 1rem; width: 400px;">
+            <div style="text-align: center">
+              <h1>FestPay</h1>
+              <h3>QrCode do Cliente</h3>
+              <hr />
+              <h2>Nome: ${client?.name}</h2>
+              <h3>Email: ${client?.email}</h3>
+              <h3>Telefone: ${client?.phone}</h3>
+            </div>
+            <img src="${client?.qrCode}" alt="QR Code" style="width: 100%;" />
+            <p style="font-size: 12px; text-align: center">*O estabelecimento não se responsabiliza em caso de perda ou roubo!</p>
           </div>
-          <img src="${client?.qrCode}" alt="QR Code" style="width: 100%;" />
-          <p style="font-size: 12px; text-align: center">*O estabelecimento não se responsabiliza em caso de perda ou roubo!</p>
-        </div>
-      </div>`
-    );
-    printWindow.document.close();
-    printWindow.print();
-    printWindow.close();
+        </div>`
+      );
+      printWindow.document.close();
+      printWindow.print();
+      printWindow.close();
+    };
   };
 
   return (
