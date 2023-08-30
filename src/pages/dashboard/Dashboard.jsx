@@ -12,13 +12,13 @@ import {
   BarElement,
   Title,
 } from "chart.js";
-import { Pie } from "react-chartjs-2";
-import { useEffect } from "react";
-import { getShops } from "../../redux/features/shop/shopSlice";
-import { Bar } from "react-chartjs-2";
+import { Pie, Bar } from "react-chartjs-2";
+import { useEffect, useState } from "react";
+import { getPurchases, getShops } from "../../redux/features/shop/shopSlice";
 import { format } from "date-fns";
 import { useRedirectLoggedOutUser } from "../../customHook/useRedirectLoggedOutUser";
 import printJS from "print-js";
+import ShopCard from "./ShopCard";
 
 Chart.register(
   CategoryScale,
@@ -49,6 +49,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getShops());
+    dispatch(getPurchases());
 
     if (isError) {
       console.log(message);
@@ -94,7 +95,7 @@ const Dashboard = () => {
     (total, cost) => total + cost,
     0
   );
-  console.log(shop);
+
   const totalProfit = profits.reduce((acc, curr) => acc + curr, 0);
   const totalCost = totalInitialCost;
 
@@ -243,9 +244,52 @@ const Dashboard = () => {
     printJS({
       printable: "print-container",
       type: "html",
+      targetStyles: ["*"],
       header: "Dashboard do FestPay",
+      style: `
+      @media print {
+        .numGraphs {
+            display: flex !important;
+            justify-content: space-between !important;
+            margin-top: 2rem !important;
+            font-size: 4.5rem !important;
+        }
+      }
+      `,
     });
   };
+
+  const recargaCompras = useSelector((state) => state.shop.purchases);
+  const guichesRecarga = recargaCompras?.filter((guiche) => {
+    const noShop = !guiche?.shop;
+    const hasRecargaItem = guiche?.items?.some(
+      (item) => item?.name === "Recarga"
+    );
+
+    return noShop && hasRecargaItem;
+  });
+
+  const totalProfitGuiche = guichesRecarga?.reduce((acc, curr) => {
+    const guicheProfit = curr?.items?.reduce((sum, item) => {
+      const itemProfit = item?.price || 0;
+      return sum + itemProfit;
+    }, 0);
+
+    return acc + guicheProfit;
+  }, 0);
+
+  const [dataReady, setDataReady] = useState(false);
+
+  useEffect(() => {
+    if (
+      shop.length > 0 &&
+      guichesRecarga &&
+      guichesRecarga.length > 0 &&
+      totalProfitGuiche !== null
+    ) {
+      setDataReady(true);
+    }
+  }, [shop, guichesRecarga, totalProfitGuiche]);
 
   return (
     <>
@@ -274,53 +318,49 @@ const Dashboard = () => {
                 <Pie data={PieData} options={optionsPie} />
               </div>
             </div>
+            <div className="hidden numGraphs">
+              <p>Total de Lucros: R${formatNumber(totalProfit)}</p>
+              <p>Total de Custos: R${formatNumber(totalCost)}</p>
+            </div>
             <div className="flex justify-center items-center h-full flex-col">
               <div className="w-full">
-                <div className="flex justify-between items-center mx-10 my-7">
+                <div className="flex justify-between items-center my-7">
                   <h3 className="text-2xl font-semibold mt-6">
                     {" "}
                     Pontos de{" "}
                     <span className="text-violet-700 font-bold">Vendas</span>
                   </h3>
                 </div>
-                <div className="shop-container">
+                <div className="w-full">
+                  {isLoading && <SpinnerImg />}
+                  {dataReady && (
+                    <>
+                      <ShopCard
+                        name="Guichê de Recarga"
+                        profit={totalProfitGuiche}
+                        isGuicheRecarga={true}
+                      />
+                      <hr className="my-5" />
+                    </>
+                  )}
                   <div
-                    className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full my-8 sm:gap-4`}
+                    className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full sm:gap-4`}
                   >
-                    {isLoading && <SpinnerImg />}
                     {!isLoading && shop.length === 0 ? (
-                      <p className={`${styles.placeholder} px-10`}>
+                      <p className={`${styles.placeholder}`}>
                         -- Nenhum ponto de venda cadastrado. Por favor, adicione
                         um Ponto de venda!
                       </p>
                     ) : (
                       sortedShops.map((shop) => {
-                        const { _id, name, profit, cost } = shop;
                         return (
-                          <div
-                            key={_id}
-                            className="bg-slate-950/50 drop-shadow-4xl w-11/12 p-4 my-3 rounded sm:mx-5 sm:col-start-1 sm:col-span-4 fade-in"
-                          >
-                            <h2 className="bg-slate-900 p-3 text-lg font-semibold mb-5 text-center">
-                              {name}
-                            </h2>
-                            <div className="flex flex-col text-center sm:ml-3">
-                              <p className="text-lg">
-                                {" "}
-                                Lucros:{" "}
-                                <span className="font-bold text-green-500">
-                                  R${formatNumber(profit)}
-                                </span>{" "}
-                              </p>
-                              <p className="text-lg sm:ml-7">
-                                {" "}
-                                Custos:{" "}
-                                <span className=" font-bold text-rose-700">
-                                  R${formatNumber(cost)}
-                                </span>{" "}
-                              </p>
-                            </div>
-                          </div>
+                          <ShopCard
+                            key={shop._id}
+                            name={shop.name}
+                            profit={shop.profit}
+                            cost={shop.cost}
+                            isGuicheRecarga={false}
+                          />
                         );
                       })
                     )}
