@@ -11,6 +11,11 @@ import {
 } from "../../redux/features/shop/shopSlice";
 import { useNavigate } from "react-router-dom";
 import { purchaseItem } from "../../redux/features/shop/itemSlice";
+import { toast } from "react-toastify";
+import {
+  getClients,
+  selectClient,
+} from "../../redux/features/client/clientSlice";
 
 const initialState = {
   email: "",
@@ -23,11 +28,11 @@ const QrCodeReader = ({ quantityValues, cart }) => {
   const [isReadingEnabled, setIsReadingEnabled] = useState(true);
   const [shopInitial, setShop] = useState(initialState);
   const isLoading = useSelector(selectIsLoading);
+  const clients = useSelector(selectClient);
   const { shop } = useSelector((state) => state.shop);
   const { _id } = shop;
   let totalValue = 0;
   const item = shop?.items ?? [];
-  console.log(cart);
   item.forEach((itemData) => {
     const itemQuantInput = parseInt(quantityValues[itemData._id] || 0, 10);
     const itemValue = itemQuantInput * itemData.price;
@@ -80,20 +85,33 @@ const QrCodeReader = ({ quantityValues, cart }) => {
     dispatch(getShop(_id));
   }, [dispatch, _id]);
 
+  useEffect(() => {
+    dispatch(getClients());
+  }, [dispatch]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const formData = {
-      name: shop?.name,
-      email: email,
-      purchaseAmount: totalValue,
-    };
+    const clientWithEmail = clients.find((client) => client.email === email);
+    console.log(clientWithEmail);
+    if (
+      clientWithEmail &&
+      parseFloat(totalValue) <= parseFloat(clientWithEmail.balance)
+    ) {
+      const formData = {
+        name: shop?.name,
+        email: email,
+        purchaseAmount: totalValue,
+      };
 
-    dispatch(purchaseQRCode(formData));
-    dispatch(registerPurchase({ id: _id, cart }));
-    if (email && email.trim() !== "") {
-      updateItemQuantities();
-      navigate(`/details-shop/${_id}`);
-      setQrscan("No result");
+      dispatch(purchaseQRCode(formData));
+      dispatch(registerPurchase({ id: _id, cart }));
+      if (email && email.trim() !== "") {
+        updateItemQuantities();
+        navigate(`/details-shop/${_id}`);
+        setQrscan("No result");
+      }
+    } else {
+      toast.error("Saldo insuficiente para a compra!");
     }
   };
 
