@@ -7,11 +7,12 @@ import { getAdmins } from "../../../redux/features/Admin/Actions/AdminSlice";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import PassStyle from "./FormAdmin.module.scss";
 import * as Components from "../../../pages/manage/addAdmin/Components";
+// import { toast } from "react-toastify";
 
 const FormAdmin = ({ admin, saveAdmin, handleInputChange, required }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [, setIsSubmitted] = useState(false);
+  const [, setIsSubmitted] = useState(false); 
   const [visible, setVisible] = useState(true);
 
   const handlePwdChange = (e) => {
@@ -25,7 +26,7 @@ const FormAdmin = ({ admin, saveAdmin, handleInputChange, required }) => {
     e.preventDefault();
     setIsSubmitted(true);
 
-    if (admin.name && admin.email) {
+    if (admin.name && admin.email && admin.password) {
       saveAdmin(admin);
       navigate("/manage");
       dispatch(getAdmins());

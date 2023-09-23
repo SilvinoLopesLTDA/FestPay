@@ -14,6 +14,7 @@ const clientRoute = require("./routes/clientRoute");
 const shopRoute = require("./routes/shopRoute");
 const qrCodeRoute = require("./routes/qrCodeRoute");
 const workerRoute = require("./routes/workerRoute");
+const itemRoute = require("./routes/itemRoute");
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use("/api/admin", adminRoute);
 app.use("/api/worker", workerRoute);
 app.use("/api/clients", clientRoute);
 app.use("/api/shops", shopRoute);
+app.use("/api/items", itemRoute);
 app.use("/api/qrCode", qrCodeRoute);
 
 // Routes

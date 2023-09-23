@@ -16,6 +16,7 @@ import {
   registerWorker,
   selectIsLoadingWorker,
 } from "../../../redux/features/Worker/Actions/workerSlice";
+import { toast } from "react-toastify";
 
 const initialState = {
   name: "",
@@ -63,13 +64,18 @@ const AddAdmin = () => {
     console.log(formData);
     await dispatch(registerAdmin(formData));
 
+    if (admin.password.length < 6) {
+      return toast.error("Senha Inválida");
+    }
+    
     if (admin.name && admin.email && admin.password) {
       const newAdmin = { ...admin };
       setSubmittedAdmins([...submittedAdmins, newAdmin]);
       setAdmin(initialState);
       dispatch(getAdmins());
       navigate("/manage");
-    }
+    }    
+
   };
 
   const saveWorker = async () => {
@@ -84,13 +90,13 @@ const AddAdmin = () => {
     console.log(formData);
     await dispatch(registerWorker(formData));
 
-    if (worker.name && worker.email && worker.password && worker.func) {
+    if (worker.name && worker.email && worker.password > 6 && worker.func) {
       const newWorker = { ...worker };
       setSubmittedWorkers([...submittedWorkers, newWorker]);
       setWorker(initialState);
       dispatch(getWorkers());
       navigate("/manage");
-    }
+    } 
   };
 
   return (

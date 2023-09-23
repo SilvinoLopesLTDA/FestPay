@@ -102,7 +102,7 @@ const ManageContainer = ({ admin, worker, isLoading, isLoadingWorker }) => {
           {isLoading && <SpinnerImg />}
           <Link to="/add-admin">
             <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-semibold sm:mt-5">
-              Adicionar Novo Membro
+              Adicionar Membro
             </button>
           </Link>
         </div>

@@ -33,6 +33,8 @@ import Storage from "./pages/storage/Storage";
 import AdminLogin from "./pages/auth/AdminLogin";
 import EditAdmin from "./pages/manage/editAdmin/EditAdmin";
 import EditWorker from "./pages/manage/editWorker/EditWorker";
+import AddItems from "./pages/storage/addItems/AddItems";
+import EditItems from "./pages/storage/editItems/EditItems";
 
 axios.defaults.withCredentials = true;
 
@@ -195,6 +197,26 @@ function App() {
             <Sidebar>
               <Layout>
                 <Storage />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/add-item"
+          element={
+            <Sidebar>
+              <Layout>
+                <AddItems />
+              </Layout>
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/edit-items/:id"
+          element={
+            <Sidebar>
+              <Layout>
+                <EditItems />
               </Layout>
             </Sidebar>
           }
