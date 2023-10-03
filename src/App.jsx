@@ -1,40 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
 import axios from "axios";
-import { getLoginStatus } from "./services/authService";
-import { SET_LOGIN } from "./redux/features/auth/authSlice";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import Forgot from "./pages/auth/Forgot";
-import Reset from "./pages/auth/Reset";
-import Sidebar from "./components/sidebar/Sidebar";
-import Layout from "./components/layout/Layout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Dashboard from "./pages/dashboard/Dashboard";
-import Shop from "./pages/shop/Shop";
-import Client from "./pages/client/Client";
-import Terms from "./pages/info/Terms";
-import Privacy from "./pages/info/Privacy";
-import Faq from "./pages/info/FAQ";
-import AddBalance from "./pages/client/addBalance/AddBalance";
-import AddShop from "./pages/shop/addShop/AddShop";
-import ShopDetails from "./pages/shop/shopDetails/ShopDetails";
-import ShopEdit from "./pages/shop/shopEdit/ShopEdit";
-import AddItem from "./pages/shop/addItem/AddItem";
-import BuyItem from "./pages/shop/buyItem/BuyItem";
-import Welcome from "./pages/welcome/Welcome";
-import ClientInfo from "./pages/client/info/ClientInfo";
-import EditItem from "./pages/shop/editItem/EditItem";
-import Manage from "./pages/manage/Manage";
-import AddAdmin from "./pages/manage/addAdmin/AddAdmin";
-import Storage from "./pages/storage/Storage";
-import AdminLogin from "./pages/auth/AdminLogin";
-import EditAdmin from "./pages/manage/editAdmin/EditAdmin";
-import EditWorker from "./pages/manage/editWorker/EditWorker";
-import AddItems from "./pages/storage/addItems/AddItems";
-import EditItems from "./pages/storage/editItems/EditItems";
+import appRoutes from "./AppRoutes.jsx";
+import { useEffect } from "react";
+import { getLoginStatus, getUser } from "./redux/features/auth/authService.js";
+import { SET_LOGIN, SET_USER } from "./redux/features/auth/authSlice.js";
 
 axios.defaults.withCredentials = true;
 
@@ -42,226 +14,28 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    async function loginStatus() {
-      const status = await getLoginStatus();
-      dispatch(SET_LOGIN(status));
-    }
-    loginStatus();
+    const fetchData = async () => {
+      try {
+        const status = await getLoginStatus();
+        if (status) {
+          const userData = await getUser();
+          dispatch(SET_LOGIN(status));
+          dispatch(SET_USER(userData));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
   }, [dispatch]);
-
-  const [resetQuantity, setResetQuantity] = useState(null);
 
   return (
     <Router>
       <ToastContainer theme="dark" />
       <Routes>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot" element={<Forgot />} />
-        <Route path="/resetpassword/:resetToken" element={<Reset />} />
-        <Route
-          path="/dashboard"
-          element={
-            <Sidebar>
-              <Layout>
-                <Dashboard />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/manage"
-          element={
-            <Sidebar>
-              <Layout>
-                <Manage />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/add-admin"
-          element={
-            <Sidebar>
-              <Layout>
-                <AddAdmin />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/edit-admin/:id"
-          element={
-            <Sidebar>
-              <Layout>
-                <EditAdmin />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/edit-worker/:id"
-          element={
-            <Sidebar>
-              <Layout>
-                <EditWorker />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route path="/:id" element={<AdminLogin />} />
-        <Route
-          path="/shops"
-          element={
-            <Sidebar>
-              <Layout>
-                <Shop />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/add-shop"
-          element={
-            <Sidebar>
-              <Layout>
-                <AddShop />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/details-shop/:id"
-          element={
-            <Sidebar>
-              <Layout>
-                <ShopDetails handleResetQuantityValues={setResetQuantity} />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/edit-shop/:id"
-          element={
-            <Sidebar>
-              <Layout>
-                <ShopEdit />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/add-item/:id"
-          element={
-            <Sidebar>
-              <Layout>
-                <AddItem />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/edit-item/:id"
-          element={
-            <Sidebar>
-              <Layout>
-                <EditItem />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/buy-item"
-          element={
-            <Sidebar>
-              <Layout>
-                <BuyItem resetQuantity={resetQuantity} />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/clients"
-          element={
-            <Sidebar>
-              <Layout>
-                <Client />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/storage"
-          element={
-            <Sidebar>
-              <Layout>
-                <Storage />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/add-item"
-          element={
-            <Sidebar>
-              <Layout>
-                <AddItems />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/edit-items/:id"
-          element={
-            <Sidebar>
-              <Layout>
-                <EditItems />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/add-balance"
-          element={
-            <Sidebar>
-              <Layout>
-                <AddBalance />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route path="/client-info/:id" element={<ClientInfo />} />
-        <Route
-          path="/terms"
-          element={
-            <Sidebar>
-              <Layout>
-                <Terms />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/privacy"
-          element={
-            <Sidebar>
-              <Layout>
-                <Privacy />
-              </Layout>
-            </Sidebar>
-          }
-        />
-        <Route
-          path="/faq"
-          element={
-            <Sidebar>
-              <Layout>
-                <Faq />
-              </Layout>
-            </Sidebar>
-          }
-        />
+        {appRoutes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
       </Routes>
     </Router>
   );

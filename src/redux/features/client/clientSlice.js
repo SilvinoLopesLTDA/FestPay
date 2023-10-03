@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import clientService from "./clientService";
+import clientService from "./clientService.js";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -264,8 +264,6 @@ const clientSlice = createSlice({
       });
   },
 });
-
-// export const {  } = clientSlice.actions;
 
 export const selectIsLoading = (state) => state.client.isLoading;
 export const selectClient = (state) => state.client.client;

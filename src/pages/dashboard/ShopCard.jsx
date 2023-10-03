@@ -9,7 +9,7 @@ const ShopCard = ({ name, profit, cost, isGuicheRecarga }) => {
     borderClass = "border-[0.5px] border-red-500";
   }
 
-  const cardClasses = `bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden ${borderClass} ${
+  const cardClasses = `dark:bg-gray-800/50 shadow-lg rounded-lg overflow-hidden ${borderClass} ${
     isGuicheRecarga ? "border border-green-500 py-5" : ""
   }`;
 
@@ -36,7 +36,7 @@ const ShopCard = ({ name, profit, cost, isGuicheRecarga }) => {
 };
 
 ShopCard.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   profit: PropTypes.number,
   cost: PropTypes.number,
   isGuicheRecarga: PropTypes.bool,

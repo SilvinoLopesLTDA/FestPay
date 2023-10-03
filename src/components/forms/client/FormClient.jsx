@@ -82,7 +82,7 @@ const FormClient = ({
         </label>
         <input
           type="text"
-          placeholder="Matheus..."
+          placeholder="Digite o nome do cliente..."
           name="name"
           id="name"
           value={client.name}
@@ -90,6 +90,7 @@ const FormClient = ({
           className={
             isSubmitted && client.name === "" ? `${styles.highlight}` : ""
           }
+          required
         />
 
         <label htmlFor="email">
@@ -98,7 +99,7 @@ const FormClient = ({
         </label>
         <input
           type="email"
-          placeholder="email@gmail.com"
+          placeholder="Digite o email do cliente..."
           name="email"
           id="email"
           value={client.email}
@@ -106,6 +107,7 @@ const FormClient = ({
           className={
             isSubmitted && client.email === "" ? `${styles.highlight}` : ""
           }
+          required
           pattern="\S+@\S+\.\S+"
         />
 
@@ -115,7 +117,7 @@ const FormClient = ({
         </label>
         <input
           type="tel"
-          placeholder="(00) 91234-5678"
+          placeholder="Digite o número de telefone do cliente..."
           name="phone"
           id="phone"
           value={client.phone}
@@ -123,6 +125,7 @@ const FormClient = ({
           className={
             isSubmitted && client.phone === "" ? `${styles.highlight}` : ""
           }
+          required
           inputMode="numeric"
           maxLength="15"
         />
@@ -133,7 +136,7 @@ const FormClient = ({
         </label>
         <input
           type="text"
-          placeholder="10"
+          placeholder="Digite o saldo que o cliente deseja..."
           name="balance"
           id="balance"
           value={client?.balance}
@@ -141,6 +144,7 @@ const FormClient = ({
           className={
             isSubmitted && client?.balance === "" ? `${styles.highlight}` : ""
           }
+          required
           inputMode="numeric"
         />
 
@@ -153,6 +157,7 @@ const FormClient = ({
           className={
             isSubmitted && client.name === "" ? `${styles.highlight}` : ""
           }
+          required
           value={client.paymentMethod}
           onChange={handleInputChange}
         >
@@ -163,7 +168,7 @@ const FormClient = ({
           <option value="Pix">Pix</option>
         </select>
         <button
-          className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
+          className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 mt-10"
           type="submit"
         >
           {" "}
@@ -175,11 +180,11 @@ const FormClient = ({
 };
 
 FormClient.propTypes = {
-  client: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  handleInputChange: PropTypes.func.isRequired,
-  saveClient: PropTypes.func.isRequired,
-  resetForm: PropTypes.func.isRequired,
-  required: PropTypes.string.isRequired,
+  client: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  handleInputChange: PropTypes.func,
+  saveClient: PropTypes.func,
+  resetForm: PropTypes.func,
+  required: PropTypes.string,
 };
 
 export default FormClient;

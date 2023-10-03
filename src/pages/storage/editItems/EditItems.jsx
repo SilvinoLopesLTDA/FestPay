@@ -76,16 +76,16 @@ const EditItems = () => {
   };
 
   return (
-    <div className="flex justify-center itemss-center">
+    <div className="flex justify-center items-center">
       {isLoading && <Loader />}
       <div className={styles.content}>
-        <div className="flex justify-between mb-3">
+        <div className="flex justify-between items-center mb-3">
           <h2 className="text-2xl font-semibold">
             Editar
-            <span className="text-violet-700 font-bold"> Item</span>
+            <span className="text-violet-600 font-bold"> Item</span>
           </h2>
           <button
-            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium"
+            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300"
             onClick={handleReturn}
           >
             Voltar
@@ -96,7 +96,7 @@ const EditItems = () => {
           <label htmlFor="name">Nome</label>
           <input
             type="text"
-            placeholder="Refrigerante..."
+            placeholder="Digite o novo nome do item..."
             name="name"
             id="name"
             value={items?.name}
@@ -108,7 +108,7 @@ const EditItems = () => {
           <label htmlFor="price">Preço</label>
           <input
             type="text"
-            placeholder="20"
+            placeholder="Digite o novo preço do item..."
             name="price"
             id="price"
             value={items?.price}
@@ -120,7 +120,7 @@ const EditItems = () => {
           <label htmlFor="quantity">Quantidade</label>
           <input
             type="text"
-            placeholder="20"
+            placeholder="Digite a nova quantidade do item..."
             name="quantity"
             id="quantity"
             value={items?.quantity}
@@ -131,7 +131,7 @@ const EditItems = () => {
           />
           <div className="flex">
             <button
-              className="w-full py-2 bg-violet-800 rounded-sm text-lg font-semibold mt-10"
+              className="w-full py-2 bg-violet-800 rounded-sm text-lg font-semibold hover:bg-violet-700 transition-colors duration-300 mt-10"
               type="submit"
             >
               Editar Item

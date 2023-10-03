@@ -14,7 +14,7 @@ import {
 const EditItem = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const shop = useSelector(selectItem); // Renomear para 'shop' para refletir a estrutura de dados
+  const shop = useSelector(selectItem);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -35,7 +35,6 @@ const EditItem = () => {
   }, [dispatch, shopId]);
 
   useEffect(() => {
-    // Atualizar o estado 'item' com os valores corretos ao carregar o 'shop' retornado pela API
     if (shop && shop.items) {
       const selectedItem = shop.items.find((itemData) => itemData._id === id);
       if (selectedItem) {
@@ -91,13 +90,12 @@ const EditItem = () => {
       <div className="flex justify-center itemss-center">
         {isLoading && <Loader />}
         <div className={styles.content}>
-          <div className="flex justify-between mb-3">
+          <div className="flex justify-between items-center mb-3">
             <h2 className="text-2xl font-semibold">
-              Edite um{" "}
-              <span className="text-violet-700 font-bold">Item</span>
+              Edite um <span className="text-violet-600 font-bold">Item</span>
             </h2>
             <Link to={`/details-shop/${shopId}`}>
-              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium">
+              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300">
                 Voltar
               </button>
             </Link>
@@ -110,13 +108,10 @@ const EditItem = () => {
               handleSubmit(e);
             }}
           >
-            <label htmlFor="name">
-              {" "}
-              Nome
-            </label>
+            <label htmlFor="name"> Nome</label>
             <input
               type="text"
-              placeholder="Bebidas..."
+              placeholder="Digite o novo nome do produto..."
               name="name"
               id="name"
               value={item?.name}
@@ -126,13 +121,10 @@ const EditItem = () => {
               }
             />
 
-            <label htmlFor="price">
-              {" "}
-              Preço
-            </label>
+            <label htmlFor="price"> Preço</label>
             <input
               type="text"
-              placeholder="10"
+              placeholder="Digite o novo preço do produto..."
               name="price"
               id="price"
               value={item?.price}
@@ -142,13 +134,10 @@ const EditItem = () => {
               }
             />
 
-            <label htmlFor="quantity">
-              {" "}
-              Quantidade
-            </label>
+            <label htmlFor="quantity"> Quantidade</label>
             <input
               type="text"
-              placeholder="10"
+              placeholder="Digite a nova quantidade do produto..."
               name="quantity"
               id="quantity"
               value={item?.quantity}
@@ -161,7 +150,7 @@ const EditItem = () => {
             />
 
             <button
-              className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
+              className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 mt-10"
               type="submit"
               onClick={saveItemData}
             >

@@ -61,14 +61,14 @@ const PasswordCard = ({ password, componentId }) => {
       {showOTP && (
         <div className={`${styles.wrapper} flex items-center`}>
           <div className={styles.container}>
-            <MdOutlinePassword size={28} className="text-violet-700" />
+            <MdOutlinePassword size={28} className="text-violet-600" />
             {!showOTP && !isPasswordValid && (
               <div className="text-center">
                 <p>A senha expirou. Por favor, insira novamente.</p>
               </div>
             )}
             <h4 className="text-2xl font-semibold mb-6">
-              Confirme a <span className="text-violet-700">Senha</span>
+              Confirme a <span className="text-violet-600">Senha</span>
             </h4>
             <OtpInput
               value={otp}
@@ -82,20 +82,20 @@ const PasswordCard = ({ password, componentId }) => {
                   inputMode="tel"
                 />
               )}
-              inputStyle={`mx-3 text-5xl text-violet-800 rounded sm:text-4xl`}
+              inputStyle={`mx-3 text-5xl text-violet-700 rounded sm:text-4xl`}
               inputMode="tel"
             />
             <div
               className={`${styles.btn_action} flex space-x-10 mt-8 text-md`}
             >
               <button
-                className="bg-slate-700 px-3 py-1 rounded-sm"
+                className="bg-slate-700 px-3 py-1 rounded-sm hover:bg-slate-600 transition-colors duration-300"
                 onClick={handleClear}
               >
                 Limpar
               </button>
               <button
-                className="bg-violet-900 px-3 py-1 rounded-sm"
+                className="bg-violet-800 px-3 py-1 rounded-sm hover:bg-violet-700 transition-colors duration-300"
                 onClick={handlePassword}
               >
                 Entrar

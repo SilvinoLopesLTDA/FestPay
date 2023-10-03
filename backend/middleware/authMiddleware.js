@@ -5,23 +5,39 @@ const jwt = require("jsonwebtoken");
 const protect = asyncHandler(async (req, res, next) => {
   try {
     const token = req.cookies.token;
+
     if (!token) {
       res.status(401);
       throw new Error("Não autorizado, por favor entre em sua conta");
     }
 
-    // Verify Token
     const verified = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Get user id from token
-    const user = await User.findById(verified.id).select("-password");
-
-    if (!user) {
+    if (!verified) {
       res.status(401);
-      throw new Error("Usuario não encontrado");
+      throw new Error("Token JWT inválido");
     }
-    req.user = user;
-    next();
+
+    const subaccountUser = await User.findOne({
+      "subaccounts._id": verified.id,
+    }).select("-password");
+
+    if (subaccountUser) {
+      const subaccountId = verified.id;
+      req.subaccount = subaccountUser.subaccounts.find(
+        (sub) => sub._id.toString() === subaccountId
+      );
+      next();
+    } else {
+      const masterUser = await User.findById(verified.id).select("-password");
+      if (masterUser) {
+        req.user = masterUser;
+        next();
+      } else {
+        res.status(401);
+        throw new Error("Usuário não encontrado");
+      }
+    }
   } catch (error) {
     res.status(401);
     throw new Error("Não autorizado, por favor entre em sua conta");

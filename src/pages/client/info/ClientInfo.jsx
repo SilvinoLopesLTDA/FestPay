@@ -27,7 +27,7 @@ const QrCode = ({ client, handleCloseQrCode }) => {
       <div className="bg-slate-800 py-4 px-6 my-4 rounded w-3/12 sm:w-11/12">
         <button
           onClick={handleCloseQrCode}
-          className="relative left-[93%] mb-2"
+          className="relative left-[93%] mb-2 rounded hover:bg-black/40"
         >
           <AiOutlineClose size={30} color="#94a3b8" />
         </button>
@@ -103,8 +103,9 @@ const ClientInfo = () => {
           <h2 className="text-lg text-center py-5 w-11/12 border-y-2 border-indigo-500">
             Seja bem-vindo(a) ao FestPay,{" "}
             <span className="text-violet-600 font-semibold">
-              {client.name}!
+              {client.name}
             </span>
+            !
           </h2>
           <div className="w-11/12 mt-5">
             <h3 className="text-violet-500 font-semibold">
@@ -117,12 +118,12 @@ const ClientInfo = () => {
           </div>
 
           <div className="w-11/12 mt-5 mb-2">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <h3 className="text-violet-500 font-semibold">
                 Detalhes da Conta
               </h3>
               <button
-                className="px-7 py-2 text-md font-semibold rounded bg-violet-700"
+                className="px-7 py-2 text-md font-semibold rounded bg-violet-800 hover:bg-violet-700 transition-colors duration-300"
                 onClick={handleShowQrCode}
               >
                 Exibir QrCode
@@ -135,9 +136,10 @@ const ClientInfo = () => {
               />
             )}
             <p className="bg-slate-700 py-4 px-6 my-4 rounded">
-              {client.email}
+              <span className="text-white/60">Email:</span> {client.email}
             </p>
             <p className="bg-slate-700 py-4 px-6 my-4 rounded">
+              <span className="text-white/60">Número de telefone:</span>{" "}
               {formattedPhoneNumber(client.phone)}
             </p>
           </div>

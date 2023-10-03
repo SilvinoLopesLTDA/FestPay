@@ -1,49 +1,32 @@
 import PropTypes from "prop-types";
-import { SpinnerImg } from "../../loader/Loader";
-import styles from "./ShopCard.module.scss";
 import { Link } from "react-router-dom";
 
-const ShopCard = ({ shop, isLoading }) => {
-  const currentItems = Array.isArray(shop) ? shop : [];
-
+const ShopCard = ({ name, id }) => {
   return (
-    <div
-      className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full my-8 sm:gap-4`}
-    >
-      {isLoading && <SpinnerImg />}
-      {!isLoading && shop.length === 0 ? (
-        <p className={`${styles.placeholder} px-10`}>
-          -- Nenhum ponto de venda cadastrado. Por favor, adicione um Ponto de
-          venda!
-        </p>
-      ) : (
-        currentItems.map((shop) => {
-          const { _id, name } = shop;
-          return (
-            <div
-              key={_id}
-              className="bg-slate-950/50 drop-shadow-4xl w-10/12 p-5 my-5 rounded sm:mx-5 sm:col-start-1 sm:col-span-4"
-            >
-              <h2 className="bg-slate-900 p-2 text-lg font-semibold mb-5 text-center">
-                {name}
-              </h2>
-              <Link to={`/details-shop/${_id}`}>
-                <button className="px-3 py-2 bg-violet-950 w-full rounded-sm text-lg font-medium">
-                  {" "}
-                  Acessar Barraca
-                </button>
-              </Link>
-            </div>
-          );
-        })
-      )}
+    <div className={`w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-3`}>
+      <div
+        className={`w-full dark:bg-gray-800/50 shadow-lg rounded-lg overflow-hidden`}
+      >
+        <div className="px-4 py-3">
+          <h2 className="text-lg font-semibold text-center text-gray-800 dark:text-white mb-2">
+            {name}
+          </h2>
+          <hr className="my-4" />
+          <Link to={`/details-shop/${id}`}>
+            <button className="px-3 py-2 bg-violet-900 w-full rounded-sm text-lg font-medium hover:bg-violet-800 transition-colors duration-300">
+              {" "}
+              Acessar Barraca
+            </button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
 
 ShopCard.propTypes = {
-  shop: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  isLoading: PropTypes.bool,
+  id: PropTypes.string,
+  name: PropTypes.string,
 };
 
 export default ShopCard;

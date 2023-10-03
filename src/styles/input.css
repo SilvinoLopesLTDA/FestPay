@@ -27,3 +27,37 @@
 html {
   scroll-behavior: smooth;
 }
+
+.pagination {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0 0 0;
+  font-size: 1rem;
+}
+
+.pagination .page-num {
+  padding: 7px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: normal;
+  color: #fff;
+  margin: 2px;
+  background-color: #172035;
+}
+
+.pagination .page-num:hover {
+  color: #fff;
+  background-color: rgb(109 40 217);
+}
+
+.activePage {
+  color: #fff !important;
+  background-color: rgb(109 40 217) !important;
+  height: 100%;
+}
+
+.activePage:hover {
+  color: #ececec !important;
+}

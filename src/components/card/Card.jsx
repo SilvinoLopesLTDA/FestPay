@@ -6,7 +6,7 @@ const Card = ({ children, cardClass }) => {
 };
 
 Card.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   cardClass: PropTypes.string,
 };
 

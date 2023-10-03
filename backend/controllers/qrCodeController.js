@@ -1,6 +1,6 @@
-// Importe os módulos necessários
 const asyncHandler = require("express-async-handler");
 const Client = require("../models/clientModel");
+const Purchase = require("../models/purchaseModel");
 const Shop = require("../models/shopModel");
 
 const qrCodeReader = asyncHandler(async (req, res) => {
@@ -42,6 +42,20 @@ const qrCodeRecharge = asyncHandler(async (req, res) => {
     client.paymentMethod = paymentMethod;
     client.balance += rechargeAmount;
     await client.save();
+
+    const purchase = new Purchase({
+      shop: client.shop,
+      user: client.user,
+      items: [
+        {
+          name: "Recarga",
+          price: rechargeAmount,
+          quantity: 1,
+        },
+      ],
+      profitValue: rechargeAmount,
+    });
+    await purchase.save();
 
     return res.json({ message: "Recarga bem-sucedida" });
   } catch (error) {

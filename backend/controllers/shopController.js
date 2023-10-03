@@ -9,6 +9,11 @@ const createShop = asyncHandler(async (req, res) => {
   const { name, password, profit, cost } = req.body;
 
   // Validation
+  if (!req.user && req.subaccount.role !== "admin") {
+    res.status(403);
+    throw new Error("Você não tem permissão para criar pontos de venda.");
+  }
+
   if (!name || !password || !cost) {
     res.status(400);
     throw new Error("Por favor, preencha os campos corretamente!");
@@ -24,9 +29,20 @@ const createShop = asyncHandler(async (req, res) => {
     throw new Error("A senha não pode conter menos de 4 caracteres!");
   }
 
+  const userId = req.user
+    ? req.user.id
+    : req.subaccount
+    ? req.subaccount.user.toString()
+    : null;
+
+  if (!userId) {
+    res.status(403);
+    throw new Error("Não foi possível determinar o usuário para criar a loja.");
+  }
+
   // Create Shop
   const shop = await Shop.create({
-    user: req.user.id,
+    user: userId,
     name,
     password,
     profit,
@@ -66,12 +82,14 @@ const createItem = asyncHandler(async (req, res) => {
 
 // Get all Shops
 const getShops = asyncHandler(async (req, res) => {
-  const shops = await Shop.find({ user: req.user.id }).sort("-createdAt");
+  const userId = req.subaccount ? req.subaccount.user : req.user.id;
+  const shops = await Shop.find({ user: userId }).sort("-createdAt");
   res.status(200).json(shops);
 });
 
 // Get single Shop
 const getShop = asyncHandler(async (req, res) => {
+  const userId = req.subaccount ? req.subaccount.user : req.user.id;
   const shop = await Shop.findById(req.params.id);
 
   if (!shop) {
@@ -79,7 +97,7 @@ const getShop = asyncHandler(async (req, res) => {
     throw new Error("Ponto de venda não encontrado.");
   }
 
-  if (shop.user.toString() !== req.user.id) {
+  if (shop.user.toString() !== userId.toString()) {
     res.status(401);
     throw new Error("Usuário não Autorizado.");
   }
@@ -96,9 +114,9 @@ const deleteShop = asyncHandler(async (req, res) => {
     throw new Error("Ponto de venda não encontrado.");
   }
 
-  if (shop.user.toString() !== req.user.id) {
-    res.status(401);
-    throw new Error({ message: "Ponto de venda Deletado com Sucesso." });
+  if (!req.user && req.subaccount.role !== "admin") {
+    res.status(403);
+    throw new Error("Você não tem permissão para criar pontos de venda.");
   }
 
   await shop.remove();
@@ -110,6 +128,11 @@ const deleteItem = asyncHandler(async (req, res) => {
   const itemId = req.params.id;
 
   const shop = await Shop.findOne({ "items._id": itemId });
+
+  if (!req.user && req.subaccount.role !== "admin") {
+    res.status(403);
+    throw new Error("Você não tem permissão para criar pontos de venda.");
+  }
 
   if (!shop) {
     res.status(404);
@@ -134,6 +157,11 @@ const updateShop = asyncHandler(async (req, res) => {
   const { name, password, profit, cost } = req.body;
   const { id } = req.params;
   const shop = await Shop.findById(id);
+
+  if (!req.user && req.subaccount.role !== "admin") {
+    res.status(403);
+    throw new Error("Você não tem permissão para criar pontos de venda.");
+  }
 
   if (!shop) {
     res.status(404);
@@ -293,12 +321,6 @@ const registerPurchase = asyncHandler(async (req, res) => {
     }
   });
 
-  // const updatedShop = await Shop.findByIdAndUpdate(
-  //   id,
-  //   { $push: { purchases: newPurchase } },
-  //   { new: true }
-  // );
-
   shop.purchases.push(newPurchase);
 
   const updatedShop = await shop.save();
@@ -308,16 +330,34 @@ const registerPurchase = asyncHandler(async (req, res) => {
 
 // Get all Purchases
 const getPurchases = asyncHandler(async (req, res) => {
-  const purchases = await Purchase.find({ user: req.user.id }).sort(
-    "-createdAt"
-  );
-  res.status(200).json(purchases);
+  const userId = req.user
+    ? req.user.id
+    : req.subaccount
+    ? req.subaccount.user.toString()
+    : null;
+  if (!req.user && req.subaccount.role !== "admin") {
+    res.status(403);
+    throw new Error("Você não tem permissão para utilizar essa função.");
+  } else {
+    const purchases = await Purchase.find({ user: userId }).sort("-createdAt");
+    res.status(200).json(purchases);
+  }
 });
 
 // Get all Costs
 const getCosts = asyncHandler(async (req, res) => {
-  const costs = await Cost.find({ user: req.user.id }).sort("-createdAt");
-  res.status(200).json(costs);
+  const userId = req.user
+    ? req.user.id
+    : req.subaccount
+    ? req.subaccount.user.toString()
+    : null;
+  if (!req.user && req.subaccount.role !== "admin") {
+    res.status(403);
+    throw new Error("Você não tem permissão para utilizar essa função.");
+  } else {
+    const costs = await Cost.find({ user: userId }).sort("-createdAt");
+    res.status(200).json(costs);
+  }
 });
 
 module.exports = {

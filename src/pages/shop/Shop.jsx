@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import ShopContainer from "../../components/shop/shopContainer/ShopContainer";
 import { getShops } from "../../redux/features/shop/shopSlice";
-import PasswordCard from "../../components/passwordCard/PasswordCard";
+// import PasswordCard from "../../components/passwordCard/PasswordCard";
 import { useRedirectLoggedOutUser } from "../../customHook/useRedirectLoggedOutUser";
 
 const Shop = () => {
@@ -21,6 +21,8 @@ const Shop = () => {
     (state) => state.shop
   );
 
+  const currentItems = Array.isArray(shop) ? shop : [];
+
   useEffect(() => {
     dispatch(getShops());
 
@@ -29,10 +31,16 @@ const Shop = () => {
     }
   }, [dispatch, isError, message]);
 
+  const sortedShops = [...currentItems].sort((a, b) => {
+    const dateA = new Date(b.createdAt);
+    const dateB = new Date(a.createdAt);
+    return dateA - dateB;
+  });
+
   return (
     <div>
-      <PasswordCard componentId="shop" password={"1234"} />
-      <ShopContainer shop={shop} isLoading={isLoading} />
+      {/* <PasswordCard componentId="shop" password={"1234"} /> */}
+      <ShopContainer shop={sortedShops} isLoading={isLoading} />
     </div>
   );
 };

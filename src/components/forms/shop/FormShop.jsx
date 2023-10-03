@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "../../../pages/client/Client.module.scss";
-import PassStyle from "./FormShop.module.scss"
 import { useDispatch } from "react-redux";
 import { getShops } from "../../../redux/features/shop/shopSlice";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -11,7 +10,7 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -62,7 +61,7 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
         </label>
         <input
           type="text"
-          placeholder="Bebidas..."
+          placeholder="Digite o nome da barraca..."
           name="name"
           id="name"
           value={shop?.name}
@@ -71,29 +70,29 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
             isSubmitted && shop?.name === "" ? `${styles.highlight}` : ""
           }
         />
-        <label htmlFor="password" className="text-slate-500/75">
-          {" "}
-          Senha{" "}<span className="text-red-600">{required}</span>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Senha<span className="text-red-600"> *</span>
         </label>
         <div className="flex">
           <input
+            className={`w-full border rounded-lg py-2 px-3 focus:outline-none focus:border-blue-500 ${
+              isSubmitted && shop?.password === "" ? `${styles.highlight}` : ""
+            }`}
             type={visible ? "text" : "password"}
-            placeholder={visible ? "1234" : "****"}
+            placeholder="Digite a senha da barraca..."
             required
-            className="w-full"
-            id="password"
             name="password"
             value={shop?.password}
             onChange={handlePwdChange}
           />
           <div
-            className={PassStyle.toggleVisible}
+            className="cursor-pointer ml-2 flex items-center"
             onClick={() => setVisible(!visible)}
           >
             {visible ? (
-              <AiOutlineEye color="#0f172a" />
+              <AiOutlineEye color="#fff" size={25} />
             ) : (
-              <AiOutlineEyeInvisible color="#0f172a" />
+              <AiOutlineEyeInvisible color="#fff" size={25} />
             )}
           </div>
         </div>

@@ -13,7 +13,6 @@ import {
 } from "../../../redux/features/shop/shopSlice";
 import Swal from "sweetalert2";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import PassStyle from "../../../components/forms/shop/FormShop.module.scss"
 
 const ShopEdit = () => {
   const dispatch = useDispatch();
@@ -21,7 +20,7 @@ const ShopEdit = () => {
 
   const shopEdit = useSelector(selectShop);
   const [shop, setShop] = useState(shopEdit);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -82,7 +81,7 @@ const ShopEdit = () => {
   const confirmDelete = (id) => {
     Swal.fire({
       title: "Tem certeza?",
-      text: "Deseja excluir permanentemente esse Ponto de Venda?",
+      text: "Deseja excluir permanentemente este ponto de venda?",
       icon: "warning",
       width: "50em",
       showCancelButton: true,
@@ -96,14 +95,14 @@ const ShopEdit = () => {
         navigate("/shops");
         Swal.fire({
           icon: "success",
-          title: "Ponto de Venda Excluido",
-          text: "Ponto de Venda excluido com sucesso!",
+          title: "Ponto de venda Excluído",
+          text: "Ponto de venda excluído com sucesso!",
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire({
           icon: "info",
-          title: "Ação Cancelada",
-          text: "Não se preocupe, seu Ponto de Venda está securo :)",
+          title: "Ação Cancelada!",
+          text: "Não se preocupe, seu ponto de venda está seguro.",
         });
       }
     });
@@ -113,13 +112,13 @@ const ShopEdit = () => {
     <div className="flex justify-center itemss-center">
       {isLoading && <Loader />}
       <div className={styles.content}>
-        <div className="flex justify-between mb-3">
+        <div className="flex justify-between items-center mb-3">
           <h2 className="text-2xl font-semibold">
             Editar o Ponto de{" "}
-            <span className="text-violet-700 font-bold">Venda</span>
+            <span className="text-violet-600 font-bold">Venda</span>
           </h2>
           <Link to={`/details-shop/${id}`}>
-            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium">
+            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300">
               Voltar
             </button>
           </Link>
@@ -136,12 +135,10 @@ const ShopEdit = () => {
             saveEditShop(e);
           }}
         >
-          <label htmlFor="name">
-            Nome
-          </label>
+          <label htmlFor="name">Nome</label>
           <input
             type="text"
-            placeholder="Bebidas..."
+            placeholder="Digite o novo nome da barraca..."
             name="name"
             id="name"
             value={shop?.name}
@@ -151,48 +148,49 @@ const ShopEdit = () => {
             }
           />
           <label htmlFor="password" className="text-slate-500/75">
-          {" "}
-          Senha{" "}
-        </label>
-        <div className="flex">
-          <input
-            type={visible ? "text" : "password"}
-            placeholder={visible ? "1234" : "****"}
-            required
-            className="w-full"
-            id="password"
-            name="password"
-            value={shop?.password}
-            onChange={handlePwdChange}
-          />
-          <div
-            className={PassStyle.toggleVisible}
-            onClick={() => setVisible(!visible)}
-          >
-            {visible ? (
-              <AiOutlineEye color="#0f172a" />
-            ) : (
-              <AiOutlineEyeInvisible color="#0f172a" />
-            )}
+            Senha
+          </label>
+          <div className="flex">
+            <input
+              type={visible ? "text" : "password"}
+              placeholder="Digite a nova senha da barraca..."
+              required
+              className={`w-full border rounded-lg py-2 px-3 focus:outline-none focus:border-blue-500 ${
+                isSubmitted && !shop?.password ? `${styles.highlight}` : ""
+              }`}
+              id="password"
+              name="password"
+              value={shop?.password}
+              onChange={handlePwdChange}
+            />
+            <div
+              className="cursor-pointer ml-2 flex items-center"
+              onClick={() => setVisible(!visible)}
+            >
+              {visible ? (
+                <AiOutlineEye color="#fff" size={25} />
+              ) : (
+                <AiOutlineEyeInvisible color="#fff" size={25} />
+              )}
+            </div>
           </div>
-        </div>
         </form>
-          <div className="flex justify-between">
-            <button
-              onClick={() => confirmDelete(id)}
-              className="px-5 py-2  bg-slate-800 border-2 border-red-600 text-red-500 rounded-sm text-lg font-medium mt-10"
-            >
-              Deletar
-            </button>
-            <button
-              className="px-5 py bg-violet-800 rounded-sm text-lg font-semibold mt-10"
-              type="submit"
-              onClick={saveEditData}
-            >
-              {" "}
-              Editar Barraca
-            </button>
-          </div>
+        <div className="flex justify-between">
+          <button
+            onClick={() => confirmDelete(id)}
+            className="px-5 py-2 bg-slate-800 border-2 border-red-600 text-red-500 rounded-sm text-lg font-medium mt-10 hover:bg-slate-800/60 transition-colors duration-300"
+          >
+            Deletar
+          </button>
+          <button
+            className="px-5 py bg-violet-800 rounded-sm text-lg font-semibold mt-10 hover:bg-violet-700 transition-colors duration-300"
+            type="submit"
+            onClick={saveEditData}
+          >
+            {" "}
+            Editar Barraca
+          </button>
+        </div>
       </div>
     </div>
   );

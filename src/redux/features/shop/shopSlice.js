@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import shopService from "./shopService";
+import shopService from "./shopService.js";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -176,7 +176,7 @@ const shopSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.shop.push(action.payload);
-        toast.success("Ponto de venda Adicionado com Sucesso!");
+        toast.success("Ponto de venda adicionado com Sucesso!");
       })
       .addCase(createShop.rejected, (state, action) => {
         state.isLoading = false;
@@ -239,7 +239,7 @@ const shopSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        toast.success("Ponto de venda Atualizado com sucesso!");
+        toast.success("Ponto de venda atualizado com sucesso!");
       })
       .addCase(updateShop.rejected, (state, action) => {
         state.isLoading = false;

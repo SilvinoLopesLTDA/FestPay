@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Loader, { SpinnerImg } from "../../components/loader/Loader";
-import PasswordCard from "../../components/passwordCard/PasswordCard";
+// import PasswordCard from "../../components/passwordCard/PasswordCard";
 import styles from "./Dashboard.module.scss";
 import {
   Chart,
@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import { useRedirectLoggedOutUser } from "../../customHook/useRedirectLoggedOutUser";
 import printJS from "print-js";
 import ShopCard from "./ShopCard";
+import { Link } from "react-router-dom";
 
 Chart.register(
   CategoryScale,
@@ -202,7 +203,7 @@ const Dashboard = () => {
       },
       title: {
         display: true,
-        text: "Lucros e Custos Diários",
+        text: "Lucros e Custos Diários (Em reais)",
       },
     },
   };
@@ -215,7 +216,7 @@ const Dashboard = () => {
       },
       title: {
         display: true,
-        text: "Valores Totais das Barracas",
+        text: "Valores Totais das Barracas (Em reais)",
       },
     },
   };
@@ -291,25 +292,50 @@ const Dashboard = () => {
     }
   }, [shop, guichesRecarga, totalProfitGuiche]);
 
+  if (!isLoading && (!dataReady || shop.length === 0)) {
+    return (
+      <div className="flex flex-col justify-center items-center h-[75vh]">
+        <div className="w-[93%] px-16 py-48 bg-[#0f172a] m-5 rounded-xl text-center">
+          <p className="text-4xl text-gray-200 mb-4">Nenhum dado disponível.</p>
+          <p className="text-lg text-gray-400">
+            <Link to="/shops" className="hover:text-violet-500">
+              Crie Barracas
+            </Link>
+            ,{" "}
+            <Link to="/clients" className="hover:text-violet-500">
+              cadastre clientes
+            </Link>{" "}
+            e comece a gerar dados!
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <PasswordCard componentId="dashboard" password={"1234"} />
+      {/* <PasswordCard componentId="dashboard" password={"1234"} /> */}
       <div className="flex justify-center items-center">
-        {isLoading && <Loader />}
-        <div className={`${styles.content}`}>
-          <div className="flex justify-between items-center mb-10">
+        {isLoading && (
+          <div className="w-full h-full flex justify-center items-center absolute inset-0 bg-gray-900 opacity-75 z-50">
+            <Loader />
+          </div>
+        )}
+        <div className={`${styles.content} relative`}>
+          <div className="flex justify-between items-center mb-5">
             <h3 className="text-2xl font-semibold sm:text-center">
               Dashboard do
-              <span className="text-violet-700 font-bold"> FestPay</span>
+              <span className="text-violet-600 font-bold"> FestPay</span>
             </h3>
             <button
-              className="px-4 py-2 text-white bg-violet-700 rounded"
+              className="px-4 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300"
               onClick={handlePrint}
             >
               Imprimir Dashboard
             </button>
           </div>
           <div id="print-container">
+            <hr className="my-5 border-indigo-500/80" />
             <div className="flex justify-between sm:flex-col">
               <div className="flex w-3/5 sm:w-full">
                 <Bar options={optionsBar} data={data} />
@@ -319,8 +345,14 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="hidden numGraphs">
-              <p>Total de Lucros: R${formatNumber(totalProfit)}</p>
-              <p>Total de Custos: R${formatNumber(totalCost)}</p>
+              <p>
+                Total de Lucros:{" "}
+                <span className="font-bold">R${formatNumber(totalProfit)}</span>
+              </p>
+              <p>
+                Total de Custos:{" "}
+                <span className="font-bold">R${formatNumber(totalCost)}</span>
+              </p>
             </div>
             <div className="flex justify-center items-center h-full flex-col">
               <div className="w-full">
@@ -332,7 +364,12 @@ const Dashboard = () => {
                   </h3>
                 </div>
                 <div className="w-full">
-                  {isLoading && <SpinnerImg />}
+                  <hr className="my-5 border-indigo-500/80" />
+                  {isLoading && (
+                    <div className="w-full flex justify-center items-center h-40">
+                      <SpinnerImg />
+                    </div>
+                  )}
                   {dataReady && (
                     <>
                       <ShopCard
@@ -340,18 +377,12 @@ const Dashboard = () => {
                         profit={totalProfitGuiche}
                         isGuicheRecarga={true}
                       />
-                      <hr className="my-5" />
                     </>
                   )}
                   <div
-                    className={`${styles.cardContainer} grid grid-cols-3 gap place-items-center flex-wrap h-full sm:gap-4`}
+                    className={`grid grid-cols-3 gap place-items-center flex-wrap h-full sm:gap-4`}
                   >
-                    {!isLoading && shop.length === 0 ? (
-                      <p className={`${styles.placeholder}`}>
-                        -- Nenhum ponto de venda cadastrado. Por favor, adicione
-                        um Ponto de venda!
-                      </p>
-                    ) : (
+                    {!isLoading && shop.length !== 0 ? (
                       sortedShops.map((shop) => {
                         return (
                           <ShopCard
@@ -363,6 +394,11 @@ const Dashboard = () => {
                           />
                         );
                       })
+                    ) : (
+                      <p className="p-4 text-center">
+                        Nenhuma barraca cadastrada. Por favor, adicione uma
+                        barraca!
+                      </p>
                     )}
                   </div>
                 </div>

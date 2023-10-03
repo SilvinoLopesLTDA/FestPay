@@ -52,7 +52,7 @@ const FormItem = ({ item, saveItem, handleInputChange, required }) => {
         </label>
         <input
           type="text"
-          placeholder="Bebidas..."
+          placeholder="Digite o nome do produto..."
           name="name"
           id="name"
           value={item?.name}
@@ -66,7 +66,7 @@ const FormItem = ({ item, saveItem, handleInputChange, required }) => {
         </label>
         <input
           type="text"
-          placeholder="20"
+          placeholder="Digite o preço do produto..."
           name="price"
           id="price"
           value={item?.price}
@@ -80,7 +80,7 @@ const FormItem = ({ item, saveItem, handleInputChange, required }) => {
         </label>
         <input
           type="text"
-          placeholder="20"
+          placeholder="Digite a quantidade disponível do produto..."
           name="quantity"
           id="quantity"
           value={item?.quantity}
@@ -91,7 +91,7 @@ const FormItem = ({ item, saveItem, handleInputChange, required }) => {
         />
         <button
           type="submit"
-          className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
+          className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10 hover:bg-violet-700 transition-colors duration-300"
           onClick={saveItemData}
         >
           Salvar

@@ -157,7 +157,7 @@ const itemsSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.item.push(action.payload);
-        toast.success("Item Adicionado com Sucesso!");
+        toast.success("Item adicionado com sucesso!");
       })
       .addCase(createItem.rejected, (state, action) => {
         state.isLoading = false;
@@ -219,7 +219,7 @@ const itemsSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        toast.success("Item Atualizado com sucesso!");
+        toast.success("Item atualizado com sucesso!");
       })
       .addCase(updateItem.rejected, (state, action) => {
         state.isLoading = false;
@@ -249,7 +249,7 @@ const itemsSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.item.push(action.payload);
-        toast.success("Item Alocado na barraca com Sucesso!");
+        toast.success("Item alocado na barraca com Sucesso!");
       })
       .addCase(handleUserChoice.rejected, (state, action) => {
         state.isLoading = false;
@@ -260,7 +260,7 @@ const itemsSlice = createSlice({
   },
 });
 
-export const selectIsLoading = (state) => state.item.isLoading;
-export const selectItems = (state) => state.item.item;
+export const selectIsLoading = (state) => state.items.isLoading;
+export const selectItems = (state) => state.items.item;
 
 export default itemsSlice.reducer;

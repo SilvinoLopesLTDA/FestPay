@@ -7,7 +7,7 @@ const {
   deleteItem,
   updateItem,
   placeItemInShop,
-  handleUserChoice
+  handleUserChoice,
 } = require("../controllers/ItemController");
 const protect = require("../middleware/authMiddleware");
 

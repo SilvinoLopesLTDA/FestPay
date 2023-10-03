@@ -21,9 +21,9 @@ export const ShowOnLogout = ({ children }) => {
 };
 
 ShowOnLogin.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
 
 ShowOnLogout.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };

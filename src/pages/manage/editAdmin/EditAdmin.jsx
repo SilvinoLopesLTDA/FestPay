@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Loader from "../../../components/loader/Loader";
-import {
-  getAdmin,
-  getAdmins,
-  selectAdmin,
-  selectIsLoading,
-  updateAdmin,
-} from "../../../redux/features/Admin/Actions/AdminSlice";
 import { useEffect } from "react";
+import {
+  getSubaccounts,
+  getSubaccount,
+  updateSubaccounts,
+  selectIsLoading,
+  selectSubaccount,
+} from "../../../redux/features/auth/authSlice";
 
 const EditAdmin = () => {
   const { id } = useParams();
@@ -19,12 +19,11 @@ const EditAdmin = () => {
   const navigate = useNavigate();
   const isLoading = useSelector(selectIsLoading);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const editAdmin = useSelector(selectAdmin);
-
+  const editAdmin = useSelector(selectSubaccount);
   const [admin, setAdmin] = useState({});
 
   useEffect(() => {
-    dispatch(getAdmin(id));
+    dispatch(getSubaccount(id));
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -40,13 +39,14 @@ const EditAdmin = () => {
     const formData = {
       name: admin.name,
       email: admin.email,
+      role: "admin",
     };
     const updateData = {
       id: id,
       formData: formData,
     };
-    await dispatch(updateAdmin(updateData));
-    await dispatch(getAdmins());
+    dispatch(updateSubaccounts(updateData));
+    dispatch(getSubaccounts());
     navigate("/manage");
   };
 
@@ -62,7 +62,7 @@ const EditAdmin = () => {
   };
 
   const handleReturn = async () => {
-    await dispatch(getAdmins());
+    dispatch(getSubaccounts());
     navigate("/manage");
   };
 
@@ -70,13 +70,13 @@ const EditAdmin = () => {
     <div className="flex justify-center itemss-center">
       {isLoading && <Loader />}
       <div className={styles.content}>
-        <div className="flex justify-between mb-3">
+        <div className="flex justify-between items-center mb-3">
           <h2 className="text-2xl font-semibold">
             Editar
-            <span className="text-violet-700 font-bold"> Administrador</span>
+            <span className="text-violet-600 font-bold"> Administrador</span>
           </h2>
           <button
-            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium"
+            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300"
             onClick={handleReturn}
           >
             Voltar
@@ -87,7 +87,6 @@ const EditAdmin = () => {
           <label htmlFor="email">Email</label>
           <input
             type="email"
-            placeholder="email@gmail.com"
             name="email"
             id="email"
             disabled
@@ -100,7 +99,7 @@ const EditAdmin = () => {
           <label htmlFor="name">Nome</label>
           <input
             type="text"
-            placeholder="Matheus..."
+            placeholder="Digite o novo nome do usuário..."
             name="name"
             id="name"
             value={admin?.name}
@@ -111,7 +110,7 @@ const EditAdmin = () => {
           />
           <div className="flex">
             <button
-              className="px-5 py-2 bg-violet-800 rounded-sm text-lg font-semibold mt-10"
+              className="px-5 py-2 bg-violet-800 rounded-sm text-lg font-semibold hover:bg-violet-700 transition-colors duration-300 mt-10"
               type="submit"
             >
               Editar Administrador

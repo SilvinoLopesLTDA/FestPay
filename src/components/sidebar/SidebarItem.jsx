@@ -74,8 +74,8 @@ const SidebarItem = ({ item, isOpen }) => {
 };
 
 SidebarItem.propTypes = {
-  item: PropTypes.object.isRequired,
-  isOpen: PropTypes.bool.isRequired,
+  item: PropTypes.object,
+  isOpen: PropTypes.bool,
 };
 
 export default SidebarItem;

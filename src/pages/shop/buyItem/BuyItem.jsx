@@ -16,15 +16,15 @@ const BuyItem = () => {
     <div className="flex justify-center items-center">
       {isLoading && <Loader />}
       <div className={styles.content}>
-        <div className="flex justify-between mb-3">
+        <div className="flex justify-between mb-3 items-center">
           <h2 className="text-2xl font-semibold">
             Bem-vindo ao{" "}
-            <span className="text-violet-700 font-bold">
+            <span className="text-violet-600 font-bold">
               Caixa de Pagamento
             </span>
           </h2>
           <Link to={`/details-shop/${_id}`}>
-            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium">
+            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300">
               Voltar
             </button>
           </Link>

@@ -33,8 +33,8 @@ const AddShop = () => {
     setShop({ ...shop, [name]: value });
   };
 
-  const saveShop = async () => {
-    event.preventDefault();
+  const saveShop = async (e) => {
+    e.preventDefault();
     const formData = {
       name: name,
       password: password,
@@ -57,13 +57,13 @@ const AddShop = () => {
     <div className="flex justify-center items-center">
       {isLoading && <Loader />}
       <div className={styles.content}>
-        <div className="flex justify-between mb-3">
+        <div className="flex justify-between items-center mb-3">
           <h2 className="text-2xl font-semibold">
             Adicione uma{" "}
-            <span className="text-violet-700 font-bold">Barraca</span>
+            <span className="text-violet-600 font-bold">Barraca</span>
           </h2>
           <Link to="/shops">
-            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg medium">
+            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300">
               {" "}
               Voltar
             </button>

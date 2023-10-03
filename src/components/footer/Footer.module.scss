@@ -2,8 +2,8 @@
     display: flex;
     justify-content: space-between;
     padding: 1rem 0;
-    color: rgb(100 116 139);
-    border-top: 1.5px solid rgb(100 116 139);
+    color: rgb(124, 142, 168);
+    border-top: 1.5px solid rgb(124, 142, 168);
     margin: 0 3em;
     .info, .links {
       margin: 1em 0;
@@ -12,10 +12,10 @@
       font-size: 14px;
       margin: 0 5px;
       text-decoration: none;
-      transition: .3s;
+      transition: .15s;
       &:hover {
         text-decoration: underline;
-        font-weight: 600;
+        color: rgb(169, 190, 221);
       }
     }
   }

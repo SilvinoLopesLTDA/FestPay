@@ -5,34 +5,44 @@ const nodemailer = require("nodemailer");
 const cloudinary = require("cloudinary").v2;
 const QRCode = require("qrcode");
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-};
+const {
+  CLOUD_NAME,
+  API_KEY,
+  API_SECRET,
+  TWILIO_ACCOUNT_SID,
+  TWILIO_AUTH_TOKEN,
+  MAIL_HOST,
+  MAIL_PORT,
+  MAIL_USER,
+  MAIL_PASS,
+  FRONTEND_URL,
+  JWT_SECRET,
+} = process.env;
 
 cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
+  cloud_name: CLOUD_NAME,
+  api_key: API_KEY,
+  api_secret: API_SECRET,
 });
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const accountSid = TWILIO_ACCOUNT_SID;
+const authToken = TWILIO_AUTH_TOKEN;
 const clientTwilio = require("twilio")(accountSid, authToken);
 
 const transporter = nodemailer.createTransport({
-  host: process.env.MAIL_HOST,
-  port: process.env.MAIL_PORT,
+  host: MAIL_HOST,
+  port: MAIL_PORT,
   secure: false,
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
+    user: MAIL_USER,
+    pass: MAIL_PASS,
   },
 });
 
 const saveBase64ImageToCloudinary = async (base64String, fileName) => {
   try {
     const result = await cloudinary.uploader.upload(base64String, {
-      folder: "FestPay",
+      folder: "FestPay/qrCodes",
       public_id: fileName,
       overwrite: true,
     });
@@ -61,7 +71,7 @@ const registerClient = asyncHandler(async (req, res) => {
     throw new Error("Preencha os campos corretamente.");
   }
 
-  const clientExists = await Client.findOne({ email });
+  const clientExists = await Client.findOne({ user: req.user.id, email });
 
   if (clientExists) {
     res.status(400);
@@ -95,19 +105,93 @@ const registerClient = asyncHandler(async (req, res) => {
 
   if (client) {
     const { _id, name, phone, email, paymentMethod, balance, qrCode } = client;
-
-    const resetUrl = `${process.env.FRONTEND_URL}/client-info/${_id}`;
+    const replacePhone = phone.replace(/[^\d]/g, "");
+    const formattedPhone = `+55${replacePhone}`;
+    const resetUrl = `${FRONTEND_URL}/client-info/${_id}`;
 
     const mailOptions = {
       from: "FestPay 🎉 <festpay49@gmail.com>",
       to: email,
       subject: "Seja bem-vindo(a) à festa!",
-      text: `
-        Ficamos muito felizes de ter você por aqui! Este é o seu QR Code pré-pago, onde você irá utilizar como uma ficha, mas, digital! Qualquer problema ou falta de saldo procure o Guichê mais perto; é um prazer te ter aqui! 
-        
-        Deseja saber o seu saldo atual? acesse o link abaixo:
-
-        ${resetUrl}
+      html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Seja bem-vindo(a) à festa! 🎉</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                  }
+      
+                  .header {
+                      background-color: #1e1b4b;
+                      color: #fff;
+                      padding: 20px;
+                      text-align: center;
+                  }
+      
+                  .content {
+                      padding: 20px;
+                  }
+  
+                  .content h4 {
+                      font-size: 20px;
+                  }
+  
+                  .content h5 {
+                      font-size: 18px;
+                      margin: 17px 0 0 0;
+                  }
+      
+                  p {
+                      font-size: 14px;
+                  }
+      
+                  ul {
+                      list-style-type: none;
+                      padding: 0;
+                      margin: 15px 0;
+                  }
+      
+                  li {
+                      margin-bottom: 10px;
+                  }
+      
+                  strong {
+                      font-weight: bold;
+                  }
+      
+                  hr {
+                      margin: 30px 0;
+                  }
+      
+                  .footer {
+                      background-color: #1e1b4b;
+                      color: #fff;
+                      padding: 10px;
+                      text-align: center;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="header">
+                  <h2>Olá, seja bem-vindo(a) à festa!</h2>
+              </div>
+          
+              <div class="content">
+                  <h4>Ficamos muito felizes de tê-lo(a) conosco!</h4>
+                  <p>Este é o seu QR Code pré-pago, que você usará como uma ficha digital durante a festa. Não hesite em procurar o guichê mais próximo se precisar de assistência ou recarga de saldo.</p>
+                  <p>Para verificar seu saldo atual, clique no link abaixo:</p>
+      
+                  <a href="${resetUrl}">${resetUrl}</a>
+              </div>
+      
+              <div class="footer">
+                  <p>Atenciosamente,</p>
+                  <p>Equipe FestPay 🎉</p>
+              </div>
+          </body>
+          </html>
       `,
       attachments: [
         {
@@ -125,25 +209,43 @@ const registerClient = asyncHandler(async (req, res) => {
       console.log("Email enviado:", info.response);
     });
 
-    // clientTwilio.messages
-    //   .create({
-    //     body: "Aqui está o seu QR Code!",
-    //     mediaUrl: cloudinaryImageUrl,
-    //     from: "whatsapp:+14155238886",
-    //     to: `whatsapp:${phone}`,
-    //   })
-    //   .then((message) => console.log(message.sid))
-    //   .catch((error) => console.error("Erro ao enviar a mensagem:", error));
+    clientTwilio.messages
+      .create({
+        body: "Aqui está o seu QR Code!",
+        mediaUrl: cloudinaryImageUrl,
+        from: "whatsapp:+14155238886",
+        to: `whatsapp:${formattedPhone}`,
+      })
+      .then((message) =>
+        console.log(
+          "SID: " +
+            message.sid +
+            "\nStatus: " +
+            message.status +
+            "\nPara: " +
+            message.to
+        )
+      )
+      .catch((error) => console.error("Erro ao enviar a mensagem:", error));
 
-    // clientTwilio.messages
-    //   .create({
-    //     body: "Aqui está o seu QR Code!",
-    //     mediaUrl: cloudinaryImageUrl,
-    //     from: "+14155238886",
-    //     to: phone,
-    //   })
-    //   .then((message) => console.log(message.sid))
-    //   .catch((error) => console.error("Erro ao enviar a mensagem:", error));
+    clientTwilio.messages
+      .create({
+        body: "Aqui está o seu QR Code!",
+        mediaUrl: cloudinaryImageUrl,
+        from: "+13612735460",
+        to: formattedPhone,
+      })
+      .then((message) =>
+        console.log(
+          "SID: " +
+            message.sid +
+            "\nStatus: " +
+            message.status +
+            "\nPara: " +
+            message.to
+        )
+      )
+      .catch((error) => console.error("Erro ao enviar a mensagem:", error));
 
     res.status(201).json({
       _id,
@@ -167,7 +269,7 @@ const ClientToken = asyncHandler(async (req, res) => {
     return res.json(false);
   }
 
-  const verified = jwt.verify(token, process.env.JWT_SECRET);
+  const verified = jwt.verify(token, JWT_SECRET);
 
   if (verified) {
     return res.json(true);

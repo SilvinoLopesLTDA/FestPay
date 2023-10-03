@@ -1,24 +1,24 @@
-// eslint-disable-next-line no-unused-vars
-const dotenv = require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const errorHandler = require("./middleware/errorMiddleware");
-// const path = require("path");
+const compression = require("compression");
+const path = require("path");
 
 const userRoute = require("./routes/userRoute");
-const adminRoute = require("./routes/adminRoute");
 const clientRoute = require("./routes/clientRoute");
 const shopRoute = require("./routes/shopRoute");
 const qrCodeRoute = require("./routes/qrCodeRoute");
-const workerRoute = require("./routes/workerRoute");
 const itemRoute = require("./routes/itemRoute");
 
 const app = express();
 
 // Middlewares
+app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
@@ -27,37 +27,35 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      "http://localhost:4173",
       "https://festpay.vercel.app",
       "https://festpay-kw22.onrender.com",
       "https://festpay-dev.vercel.app",
       "https://festpay-dev-branch.onrender.com",
     ],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Cookie"],
+    allowedHeaders: ["Content-Encoding", "Content-Type", "Cookie"],
   })
 );
+app.use(express.static(path.join(__dirname, "dist")));
 app.options("*", cors());
-
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes Middleware
 app.use("/api/user", userRoute);
-app.use("/api/admin", adminRoute);
-app.use("/api/worker", workerRoute);
 app.use("/api/clients", clientRoute);
 app.use("/api/shops", shopRoute);
 app.use("/api/items", itemRoute);
 app.use("/api/qrCode", qrCodeRoute);
 
-// Routes
+// Rota para a página inicial
 app.get("/", (req, res) => {
   res.send("Home Page");
 });
 
-// Error MiddleWare
+// Middleware de tratamento de erros
 app.use(errorHandler);
 
-// Connect to DB and start server
+// Conexão com o banco de dados e inicialização do servidor
 const PORT = process.env.PORT || 5000;
 mongoose
   .connect(process.env.MONGO_URI)

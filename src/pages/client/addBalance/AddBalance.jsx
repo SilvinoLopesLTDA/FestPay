@@ -85,18 +85,21 @@ const Client = () => {
       <div className="flex justify-center items-center">
         {isLoading && <Loader />}
         <div className={styles.content}>
-          <div className="flex justify-between mb-3">
+          <div className="flex justify-between mb-3 items-center">
             <h2 className="text-2xl font-semibold">
               Faça uma{" "}
-              <span className="text-violet-700 font-bold">Recarga</span>
+              <span className="text-violet-600 font-bold">Recarga</span>
             </h2>
             <Link to="/clients">
-              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium sm:mt-2">
+              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 sm:mt-2">
                 Voltar
               </button>
             </Link>
           </div>
-          <p className="mb-3 text-lg sm:mt-5"> - Insira os dados do cliente abaixo </p>
+          <p className="mb-3 text-lg sm:mt-5">
+            {" "}
+            - Insira os dados do cliente abaixo{" "}
+          </p>
           <form
             className="flex flex-col"
             onSubmit={(e) => {
@@ -111,7 +114,7 @@ const Client = () => {
             </label>
             <input
               type="text"
-              placeholder="email@gmail.com"
+              placeholder="Digite o email do cliente..."
               name="email"
               id="email"
               value={client.email}
@@ -119,6 +122,7 @@ const Client = () => {
               className={
                 isSubmitted && client.email === "" ? `${styles.highlight}` : ""
               }
+              required
             />
 
             <label htmlFor="rechargeAmount">
@@ -127,7 +131,7 @@ const Client = () => {
             </label>
             <input
               type="text"
-              placeholder="10"
+              placeholder="Digite a quantidade da recarga..."
               name="rechargeAmount"
               id="rechargeAmount"
               value={client.rechargeAmount}
@@ -137,6 +141,7 @@ const Client = () => {
                   ? `${styles.highlight}`
                   : ""
               }
+              required
             />
             <label htmlFor="paymentMethod">
               {" "}
@@ -152,6 +157,7 @@ const Client = () => {
               }
               value={client.paymentMethod}
               onChange={handleInputChange}
+              required
             >
               <option value="">Selecione um método de pagamento</option>
               <option value="Crédito">Crédito</option>
@@ -160,7 +166,7 @@ const Client = () => {
               <option value="Pix">Pix</option>
             </select>
             <button
-              className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
+              className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10 hover:bg-violet-700 transition-colors duration-300"
               type="submit"
               onClick={saveClientData}
             >

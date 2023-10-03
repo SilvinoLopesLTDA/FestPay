@@ -1,21 +1,24 @@
 import PropTypes from "prop-types";
 import styles from "./Sidebar.module.scss";
 import { HiMenuAlt3 } from "react-icons/hi";
-import menu from "../../data/sidebar";
 import SidebarItem from "./SidebarItem";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Logo from "/assets/Logo-2.png";
-import { useEffect } from "react";
+import Logo from "/assets/Logo-2.webp";
+import Menu from "../../data/Menu";
 
 const Sidebar = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(window.innerWidth >= 600);
+
   const toggle = () => setIsOpen(!isOpen);
 
   useEffect(() => {
-    if (window.innerWidth < 600) {
-      setIsOpen(false);
-    }
+    const handleWindowResize = () => {
+      setIsOpen(window.innerWidth >= 600);
+    };
+
+    window.addEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
 
   return (
@@ -25,28 +28,32 @@ const Sidebar = ({ children }) => {
         style={{ width: isOpen ? "230px" : "60px" }}
       >
         <div className={`${styles.top_section} bg-violet-900`}>
-          <div
-            className={`${styles.logo}`}
-            style={{ display: isOpen ? "block" : "none" }}
-          >
-            <Link to="/">
-              <img src={Logo} alt="FestPay Logo" />
-            </Link>
-          </div>
+          {isOpen && (
+            <div className={`${styles.logo}`}>
+              <Link to="/">
+                <img src={Logo} alt="FestPay Logo" />
+              </Link>
+            </div>
+          )}
           <div
             className={`${styles.bars} ${styles.isClosed}`}
             style={{ marginLeft: isOpen ? "100px" : "0px" }}
           >
             <HiMenuAlt3 onClick={toggle} />
           </div>
-          <div className={` ${styles.small_devices}`}>
-            <Link to="/">
-              <img src={Logo} alt="FestPay Logo" />
-            </Link>
-          </div>
+          {!isOpen && (
+            <div className={` ${styles.small_devices}`}>
+              <Link to="/">
+                <img src={Logo} alt="FestPay Logo" />
+              </Link>
+            </div>
+          )}
         </div>
-        {menu.map((item, index) => {
-          return <SidebarItem key={index} item={item} isOpen={isOpen} />;
+        {Menu().map((item) => {
+          if (!item.visible) {
+            return null;
+          }
+          return <SidebarItem key={item.title} item={item} isOpen={isOpen} />;
         })}
       </div>
       <main
@@ -62,7 +69,7 @@ const Sidebar = ({ children }) => {
 };
 
 Sidebar.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
 
 export default Sidebar;

@@ -1,0 +1,49 @@
+.content {
+  width: 50em;
+  padding: 4em;
+  background-color: rgb(15 23 42);
+  margin: 5% 0;
+  border-radius: 10px;
+  label {
+    margin: 1em 0;
+    font-weight: 600;
+    color: rgb(139 92 246);
+  }
+
+  input,
+  select {
+    padding: 0.5em;
+    border-radius: 3px;
+    color: rgb(15 23 42);
+    outline: none;
+  }
+}
+
+.input {
+  width: 100%;
+  label {
+    margin: 1em 0;
+    font-weight: 600;
+    color: rgb(139 92 246);
+  }
+
+  input,
+  select {
+    padding: 0.5em;
+    border-radius: 3px;
+    color: rgb(15 23 42);
+    outline: none;
+  }
+}
+
+.highlight {
+  border: 0.125em solid red;
+}
+
+@media screen and (max-width: 850px) {
+  .content {
+    width: 20em;
+    padding: 2.5em;
+    margin-top: 4em;
+  }
+}

@@ -1,9 +1,9 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Card from "../../components/card/Card";
 import styles from "./auth.module.scss";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { resetPassword } from "../../services/authService";
+import { resetPassword } from "../../redux/features/auth/authService";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const initialState = {
@@ -12,11 +12,12 @@ const initialState = {
 };
 
 const Reset = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
   const { password, password2 } = formData;
 
-  const [visible, setVisible] = useState(true);
-  const [visibleConfirm, setVisibleConfirm] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [visibleConfirm, setVisibleConfirm] = useState(false);
 
   const { resetToken } = useParams();
 
@@ -29,12 +30,12 @@ const Reset = () => {
     e.preventDefault();
 
     if (password.length < 6) {
-      return toast.error("A senha teve conter mais de 6 caracteres");
+      return toast.error("A senha deve conter pelo menos 6 caracteres!");
     }
 
     if (password !== password2) {
       return toast.error(
-        "As senhas não iguais, Por favor preencha o campo corretamente"
+        "As senhas não iguais! Por favor, preencha os campos corretamente."
       );
     }
 
@@ -46,6 +47,7 @@ const Reset = () => {
     try {
       const data = await resetPassword(userData, resetToken);
       toast.success(data.message);
+      navigate("/login");
     } catch (error) {
       console.log(error.message);
     }
@@ -55,53 +57,61 @@ const Reset = () => {
     <div className={`${styles.auth}`}>
       <Card>
         <div className={styles.form}>
-          <h2> Mude a senha </h2>
-          <p className="text-slate-400/75 text-lg">Siga os passos para redefinir a sua senha </p>
+          <h2>Alteração de senha</h2>
+          <p className="text-slate-400/75 text-lg">
+            Siga os passos para redefinir a sua senha:{" "}
+          </p>
           <form onSubmit={reset}>
-          <div className="mt-7">
-              <label htmlFor="password" className="text-slate-500/75">
-                {" "}
-                Senha{" "}
+            <div className="mt-8 mb-6">
+              <label htmlFor="password" className="text-gray-500 font-semibold">
+                Nova senha<span className="text-red-600"> *</span>
               </label>
-              <div className="flex">
+              <div className="relative">
                 <input
                   type={visible ? "text" : "password"}
-                  placeholder={visible ? "123456" : "******"}
+                  placeholder="Digite aqui a sua nova senha..."
                   required
                   id="password"
                   name="password"
                   value={password}
                   onChange={handleInputChange}
+                  minLength="6"
                 />
-                <div className={styles.toggleVisible} onClick={() => setVisible(!visible)}>
+                <div
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setVisible(!visible)}
+                >
                   {visible ? (
-                    <AiOutlineEye color="white" />
+                    <AiOutlineEye color="#fff" size={25} />
                   ) : (
-                    <AiOutlineEyeInvisible color="white" />
+                    <AiOutlineEyeInvisible color="#fff" size={25} />
                   )}
                 </div>
               </div>
             </div>
             <div className="mt-2">
-              <label htmlFor="password" className="text-slate-500/75">
-                {" "}
-                Senha{" "}
+              <label htmlFor="password" className="text-gray-500 font-semibold">
+                Confirme sua nova senha<span className="text-red-600"> *</span>
               </label>
-              <div className="flex">
+              <div className="relative">
                 <input
                   type={visibleConfirm ? "text" : "password"}
-                  placeholder={visibleConfirm ? "123456" : "******"}
+                  placeholder="Digite aqui novamente a sua nova senha..."
                   required
-                  id="password"
-                  name="password"
-                  value={password}
+                  id="password2"
+                  name="password2"
+                  value={password2}
                   onChange={handleInputChange}
+                  minLength="6"
                 />
-                <div className={styles.toggleVisible} onClick={() => setVisibleConfirm(!visibleConfirm)}>
+                <div
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setVisibleConfirm(!visibleConfirm)}
+                >
                   {visibleConfirm ? (
-                    <AiOutlineEye color="white" />
+                    <AiOutlineEye color="#fff" size={25} />
                   ) : (
-                    <AiOutlineEyeInvisible color="white" />
+                    <AiOutlineEyeInvisible color="#fff" size={25} />
                   )}
                 </div>
               </div>
@@ -114,11 +124,17 @@ const Reset = () => {
               Alterar Senha
             </button>
             <div className={styles.links}>
-              <p className="text-slate-500/75">
-                <Link to="/"> {"< "}Voltar</Link>
+              <p className="text-[#94a3b8]">
+                <Link to="/" className="hover:text-violet-500">
+                  {" "}
+                  {"< "}Voltar
+                </Link>
               </p>
-              <p className="text-slate-500/75">
-                <Link to="/login"> Entrar{" >"} </Link>
+              <p className="text-[#94a3b8]">
+                <Link to="/login" className="hover:text-violet-500">
+                  {" "}
+                  Entrar{" >"}{" "}
+                </Link>
               </p>
             </div>
           </form>

@@ -1,11 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Card from "../../components/card/Card";
 import styles from "./auth.module.scss";
 import { useState } from "react";
-import { forgotPassword, validateEmail } from "../../services/authService";
+import {
+  forgotPassword,
+  validateEmail,
+} from "../../redux/features/auth/authService";
 import { toast } from "react-toastify";
 
 const Forgot = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
 
   const forgot = async (e) => {
@@ -25,20 +29,25 @@ const Forgot = () => {
 
     await forgotPassword(userData);
     setEmail("");
+    navigate("/login");
   };
 
   return (
     <div className={`${styles.auth}`}>
       <Card>
         <div className={styles.form}>
-          <h2> Esqueceu a Senha ? </h2>
-          <p className="text-slate-400/75 text-lg">Siga os passos para redefinir a sua senha </p>
+          <h2> Esqueceu a Senha? </h2>
+          <p className="text-slate-400/75 text-lg">
+            Siga os passos a seguir para redefinir a sua senha:{" "}
+          </p>
           <form onSubmit={forgot}>
-            <div className={styles.fields}>
-              <label htmlFor="email" className="text-slate-500/75"> Email </label>
+            <div className={`mt-8 ${styles.fields}`}>
+              <label htmlFor="email" className="text-gray-500 font-semibold">
+                Email<span className="text-red-600"> *</span>
+              </label>
               <input
                 type="email"
-                placeholder="exemplo@gmail.com"
+                placeholder="Digite aqui o seu email..."
                 required
                 id="email"
                 name="email"
@@ -54,11 +63,17 @@ const Forgot = () => {
               Recuperar Senha{" "}
             </button>
             <div className={styles.links}>
-              <p className="text-slate-500/75">
-                <Link to="/login"> {"< "}Voltar </Link>
+              <p className="text-[#94a3b8]">
+                <Link to="/login" className="hover:text-violet-500">
+                  {" "}
+                  {"< "}Voltar{" "}
+                </Link>
               </p>
-              <p className="text-slate-500/75">
-                <Link to="/login"> Entrar{" >"} </Link>
+              <p className="text-[#94a3b8]">
+                <Link to="/login" className="hover:text-violet-500">
+                  {" "}
+                  Entrar{" >"}{" "}
+                </Link>
               </p>
             </div>
           </form>

@@ -235,6 +235,14 @@ const ShopDetails = () => {
         className={` ${styles.items_list} flex justify-center items-center h-full flex-col `}
       >
         <div className="bg-slate-900 w-11/12 my-16 sm:flex sm:flex-col">
+          <Link to="/shops">
+            <button className="px-4 py-2 mt-5 ml-5 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300">
+              Voltar
+            </button>
+          </Link>
+          <div className="flex items-center justify-center">
+            <hr className="mt-5 w-[96.5%] border-indigo-500/80" />
+          </div>{" "}
           {isLoading && showLoading && <SpinnerImg />}
           <div className="flex flex-between sm:flex-col">
             <div className="flex justify-center align-center flex-col float-left p-5 w-full">
@@ -244,12 +252,12 @@ const ShopDetails = () => {
             </div>
             <div className="flex text-center flex-col float-right px-5 text-white mt-5 sm:justify-center sm:text-center md:flex-row">
               <Link to={`/edit-shop/${id}`}>
-                <button className="flex align-items justify-center w-full px-14 py-3 bg-indigo-800 rounded-sm text-lg font-semibold md:mt-0 sm:p-4 sm:justify-center">
+                <button className="flex align-items justify-center w-full px-14 py-3 bg-indigo-800 rounded-sm text-lg font-medium hover:bg-indigo-700 transition-colors duration-300 md:mt-0 sm:p-4 sm:justify-center">
                   <h2> Editar </h2>
                 </button>
               </Link>
               <Link to={`/add-item/${id}`}>
-                <button className="flex w-full px-14 py-3 bg-violet-900 rounded-sm text-lg font-semibold mt-5 md:mt-0 sm:ml-3 sm:p-4 sm:justify-center">
+                <button className="flex w-full px-14 py-3 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 mt-5 md:mt-0 sm:ml-3 sm:p-4 sm:justify-center">
                   <h2 className="w-32">Adicionar Item</h2>
                 </button>
               </Link>
@@ -260,7 +268,6 @@ const ShopDetails = () => {
               Itens da Barraca
             </h2>
           </div>
-
           <div className={`${styles.table} m-5`}>
             {!isLoading && !showLoading && item?.length === 0 ? (
               <p className="p-4 text-center">
@@ -298,7 +305,7 @@ const ShopDetails = () => {
                         <td className="w-12">
                           <div className="flex justify-center">
                             <button
-                              className="p-1 mr-3 bg-indigo-700 text-white-950"
+                              className="p-1 mr-3 bg-indigo-700 text-white-950 hover:bg-indigo-600 transition-colors duration-200"
                               onClick={() => decreaseQuantity(_id)}
                             >
                               <AiOutlineMinus color="white" size={25} />
@@ -318,7 +325,7 @@ const ShopDetails = () => {
                               className="text-center w-32"
                             />
                             <button
-                              className="p-1 ml-3 bg-indigo-700 text-white-950"
+                              className="p-1 ml-3 bg-indigo-700 text-white-950 hover:bg-indigo-600 transition-colors duration-200"
                               onClick={() => increaseQuantity(_id)}
                             >
                               <BsPlus color="white" size={25} />
@@ -356,7 +363,7 @@ const ShopDetails = () => {
               <span className="text-lg flex mt-1 sm:flex-col">
                 <p>
                   Valor Total:{" "}
-                  <span className="text-indigo-600/75 font-bold">
+                  <span className="text-indigo-600 font-bold">
                     R${formatNumber(totalValue)}
                   </span>
                 </p>
@@ -376,14 +383,14 @@ const ShopDetails = () => {
                     CART_STORAGE_KEY: CART_STORAGE_KEY,
                   }}
                 >
-                  <button className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2 sm:w-full sm:justify-center">
+                  <button className="flex text-lg font-medium p-2 bg-violet-700 rounded hover:bg-violet-600 transition-colors duration-300 sm:px-14 sm:mt-2 sm:w-full sm:justify-center">
                     <BsQrCodeScan size={26} color="white" className="mr-2.5" />
                     Prosseguir à compra!
                   </button>
                 </Link>
               ) : (
                 <button
-                  className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2 sm:w-full sm:justify-center cursor-not-allowed"
+                  className="flex text-lg font-medium p-2 bg-violet-700 rounded sm:px-14 sm:mt-2 sm:w-full sm:justify-center cursor-not-allowed hover:bg-violet-600 transition-colors duration-300"
                   disabled
                 >
                   Adicione um item para prosseguir!

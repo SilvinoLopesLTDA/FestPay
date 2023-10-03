@@ -3,9 +3,16 @@ import Card from "../../components/card/Card";
 import styles from "./auth.module.scss";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { registerUser, validateEmail } from "../../services/authService";
+import {
+  registerUser,
+  validateEmail,
+} from "../../redux/features/auth/authService";
 import { useDispatch } from "react-redux";
-import { SET_LOGIN, SET_NAME } from "../../redux/features/auth/authSlice";
+import {
+  SET_LOGIN,
+  SET_NAME,
+  SET_USER,
+} from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
@@ -23,8 +30,8 @@ const Register = () => {
   const [formData, setFormData] = useState(initialState);
   const { name, email, password, password2 } = formData;
 
-  const [visible, setVisible] = useState(true);
-  const [visibleConfirm, setVisibleConfirm] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [visibleConfirm, setVisibleConfirm] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -62,9 +69,10 @@ const Register = () => {
 
     try {
       const data = await registerUser(userData);
-      await dispatch(SET_LOGIN(true));
-      await dispatch(SET_NAME(data.name));
-      navigate("/dashboard");
+      dispatch(SET_LOGIN(true));
+      dispatch(SET_NAME(data.name));
+      dispatch(SET_USER(data));
+      navigate("/home");
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -77,7 +85,10 @@ const Register = () => {
       {isLoading && <Loader />}
       <Card>
         <span style={{ color: "#94a3b8" }}>
-          <Link to="/"> {"← "}Voltar </Link>
+          <Link to="/" className="hover:text-violet-500">
+            {" "}
+            {"← "}Voltar{" "}
+          </Link>
         </span>
         <div className={styles.form}>
           <h2> Crie sua conta</h2>
@@ -86,19 +97,21 @@ const Register = () => {
             <div className={styles.register}>
               <Link to="/login">
                 Já tem uma conta?{" "}
-                <span className="font-semibold">Entre aqui</span>
+                <span className="font-semibold hover:text-violet-600">
+                  Entre aqui
+                </span>
               </Link>
             </div>
           </p>
           <form onSubmit={register}>
             <div className="mt-5">
-              <label htmlFor="name" className="text-slate-500/75">
+              <label htmlFor="name" className="text-gray-500 font-semibold">
                 {" "}
-                Nome{" "}
+                Nome<span className="text-red-600"> *</span>
               </label>
               <input
                 type="text"
-                placeholder="Matheus..."
+                placeholder="Digite aqui o seu nome..."
                 required
                 id="name"
                 name="name"
@@ -107,13 +120,13 @@ const Register = () => {
               />
             </div>
             <div className="mt-2">
-              <label htmlFor="email" className="text-slate-500/75">
+              <label htmlFor="email" className="text-gray-500 font-semibold">
                 {" "}
-                Email{" "}
+                Email<span className="text-red-600"> *</span>
               </label>
               <input
                 type="email"
-                placeholder="exemplo@gmail.com"
+                placeholder="Digite aqui o seu email..."
                 required
                 id="email"
                 name="email"
@@ -122,49 +135,60 @@ const Register = () => {
               />
             </div>
             <div className="mt-2">
-              <label htmlFor="password" className="text-slate-500/75">
+              <label htmlFor="password" className="text-gray-500 font-semibold">
                 {" "}
-                Senha{" "}
+                Senha<span className="text-red-600"> *</span>
               </label>
-              <div className="flex">
+              <div className="relative">
                 <input
                   type={visible ? "text" : "password"}
-                  placeholder={visible ? "123456" : "******"}
+                  placeholder="Digite aqui a sua senha..."
                   required
                   id="password"
                   name="password"
                   value={password}
                   onChange={handleInputChange}
+                  minLength="6"
                 />
-                <div className={styles.toggleVisible} onClick={() => setVisible(!visible)}>
+                <div
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setVisible(!visible)}
+                >
                   {visible ? (
-                    <AiOutlineEye color="white" />
+                    <AiOutlineEye color="#fff" size={25} />
                   ) : (
-                    <AiOutlineEyeInvisible color="white" />
+                    <AiOutlineEyeInvisible color="#fff" size={25} />
                   )}
                 </div>
               </div>
             </div>
             <div className="mt-2">
-              <label htmlFor="password2" className="text-slate-500/75">
+              <label
+                htmlFor="password2"
+                className="text-gray-500 font-semibold"
+              >
                 {" "}
-                Confirmar Senha{" "}
+                Confirmar Senha<span className="text-red-600"> *</span>
               </label>
-              <div className="flex">
+              <div className="relative">
                 <input
                   type={visibleConfirm ? "text" : "password"}
-                  placeholder={visibleConfirm ? "123456" : "******"}
+                  placeholder="Digite aqui novamente a sua senha..."
                   required
                   id="password2"
                   name="password2"
                   value={password2}
                   onChange={handleInputChange}
+                  minLength="6"
                 />
-                <div className={styles.toggleVisible} onClick={() => setVisibleConfirm(!visibleConfirm)}>
+                <div
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setVisibleConfirm(!visibleConfirm)}
+                >
                   {visibleConfirm ? (
-                    <AiOutlineEye color="white" />
+                    <AiOutlineEye color="#fff" size={25} />
                   ) : (
-                    <AiOutlineEyeInvisible color="white" />
+                    <AiOutlineEyeInvisible color="#fff" size={25} />
                   )}
                 </div>
               </div>

@@ -1,20 +1,17 @@
 import PropTypes from "prop-types";
-import styles from "./Layout.module.scss";
 import Footer from "../footer/Footer";
 import Header from "../header/Header";
 
-const Layout = ({ children }) => {
-  return (
-    <>
-      <Header />
-      <div className={`${styles.layout}`}>{children}</div>
-      <Footer />
-    </>
-  );
-};
+const Layout = ({ children }) => (
+  <div className="flex flex-col min-h-screen">
+    <Header />
+    <main className="flex-1">{children}</main>
+    <Footer />
+  </div>
+);
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
 
 export default Layout;

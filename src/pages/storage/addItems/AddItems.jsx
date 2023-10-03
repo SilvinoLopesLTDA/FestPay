@@ -23,7 +23,7 @@ const AddItems = () => {
   const [item, setItem] = useState(initialState);
   const [submittedItems, setSubmittedItems] = useState([]);
 
-  const { name, price, quantity} = item;
+  const { name, price, quantity } = item;
 
   const isLoading = useSelector(selectIsLoading);
 
@@ -47,7 +47,7 @@ const AddItems = () => {
       setSubmittedItems([...submittedItems, newItem]);
       setItem(initialState);
       dispatch(getItems());
-      navigate("/storage")
+      navigate("/storage");
     }
   };
 
@@ -55,13 +55,12 @@ const AddItems = () => {
     <div className="flex justify-center items-center">
       {isLoading && <Loader />}
       <div className={styles.content}>
-        <div className="flex justify-between mb-3">
+        <div className="flex justify-between items-center mb-3">
           <h2 className="text-2xl font-semibold">
-            Adicione um{" "}
-            <span className="text-violet-700 font-bold">Item</span>
+            Adicione um <span className="text-violet-600 font-bold">Item</span>
           </h2>
           <Link to="/storage">
-            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg medium">
+            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300">
               {" "}
               Voltar
             </button>

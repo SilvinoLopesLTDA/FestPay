@@ -1,24 +1,10 @@
-import { useState, useEffect } from "react";
-import versionData from "./version/version.json";
 import styles from "./Footer.module.scss";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-  const [version, setVersion] = useState("");
-  const [currentYear, setCurrentYear] = useState("");
-  const repoUrl = "https://github.com/SilvinoLopesLTDA/Gratiam";
-
-  useEffect(() => {
-    try {
-      const { version: versionNumber } = versionData;
-      setVersion(versionNumber);
-    } catch (error) {
-      console.error("Erro ao obter a versão do arquivo version.json:", error);
-    }
-
-    const year = new Date().getFullYear();
-    setCurrentYear(year);
-  }, []);
+  const repoUrl = "https://github.com/SilvinoLopesLTDA/FestPay";
+  const currentYear = new Date().getFullYear();
+  const version = "v1.0.0-beta";
 
   return (
     <div className={styles.footer}>
@@ -31,7 +17,7 @@ const Footer = () => {
       </div>
       <div className={styles.links}>
         <Link to="/terms">Termos e Condições </Link>&nbsp;-&nbsp;
-        <Link to="/privacy">Politica de Privacidade </Link> &nbsp;-&nbsp;
+        <Link to="/privacy">Política de Privacidade </Link> &nbsp;-&nbsp;
         <Link to="/faq">FAQ</Link>
       </div>
     </div>

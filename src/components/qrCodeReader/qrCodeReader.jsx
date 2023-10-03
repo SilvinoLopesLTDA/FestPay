@@ -120,7 +120,7 @@ const QrCodeReader = ({ quantityValues, cart }) => {
       <div className="flex justify-center items-center flex-col">
         {isLoading && <Loader />}
         <form onSubmit={handleSubmit} className="flex flex-col w-full">
-          <label htmlFor="name">Nome do Ponto de Venda:</label>
+          <label htmlFor="name">Nome do ponto de venda:</label>
           <input
             type="text"
             id="name"
@@ -142,12 +142,13 @@ const QrCodeReader = ({ quantityValues, cart }) => {
           <input
             type="text"
             id="email"
+            placeholder="Aproxime o QR Code à câmera!"
             value={email}
-            className="cursor-not-allowed"
+            className="cursor-not-allowed placeholder:text-black"
             disabled
           />
 
-          <label>Aproxime o QRcode</label>
+          <label>Aproxime o QR Code:</label>
           <div className="flex justify-center border-4 border-indigo-900">
             <QrReader
               onError={handleError}
@@ -158,7 +159,7 @@ const QrCodeReader = ({ quantityValues, cart }) => {
           </div>
           <button
             type="submit"
-            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10"
+            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10 hover:bg-violet-700 transition-colors duration-300"
           >
             Realizar compra
           </button>
@@ -169,7 +170,7 @@ const QrCodeReader = ({ quantityValues, cart }) => {
 };
 
 QrCodeReader.propTypes = {
-  quantityValues: PropTypes.object.isRequired,
+  quantityValues: PropTypes.object,
   cart: PropTypes.array,
 };
 

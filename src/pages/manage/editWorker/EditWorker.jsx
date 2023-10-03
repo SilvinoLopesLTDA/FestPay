@@ -6,25 +6,25 @@ import { useState } from "react";
 import Loader from "../../../components/loader/Loader";
 import { useEffect } from "react";
 import {
-  getWorker,
-  getWorkers,
-  selectIsLoadingWorker,
-  selectWorker,
-  updateWorker,
-} from "../../../redux/features/Worker/Actions/workerSlice";
+  getSubaccounts,
+  getSubaccount,
+  updateSubaccounts,
+  selectIsLoading,
+  selectSubaccount,
+} from "../../../redux/features/auth/authSlice";
 
 const EditWorker = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoading = useSelector(selectIsLoadingWorker);
+  const isLoading = useSelector(selectIsLoading);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const editWorker = useSelector(selectWorker);
+  const editWorker = useSelector(selectSubaccount);
 
   const [worker, setWorker] = useState({});
 
   useEffect(() => {
-    dispatch(getWorker(id));
+    dispatch(getSubaccount(id));
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -40,14 +40,15 @@ const EditWorker = () => {
     const formData = {
       name: worker.name,
       email: worker.email,
-      func: worker.func
+      role: "worker",
+      workerFunction: worker.workerFunction,
     };
     const updateData = {
       id: id,
       formData: formData,
     };
-    await dispatch(updateWorker(updateData));
-    await dispatch(getWorkers());
+    dispatch(updateSubaccounts(updateData));
+    dispatch(getSubaccounts());
     navigate("/manage");
   };
 
@@ -63,7 +64,7 @@ const EditWorker = () => {
   };
 
   const handleReturn = async () => {
-    await dispatch(getWorkers());
+    dispatch(getSubaccounts());
     navigate("/manage");
   };
 
@@ -71,13 +72,13 @@ const EditWorker = () => {
     <div className="flex justify-center itemss-center">
       {isLoading && <Loader />}
       <div className={styles.content}>
-        <div className="flex justify-between mb-3">
+        <div className="flex justify-between items-center mb-3">
           <h2 className="text-2xl font-semibold">
             Editar
-            <span className="text-violet-700 font-bold"> Operário</span>
+            <span className="text-violet-600 font-bold"> Trabalhador</span>
           </h2>
           <button
-            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium"
+            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300"
             onClick={handleReturn}
           >
             Voltar
@@ -88,7 +89,6 @@ const EditWorker = () => {
           <label htmlFor="email">Email</label>
           <input
             type="email"
-            placeholder="email@gmail.com"
             name="email"
             id="email"
             disabled
@@ -101,7 +101,7 @@ const EditWorker = () => {
           <label htmlFor="name">Nome</label>
           <input
             type="text"
-            placeholder="Matheus..."
+            placeholder="Digite o novo nome do usuário..."
             name="name"
             id="name"
             value={worker?.name}
@@ -110,14 +110,14 @@ const EditWorker = () => {
               isSubmitted && worker?.name === "" ? `${styles.highlight}` : ""
             }
           />
-          <label htmlFor="func" className="flex justify-start my-3">
+          <label htmlFor="workerFunction" className="flex justify-start my-3">
             Função
           </label>
           <select
-            name="func"
-            id="func"
+            name="workerFunction"
+            id="workerFunction"
             className="w-full"
-            value={worker.func}
+            value={worker.workerFunction}
             onChange={handleInputChange}
           >
             <option value="">Selecione a Nova Função do Operário</option>
@@ -127,10 +127,10 @@ const EditWorker = () => {
           </select>
           <div className="flex">
             <button
-              className="px-5 py-2 bg-violet-800 rounded-sm text-lg font-semibold mt-10"
+              className="px-5 py-2 bg-violet-800 rounded-sm text-lg font-semibold hover:bg-violet-700 transition-colors duration-300 mt-10"
               type="submit"
             >
-              Editar Operário
+              Editar Trabalhador
             </button>
           </div>
         </form>

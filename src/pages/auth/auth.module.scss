@@ -23,7 +23,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-       svg {
+      svg {
         position: absolute;
         left: 60.5%;
         font-size: 1.5em;
@@ -40,7 +40,7 @@
         width: 21em;
         font-weight: 300;
         padding: 0.6rem;
-        margin: 0.8rem auto;
+        margin: 0.8rem 0;
         border: 1px solid rgb(51 65 85);
         color: #fff;
         border-bottom: 3px solid rgb(51 65 85);
@@ -48,10 +48,14 @@
         border-radius: 3px;
         outline: none;
 
-        &:focus {
+        &:focus:valid {
           outline: none;
           box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
           border-bottom: 3px solid #55c57a;
+        }
+
+        &.invalid-password {
+          border-bottom: 3px solid #ff7730;
         }
 
         &:focus:invalid {
@@ -76,7 +80,7 @@
     }
     .register {
       &:hover {
-        color: rgba(99, 101, 241, 0.75);
+        color: rgb(139 92 246);
       }
     }
   }
@@ -109,7 +113,7 @@
   .auth {
     .form {
       .toggleVisible {
-         svg {
+        svg {
           position: absolute;
           left: 80%;
         }

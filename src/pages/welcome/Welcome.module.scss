@@ -2,13 +2,13 @@
   margin-top: 0;
   height: 100vh;
   color: #fff;
-  background-image: url(../../../assets/festpay_bg.png);
+  background-image: url(/assets/festpay_bg.webp);
   background-position: top center;
   background-size: cover;
   background-repeat: no-repeat;
   background-color: #121214;
   h2 {
-    padding: 2em;
+    padding: 1em;
     background: rgb(94, 23, 235);
     background: linear-gradient(
       90deg,
@@ -114,6 +114,6 @@
   .btn_sm {
     width: 15em;
     position: relative;
-    top: -.7em;
+    top: -0.7em;
   }
 }
