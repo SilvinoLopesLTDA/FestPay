@@ -33,15 +33,15 @@ const AddShop = () => {
     setShop({ ...shop, [name]: value });
   };
 
-  const saveShop = async (e) => {
-    e.preventDefault();
+  const saveShop = async () => {
+    event.preventDefault();
     const formData = {
       name: name,
       password: password,
       profit: profit,
       cost: cost,
     };
-    console.log(formData);
+
     await dispatch(createShop(formData));
 
     if (shop.name && shop.password && shop.cost) {

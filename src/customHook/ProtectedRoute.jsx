@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 function ProtectedRoute({ children, allowedRoles }) {
   const user = useSelector((state) => state.auth.user);
-  console.log(user)
   const userRole = user ? user.role : null;
   const isAuthorized = userRole === "master" || allowedRoles.includes(userRole);
 

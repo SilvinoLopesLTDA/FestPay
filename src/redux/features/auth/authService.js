@@ -43,7 +43,6 @@ export const registerSubUser = async (formData) => {
     if (response.statusText === "OK") {
       toast.success("Usuário cadastrado com sucesso!");
     }
-    console.log(response)
     return response.data;
   } catch (error) {
     const message =

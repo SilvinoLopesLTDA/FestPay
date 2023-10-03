@@ -12,7 +12,6 @@ const createShop = async (formData) => {
       "Content-Type": "application/json",
     },
   };
-  console.log(formData);
   const response = await axios.post(`${API_URL}/create-shop`, formData, config);
   return response.data;
 };
