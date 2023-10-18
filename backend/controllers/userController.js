@@ -34,9 +34,9 @@ const registerSubaccount = asyncHandler(async (req, res) => {
 
   const emailExistsAsMaster = await User.findOne({ email });
 
-  const emailExistsAsSubaccount = await User.findOne({
-    "subaccounts.email": email,
-  });
+  const emailExistsAsSubaccount = user.subaccounts.some(
+    (sub) => sub.email === email
+  );
 
   if (emailExistsAsMaster || emailExistsAsSubaccount) {
     res.status(400);
@@ -427,7 +427,16 @@ const loginUser = asyncHandler(async (req, res) => {
 
     if (user.email === email) {
       token = generateToken(user._id);
-      const { _id, name, email: userEmail, photo, phone, bio, subaccounts, role } = user;
+      const {
+        _id,
+        name,
+        email: userEmail,
+        photo,
+        phone,
+        bio,
+        subaccounts,
+        role,
+      } = user;
       responseData = {
         _id,
         name,
@@ -513,8 +522,17 @@ const getUser = asyncHandler(async (req, res) => {
     }
 
     if (userData) {
-      const { _id, name, email, photo, phone, bio, subaccounts, role, workerFunction } =
-        userData;
+      const {
+        _id,
+        name,
+        email,
+        photo,
+        phone,
+        bio,
+        subaccounts,
+        role,
+        workerFunction,
+      } = userData;
       res.status(200).json({
         _id,
         name,
@@ -654,15 +672,14 @@ const changePassword = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Usuário não encontrado! Por favor, cadastre-se.");
   }
-  
+
   if (!oldPassword || !newPassword) {
     res.status(400);
     throw new Error("Por favor, adicione a antiga e nova senha.");
   }
-  
+
   const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
-  console.log(isPasswordCorrect)
-  
+
   if (user && isPasswordCorrect) {
     user.password = newPassword;
     await user.save();

@@ -17,7 +17,6 @@ const subaccountSchema = mongoose.Schema(
     email: {
       type: String,
       required: [true, "Por favor, adicione um email."],
-      unique: true,
       trim: true,
       match: [
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -84,7 +83,7 @@ const userSchema = mongoose.Schema(
     },
     phone: {
       type: String,
-      default: "+55",
+      default: "Nenhum telefone foi informado.",
     },
     bio: {
       type: String,
