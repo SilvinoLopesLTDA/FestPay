@@ -16,7 +16,7 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
     e.preventDefault();
     setIsSubmitted(true);
 
-    if (shop.name && shop.password && shop.cost) {
+    if (shop.name && shop.password) {
       saveShop(shop);
       navigate("/shops");
       dispatch(getShops());
@@ -96,12 +96,10 @@ const FormShop = ({ shop, saveShop, handleInputChange, required }) => {
             )}
           </div>
         </div>
-        <label htmlFor="cost">
-          Custo <span className="text-red-600"> {required}</span>
-        </label>
+        <label htmlFor="cost">Custo</label>
         <input
           type="text"
-          placeholder="20"
+          placeholder="Digite aqui, se houver, o custo da barraca..."
           name="cost"
           id="cost"
           value={shop?.cost}

@@ -14,7 +14,7 @@ const createShop = asyncHandler(async (req, res) => {
     throw new Error("Você não tem permissão para criar pontos de venda.");
   }
 
-  if (!name || !password || !cost) {
+  if (!name || !password) {
     res.status(400);
     throw new Error("Por favor, preencha os campos corretamente!");
   }

@@ -34,7 +34,7 @@ const AddItem = () => {
 
   useEffect(() => {
     if (formData !== -1) {
-      dispatch(handleUserChoice(id, formData));
+      dispatch(handleUserChoice({ id: id, selectedItemIndex: formData }));
       setFormData(-1);
       navigate(`/details-shop/${id}`);
     }
@@ -104,8 +104,8 @@ const AddItem = () => {
                       const itemIndex = startIndex + index + 1;
                       return (
                         <tr
-                          key={_id}
-                          onClick={() => handleChoice(index)}
+                          key={_id + index}
+                          onClick={() => handleChoice(_id)}
                           className={`text-center hover:bg-slate-800 odd:bg-slate-900/80 even:bg-slate-900/20 cursor-pointer ${
                             formData === index ? "bg-violet-700" : ""
                           }`}

@@ -64,7 +64,7 @@ const placeItemInShop = async (shopId, formData) => {
 };
 
 // Update  Item
-const handleUserChoice = async (id, formData) => {
+const handleUserChoice = async ({ id, selectedItemIndex }) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const handleUserChoice = async (id, formData) => {
   };
   const response = await axios.patch(
     `${API_URL}/handle-choice/${id}`,
-    formData,
+    { selectedItemIndex },
     config
   );
   return response.data;
@@ -85,7 +85,7 @@ const itemsService = {
   deleteItem,
   updateItem,
   placeItemInShop,
-  handleUserChoice
+  handleUserChoice,
 };
 
 export default itemsService;

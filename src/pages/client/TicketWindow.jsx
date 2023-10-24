@@ -140,7 +140,7 @@ const TicketWindow = () => {
       if (createClient.fulfilled.match(createdClient)) {
         setShowQrCode(true);
         resetForm();
-        navigate("/clients");
+        navigate("/ticket-window");
       }
     } catch (error) {
       console.log("Erro ao criar cliente:", error);

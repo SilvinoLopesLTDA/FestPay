@@ -167,7 +167,11 @@ const registerSubaccount = asyncHandler(async (req, res) => {
             <hr/>
             <div>
             <p>Lembramos que o seu papel é fundamental para o funcionamento harmonioso do evento, e agradecemos desde já o seu compromisso. Caso tenha alguma dúvida ou precise de orientações adicionais, não hesite em entrar em contato com a equipe de coordenação.</p>
-    
+
+            <h4 style="text-align:center;">Acesse o site por aqui: 
+            <a href="${process.env.FRONTEND_URL}">link de redirecionamento</a>
+            ou o colando este link no seu navegador ${process.env.FRONTEND_URL}</h4>
+
             <p>Agradecemos antecipadamente pelo seu empenho e esperamos contar com sua dedicação durante todo o evento.</p>
             </div>
         </div>
@@ -303,6 +307,10 @@ const registerSubaccount = asyncHandler(async (req, res) => {
             <hr/>
             <div>
             <p>Lembre-se de fornecer as informações necessárias e orientações adicionais para os trabalhadores de acordo com as funções atribuídas.</p>
+
+            <h4 style="text-align:center;">Acesse o site por aqui: 
+            <a href="${process.env.FRONTEND_URL}">link de redirecionamento</a>
+            ou o colando este link no seu navegador ${process.env.FRONTEND_URL}</h4>
     
             <p>Se você tiver alguma dúvida ou precisar de assistência, não hesite em entrar em contato com a equipe de suporte do FestPay.</p>
             </div>

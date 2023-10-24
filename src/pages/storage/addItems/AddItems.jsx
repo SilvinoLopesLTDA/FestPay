@@ -39,7 +39,6 @@ const AddItems = () => {
       price: price,
       quantity: quantity,
     };
-    console.log(formData);
     await dispatch(createItem(formData));
 
     if (item.name && item.price && item.quantity) {

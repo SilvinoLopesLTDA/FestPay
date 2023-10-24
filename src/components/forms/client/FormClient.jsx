@@ -25,7 +25,7 @@ const FormClient = ({
       client.balance
     ) {
       resetForm();
-      navigate("/clients");
+      navigate("/ticket-window");
       setIsSubmitted(false);
     } else {
       console.log("Preencha os campos corretamente!");

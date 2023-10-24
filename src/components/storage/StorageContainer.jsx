@@ -108,7 +108,7 @@ const StorageContainer = ({ item, isLoading }) => {
                   <tbody>
                     {currentItems?.map((item, index) => {
                       const { _id, name, price, quantity } = item;
-                      const itemIndex = endIndex + index + 1;
+                      const itemIndex = startIndex + index + 1;
                       return (
                         <tr
                           key={_id}

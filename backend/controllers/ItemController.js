@@ -134,8 +134,15 @@ const handleUserChoice = asyncHandler(async (req, res) => {
     throw new Error("Índice de item inválido.");
   }
 
-  const selectedItem = items[selectedItemIndex];
-  
+  const selectedItem = items.find(
+    (item) => item._id.toString() === selectedItemIndex
+  );
+
+  if (!selectedItem) {
+    res.status(404);
+    throw new Error("Item não encontrado.");
+  }
+
   if (selectedItem.quantity > 0) {
     selectedItem.quantity -= 1;
     await selectedItem.save();
@@ -149,7 +156,6 @@ const handleUserChoice = asyncHandler(async (req, res) => {
 
   res.status(200).json({ message: "Item colocado na barraca com sucesso." });
 });
-
 
 module.exports = {
   createItem,

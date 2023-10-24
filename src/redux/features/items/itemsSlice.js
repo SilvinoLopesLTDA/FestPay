@@ -127,9 +127,13 @@ export const placeItemInShop = createAsyncThunk(
 // Place Item in a Shop
 export const handleUserChoice = createAsyncThunk(
   "items/handleUserChoice",
-  async ({ id, formData }, thunkAPI) => {
+  async ({ id, selectedItemIndex }, thunkAPI) => {
     try {
-      return await itemsService.handleUserChoice(id, formData);
+      const response = await itemsService.handleUserChoice({
+        id,
+        selectedItemIndex,
+      });
+      return response;
     } catch (error) {
       const message =
         (error.response &&
@@ -137,7 +141,6 @@ export const handleUserChoice = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      console.log(message);
       return thunkAPI.rejectWithValue(message);
     }
   }

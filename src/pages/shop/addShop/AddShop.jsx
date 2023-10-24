@@ -38,13 +38,13 @@ const AddShop = () => {
     const formData = {
       name: name,
       password: password,
-      profit: profit,
-      cost: cost,
+      profit: profit || 0,
+      cost: cost || 0,
     };
 
     await dispatch(createShop(formData));
 
-    if (shop.name && shop.password && shop.cost) {
+    if (shop.name && shop.password) {
       const newShop = { ...shop };
       setSubmittedShops([...submittedShops, newShop]);
       setShop(initialState);
