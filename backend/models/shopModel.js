@@ -61,6 +61,7 @@ const shopSchema = mongoose.Schema(
         ref: "Cost",
       },
     ],
+    workers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   {
     timestamps: true,

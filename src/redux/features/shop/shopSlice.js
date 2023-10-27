@@ -162,6 +162,44 @@ export const getPurchases = createAsyncThunk(
   }
 );
 
+// Add Worker
+export const addWorker = createAsyncThunk(
+  "shops/addWorker",
+  async ({ id, workers }, thunkAPI) => {
+    try {
+      return await shopService.addWorker(id, workers);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Remove Worker
+export const removeWorker = createAsyncThunk(
+  "shops/removeWorker",
+  async ({ id, workers }, thunkAPI) => {
+    try {
+      return await shopService.removeWorker(id, workers);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const shopSlice = createSlice({
   name: "shops",
   initialState,
@@ -289,6 +327,37 @@ const shopSlice = createSlice({
         state.purchases = action.payload;
       })
       .addCase(getPurchases.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+
+      .addCase(addWorker.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addWorker.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Trabalhador alocado com sucesso!");
+      })
+      .addCase(addWorker.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+      .addCase(removeWorker.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(removeWorker.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Trabalhador retirado com sucesso!");
+      })
+      .addCase(removeWorker.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

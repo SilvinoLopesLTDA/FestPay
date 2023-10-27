@@ -16,7 +16,6 @@ import { Pie, Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { getPurchases, getShops } from "../../redux/features/shop/shopSlice";
 import { format } from "date-fns";
-import { useRedirectLoggedOutUser } from "../../customHook/useRedirectLoggedOutUser";
 import printJS from "print-js";
 import ShopCard from "./ShopCard";
 import { Link } from "react-router-dom";
@@ -39,14 +38,6 @@ const Dashboard = () => {
   );
 
   const currentItems = Array.isArray(shop) ? shop : [];
-
-  useEffect(() => {
-    if (sessionStorage.getItem("shouldReloadDashboard")) {
-      window.location.reload();
-      sessionStorage.removeItem("shouldReloadDashboard");
-    }
-  }, []);
-  useRedirectLoggedOutUser("/login");
 
   useEffect(() => {
     dispatch(getShops());

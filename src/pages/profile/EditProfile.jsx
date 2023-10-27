@@ -1,12 +1,20 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../redux/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  SET_LOGIN,
+  SET_USER,
+  selectUser,
+} from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { updateUser } from "../../redux/features/auth/authService";
+import {
+  deleteAccount,
+  updateUser,
+} from "../../redux/features/auth/authService";
 import ChangePassword from "./ChangePassword";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const initializeProfile = (user) => {
   return {
@@ -21,11 +29,15 @@ const initializeProfile = (user) => {
 const EditProfile = () => {
   const user = useSelector(selectUser);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [profile, setProfile] = useState(initializeProfile(user));
   const [profileImage, setProfileImage] = useState("");
   const [imagePreview, setImagePreview] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (!user) {
@@ -46,6 +58,9 @@ const EditProfile = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
+    if (name === "password") {
+      setPassword(value);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -95,9 +110,7 @@ const EditProfile = () => {
         bio: profile.bio,
         photo: profileImage ? imageURL : profile.photo,
       };
-      console.log(FormDataEvent);
-      const data = await updateUser(formData);
-      console.log(data);
+      await updateUser(formData);
       toast.success("Usuário Atualizado");
       navigate("/profile");
       setIsLoading(false);
@@ -110,6 +123,15 @@ const EditProfile = () => {
 
   const handleShowChangePassword = () => {
     setShowChangePassword(true);
+  };
+
+  const handleDeleteAccount = async () => {
+    await deleteAccount(password);
+    dispatch(SET_LOGIN(false));
+    dispatch(SET_USER(null));
+    setShowDeleteConfirmation(false);
+    localStorage.clear();
+    navigate("/");
   };
 
   return (
@@ -193,17 +215,77 @@ const EditProfile = () => {
                   O Email não pode ser Alterado
                 </code>
               </div>
-              <button
-                type="button"
-                className="px-7 py-2 text-md font-semibold rounded bg-violet-800 hover:bg-violet-700 transition-colors duration-300"
-                onClick={handleShowChangePassword}
-              >
-                Alterar a senha
-              </button>
+              <div className="flex justify-between">
+                <button
+                  type="button"
+                  className="w-2/5 px-7 py-2 text-md font-semibold rounded bg-violet-800 hover:bg-violet-700 transition-colors duration-300"
+                  onClick={handleShowChangePassword}
+                >
+                  Alterar a senha
+                </button>
+                <button
+                  type="button"
+                  className="w-2/5 px-7 py-2 text-md font-semibold rounded bg-slate-800 border-2 border-red-600 text-red-500 hover:bg-slate-800/60 transition-colors duration-300"
+                  onClick={() => setShowDeleteConfirmation(true)}
+                >
+                  Excluir Conta
+                </button>
+              </div>
               {showChangePassword && (
                 <ChangePassword
                   handleCloseChangePassword={() => setShowChangePassword(false)}
                 />
+              )}
+              {showDeleteConfirmation && (
+                <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black/60">
+                  <div className="bg-slate-800 p-6 rounded-lg">
+                    <h3 className="text-xl mb-4 font-medium">
+                      Confirme a sua senha:
+                    </h3>
+                    <div className="relative">
+                      <input
+                        type={visible ? "text" : "password"}
+                        placeholder="Digite aqui a sua senha..."
+                        required
+                        id="password"
+                        name="password"
+                        value={password}
+                        onChange={handleInputChange}
+                        minLength="6"
+                        className="bg-gray-100 text-black px-4 py-2 rounded-md w-full"
+                      />
+                      <div
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                        onClick={() => setVisible(!visible)}
+                      >
+                        {visible ? (
+                          <AiOutlineEye color="#000" size={25} />
+                        ) : (
+                          <AiOutlineEyeInvisible color="#000" size={25} />
+                        )}
+                      </div>
+                    </div>
+                    <div className="py-4">
+                      <hr />
+                    </div>
+                    <p>Tem certeza de que deseja excluir sua conta?</p>
+                    <div className="mt-4 flex justify-between">
+                      <button
+                        type="button"
+                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-300"
+                        onClick={handleDeleteAccount}
+                      >
+                        Sim, excluir
+                      </button>
+                      <button
+                        className="px-4 py-2 ml-4 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg transition-colors duration-300"
+                        onClick={() => setShowDeleteConfirmation(false)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                </div>
               )}
             </form>
           </div>

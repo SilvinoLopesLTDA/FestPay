@@ -15,12 +15,15 @@ const {
   resetPassword,
   updateSubaccount,
   deleteSubaccount,
+  confirmEmail,
+  deleteAccount,
 } = require("../controllers/userController");
 const protect = require("../middleware/authMiddleware");
 
 router.post("/register-subaccount", protect, registerSubaccount);
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.get("/confirm-email/:token", confirmEmail);
 router.get("/logout", logout);
 router.get("/get-user", protect, getUser);
 router.get("/get-subaccounts", protect, listSubaccounts);
@@ -32,5 +35,6 @@ router.patch("/change-password", protect, changePassword);
 router.post("/forgot-password", forgotPassword);
 router.put("/reset-password/:resetToken", resetPassword);
 router.delete("/delete-subaccount/:id", protect, deleteSubaccount);
+router.delete("/delete-account", protect, deleteAccount);
 
 module.exports = router;

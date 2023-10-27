@@ -146,6 +146,24 @@ export const handleUserChoice = createAsyncThunk(
   }
 );
 
+export const removeItemFromShop = createAsyncThunk(
+  "items/removeItemsFromShop",
+  async ({ id, itemId }, thunkAPI) => {
+    try {
+      const response = await itemsService.removeItemFromShop(id, itemId);
+      return response;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const itemsSlice = createSlice({
   name: "items",
   initialState,
@@ -252,9 +270,24 @@ const itemsSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.item.push(action.payload);
-        toast.success("Item alocado na barraca com Sucesso!");
+        toast.success("Item alocado na barraca com sucesso!");
       })
       .addCase(handleUserChoice.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+      .addCase(removeItemFromShop.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(removeItemFromShop.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Item removido da barraca com sucesso!");
+      })
+      .addCase(removeItemFromShop.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

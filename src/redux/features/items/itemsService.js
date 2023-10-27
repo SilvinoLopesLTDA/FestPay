@@ -48,7 +48,7 @@ const updateItem = async (id, formData) => {
   return response.data;
 };
 
-// Update  Item
+// Place Item Shop
 const placeItemInShop = async (shopId, formData) => {
   const config = {
     headers: {
@@ -63,7 +63,7 @@ const placeItemInShop = async (shopId, formData) => {
   return response.data;
 };
 
-// Update  Item
+// Handle User Choice
 const handleUserChoice = async ({ id, selectedItemIndex }) => {
   const config = {
     headers: {
@@ -78,6 +78,14 @@ const handleUserChoice = async ({ id, selectedItemIndex }) => {
   return response.data;
 };
 
+// Remove Item From Shop
+const removeItemFromShop = async (id, itemId) => {
+  const response = await axios.delete(
+    `${API_URL}/shops/${id}/remove-item/${itemId}`
+  );
+  return response.data;
+};
+
 const itemsService = {
   createItem,
   getItems,
@@ -86,6 +94,7 @@ const itemsService = {
   updateItem,
   placeItemInShop,
   handleUserChoice,
+  removeItemFromShop,
 };
 
 export default itemsService;

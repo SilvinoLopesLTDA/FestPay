@@ -5,10 +5,116 @@ const bcrypt = require("bcryptjs");
 const Token = require("../models/tokenModel");
 const crypto = require("crypto");
 const sendEmail = require("../util/sendEmail");
+const { CronJob } = require("cron");
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
+
+const cleanExpiredAccounts = async () => {
+  console.log("Verificando contas...");
+  const expirationDate = new Date();
+  expirationDate.setHours(expirationDate.getHours() - 24);
+
+  try {
+    const expiredUsers = await User.find({
+      isConfirmed: false,
+      confirmationTokenExpires: { $lte: expirationDate },
+    });
+
+    for (const user of expiredUsers) {
+      await User.findByIdAndRemove(user._id);
+      console.log(`Conta de usuário expirada excluída: ${user.email}`);
+    }
+  } catch (error) {
+    console.error("Erro ao limpar contas de usuário expiradas:", error);
+  }
+};
+
+const job = new CronJob(
+  "* */12 * * *",
+  cleanExpiredAccounts,
+  null,
+  true,
+  "UTC"
+);
+
+job.start();
+
+const sendConfirmationEmail = asyncHandler(
+  async (toEmail, confirmationToken) => {
+    const confirmLink = `${process.env.FRONTEND_URL}/confirm-email/${confirmationToken}`;
+
+    const message = `
+    <html>
+    <head>
+      <title>Boas vindas ao FestPay! Confirme o seu email</title>
+    </head>
+    <body>
+      <div style="font-family: Arial, sans-serif;">
+        <div style="background-color: #1e1b4b; color: #fff; text-align: center; padding: 10px;">
+          <h1>Boas vindas ao FestPay!</h1>
+        </div>
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+          <p>Olá,</p>
+          <p>
+            Bem-vindo ao FestPay! Para começar a usar sua conta, precisamos confirmar o seu e-mail.
+          </p>
+          <p>
+            Clique no link abaixo para confirmar seu e-mail:
+            <a href="${confirmLink}" style="font-size: 10px;">Confirmar meu e-mail</a>
+          </p>
+          <p style="font-size: 10px;">
+            Ou cole este link no seu navegador: ${confirmLink}
+          </p>
+          <p>
+            Se você não se cadastrou no FestPay, pode ignorar este e-mail.
+          </p>
+          <p>Obrigado!</p>
+        </div>
+        <div style="background-color: #1e1b4b; color: #fff; padding: 10px; text-align: center;">
+          <p>Atenciosamente,</p>
+          <p>Time de Desenvolvimento FestPay.</p>
+        </div>
+      </div>
+    </body>
+  </html>
+  `;
+    const subject = `Boas vindas ao FestPay! Confirme o seu email!`;
+    const send_to = toEmail;
+    const send_from = `Staff - FestPay 👨‍🔧 <${process.env.EMAIL_USER}>`;
+
+    try {
+      await sendEmail(subject, message, send_to, send_from);
+    } catch (error) {
+      throw new Error(
+        "Email não enviado para à conta. Por favor, tente novamente!"
+      );
+    }
+  }
+);
+
+const confirmEmail = asyncHandler(async (req, res) => {
+  const confirmationToken = req.params.token;
+
+  const user = await User.findOne({ confirmationToken });
+
+  if (!user) {
+    return res.status(400).json({ message: "Token de confirmação inválido." });
+  }
+
+  const currentTime = new Date();
+  if (user.emailVerificationTokenExpires <= currentTime) {
+    return res.status(400).json({ message: "Token de confirmação expirado." });
+  }
+
+  user.isEmailVerified = true;
+  user.confirmationToken = undefined;
+  user.emailVerificationTokenExpires = undefined;
+  await user.save();
+
+  res.status(200).json({ message: "Email confirmado com sucesso." });
+});
 
 // Register Subaccount (Admin or Worker)
 const registerSubaccount = asyncHandler(async (req, res) => {
@@ -357,7 +463,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("A senha deve conter mais de 6 caracteres.");
   }
 
-  // Check if user email already exist
+  // Check if user email already exists
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -365,41 +471,26 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("O email já está cadastrado!");
   }
 
-  // Create new user
+  const confirmationToken = generateToken();
+  const tokenFormatted = confirmationToken.replace(/\./g, "");
+
+  const tokenExpires = new Date();
+  tokenExpires.setDate(tokenExpires.getDate() + 1);
+
   const user = await User.create({
     name,
     email,
     password,
+    confirmationToken: tokenFormatted,
+    emailVerificationTokenExpires: tokenExpires,
   });
 
-  // Generate Token
-  const token = generateToken(user._id);
+  sendConfirmationEmail(user.email, tokenFormatted);
 
-  // Send HTTP-only cookie
-  res.cookie("token", token, {
-    path: "/",
-    httpOnly: true,
-    expires: new Date(Date.now() + 1000 * 86400), // 1 day
-    sameSite: "none",
-    secure: true,
+  res.status(201).json({
+    message:
+      "Usuário registrado com sucesso. Verifique seu e-mail para confirmar.",
   });
-
-  if (user) {
-    const { _id, name, email, photo, phone, bio, role } = user;
-    res.status(201).json({
-      _id,
-      name,
-      email,
-      photo,
-      phone,
-      bio,
-      role,
-      token,
-    });
-  } else {
-    res.status(400);
-    throw new Error("Dados de usuário invalidos!");
-  }
 });
 
 // Login User
@@ -419,6 +510,13 @@ const loginUser = asyncHandler(async (req, res) => {
 
     if (!user) {
       throw new Error("Usuário não encontrado. Por favor, cadastre-se!");
+    }
+
+    // Check if the user's email is confirmed
+    if (!user.isEmailVerified) {
+      throw new Error(
+        "Você precisa confirmar seu e-mail antes de fazer login."
+      );
     }
 
     // Check if password is correct for the user
@@ -926,9 +1024,51 @@ const deleteSubaccount = asyncHandler(async (req, res) => {
   });
 });
 
+// Delete Account
+const deleteAccount = async (req, res) => {
+  try {
+    const userId = req.subaccount ? req.subaccount.user : req.user.id;
+    const { password } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuário não encontrado." });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
+      return res
+        .status(400)
+        .json({ message: "Senha incorreta. A conta não foi excluída." });
+    }
+
+    await user.remove();
+
+    res.cookie("token", "", {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(0), // 1 day
+      sameSite: "none",
+      secure: true,
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Sua conta foi excluída com sucesso." });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "Ocorreu um erro ao excluir a conta." });
+  }
+};
+
 module.exports = {
   registerSubaccount,
   registerUser,
+  confirmEmail,
   loginUser,
   logout,
   getUser,
@@ -941,4 +1081,5 @@ module.exports = {
   resetPassword,
   updateSubaccount,
   deleteSubaccount,
+  deleteAccount,
 };

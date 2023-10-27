@@ -83,8 +83,18 @@ const createItem = asyncHandler(async (req, res) => {
 // Get all Shops
 const getShops = asyncHandler(async (req, res) => {
   const userId = req.subaccount ? req.subaccount.user : req.user.id;
-  const shops = await Shop.find({ user: userId }).sort("-createdAt");
-  res.status(200).json(shops);
+  const isSubaccountBarraca =
+    req.subaccount && req.subaccount.workerFunction === "Barraca";
+
+  if (isSubaccountBarraca) {
+    const shops = await Shop.find({ workers: req.subaccount._id }).sort(
+      "-createdAt"
+    );
+    res.status(200).json(shops);
+  } else {
+    const shops = await Shop.find({ user: userId }).sort("-createdAt");
+    res.status(200).json(shops);
+  }
 });
 
 // Get single Shop
@@ -360,6 +370,73 @@ const getCosts = asyncHandler(async (req, res) => {
   }
 });
 
+// Add Worker
+const addWorker = asyncHandler(async (req, res) => {
+  const shopId = req.params.id;
+  const { workers } = req.body;
+
+  const shop = await Shop.findById(shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Ponto de venda não encontrado.");
+  }
+
+  if (!req.user && req.subaccount.role !== "admin") {
+    res.status(403);
+    throw new Error("Você não tem permissão para utilizar essa função.");
+  } else {
+    shop.workers = workers;
+    const updatedShop = await shop.save();
+    res.status(200).json(updatedShop);
+  }
+});
+
+// Remove Worker
+const removeWorker = asyncHandler(async (req, res) => {
+  const shopId = req.params.id;
+  const workers = req.body;
+
+  if (!workers) {
+    res.status(400);
+    throw new Error("Nenhum trabalhador fornecido para remoção.");
+  }
+
+  const shop = await Shop.findById(shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Ponto de venda não encontrado.");
+  }
+
+  if (!req.user && req.subaccount.role !== "admin") {
+    res.status(403);
+    throw new Error("Você não tem permissão para utilizar essa função.");
+  } else {
+    const validWorkerIds = workers
+      .map((workerId) => workerId.trim())
+      .filter((workerId) => mongoose.Types.ObjectId.isValid(workerId));
+
+    if (validWorkerIds.length === 0) {
+      res.status(400);
+      throw new Error("IDs de trabalhadores inválidos fornecidos.");
+    }
+
+    const removedWorkers = shop.workers.filter(
+      (workerId) => !validWorkerIds.includes(workerId.toString())
+    );
+
+    if (removedWorkers.length === shop.workers.length) {
+      res.status(404);
+      throw new Error("Nenhum trabalhador foi removido desta barraca.");
+    }
+
+    shop.workers = removedWorkers.map((workerId) =>
+      mongoose.Types.ObjectId(workerId)
+    );
+    const updatedShop = await shop.save();
+    res.status(200).json(updatedShop);
+  }
+});
+
 module.exports = {
   createShop,
   createItem,
@@ -373,4 +450,6 @@ module.exports = {
   registerPurchase,
   getPurchases,
   getCosts,
+  addWorker,
+  removeWorker,
 };

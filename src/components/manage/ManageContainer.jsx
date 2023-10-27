@@ -25,7 +25,7 @@ const ManageContainer = ({ subaccount, isLoading }) => {
   const confirmDeleteSubAccount = (adminId) => {
     Swal.fire({
       title: "Tem certeza?",
-      text: "Deseja retirar permanentemente esse administrador?",
+      text: "Deseja retirar permanentemente essa subconta?",
       icon: "warning",
       width: "50em",
       showCancelButton: true,
@@ -39,14 +39,14 @@ const ManageContainer = ({ subaccount, isLoading }) => {
         navigate(`/manage`);
         Swal.fire({
           icon: "success",
-          title: "Administrador Retirado.",
-          text: "Esse administrador foi retirado com sucesso!",
+          title: "Subconta Retirada.",
+          text: "Essa subconta foi retirada com sucesso!",
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire({
           icon: "info",
           title: "Ação Cancelada",
-          text: "Não se preocupe, os administradores estão seguros!",
+          text: "Não se preocupe, a subconta está segura!",
         });
       }
     });

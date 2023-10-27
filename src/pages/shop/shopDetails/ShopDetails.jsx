@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { SpinnerImg } from "../../../components/loader/Loader";
 import PasswordCard from "../../../components/passwordCard/PasswordCard";
-import { deleteItem } from "../../../redux/features/shop/itemSlice";
 import { BsPlus, BsQrCodeScan } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import { AiOutlineMinus } from "react-icons/ai";
 import styles from "./ShopDetails.module.scss";
 import { format, isValid } from "date-fns";
+import { removeItemFromShop } from "../../../redux/features/items/itemsSlice";
 
 const ShopDetails = () => {
   const dispatch = useDispatch();
@@ -20,6 +20,8 @@ const ShopDetails = () => {
   const { shop, isLoading, isError, message } = useSelector(
     (state) => state.shop
   );
+
+  const user = useSelector((state) => state.auth.user?.role);
 
   const location = useLocation();
   const showLoading = location.state?.showLoading || false;
@@ -193,25 +195,26 @@ const ShopDetails = () => {
     }
   }, [dispatch, id, isError, message]);
 
-  const delItem = async (itemId) => {
-    await dispatch(deleteItem(itemId));
+  const removeItem = async (itemId) => {
+    console.log(itemId + " | " + id);
+    await dispatch(removeItemFromShop({ id: id, itemId: itemId }));
     await dispatch(getShop(id));
   };
 
-  const confirmDeleteItem = (itemId) => {
+  const confirmRemoveItem = (itemId) => {
     Swal.fire({
       title: "Tem certeza?",
-      text: "Deseja excluir permanentemente esse item?",
+      text: "Deseja remover este item?",
       icon: "warning",
       width: "50em",
       showCancelButton: true,
       confirmButtonColor: "#EF233C",
       cancelButtonColor: "#2B2D42",
-      confirmButtonText: "Sim, Excluir",
+      confirmButtonText: "Sim, Remover",
       cancelButtonText: "Não, Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        delItem(itemId);
+        removeItem(itemId);
         navigate(`/details-shop/${id}`);
         Swal.fire({
           icon: "success",
@@ -235,30 +238,64 @@ const ShopDetails = () => {
         className={` ${styles.items_list} flex justify-center items-center h-full flex-col `}
       >
         <div className="bg-slate-900 w-11/12 my-16 sm:flex sm:flex-col">
-          <Link to="/shops">
-            <button className="px-4 py-2 mt-5 ml-5 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300">
-              Voltar
-            </button>
-          </Link>
+          <div className="flex justify-between">
+            <Link to="/shops">
+              <button className="px-4 py-2 mt-5 ml-5 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300">
+                Voltar
+              </button>
+            </Link>
+            {user === "master" || user === "admin" ? (
+              <div>
+                <Link to={`/workers-shop/${id}`}>
+                  <button className="px-4 py-2 mt-5 mr-5 bg-fuchsia-800 rounded-sm text-lg font-medium hover:bg-fuchsia-700 transition-colors duration-300">
+                    <h2> Trabalhadores </h2>
+                  </button>
+                </Link>
+                <Link to={`/edit-shop/${id}`}>
+                  <button className="px-4 py-2 mt-5 mr-5 bg-indigo-800 rounded-sm text-lg font-medium hover:bg-indigo-700 transition-colors duration-300">
+                    <h2> Editar </h2>
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
           <div className="flex items-center justify-center">
             <hr className="mt-5 w-[96.5%] border-indigo-500/80" />
           </div>{" "}
           {isLoading && showLoading && <SpinnerImg />}
-          <div className="flex flex-between sm:flex-col">
-            <div className="flex justify-center align-center flex-col float-left p-5 w-full">
-              <h2 className="bg-slate-700 p-11 align-center text-3xl font-semibold text-center rounded">
+          <div className="flex justify-center flex-between sm:flex-col">
+            <div className="flex justify-center flex-col float-left p-5 w-4/6">
+              <h2 className="bg-slate-700 p-11 text-3xl font-semibold text-center rounded">
                 {shop.name}
               </h2>
             </div>
-            <div className="flex text-center flex-col float-right px-5 text-white mt-5 sm:justify-center sm:text-center md:flex-row">
-              <Link to={`/edit-shop/${id}`}>
-                <button className="flex align-items justify-center w-full px-14 py-3 bg-indigo-800 rounded-sm text-lg font-medium hover:bg-indigo-700 transition-colors duration-300 md:mt-0 sm:p-4 sm:justify-center">
-                  <h2> Editar </h2>
-                </button>
-              </Link>
+            <div
+              className={`flex text-center flex-col float-right px-5 text-white sm:justify-center sm:text-center md:flex-row ${
+                user === "master" || user === "admin"
+                  ? "mt-5"
+                  : "flex justify-center items-center"
+              }`}
+            >
+              {user === "master" || user === "admin" ? (
+                <Link to={`/add-worker/${id}`}>
+                  <button className="flex justify-center items-center w-full px-14 py-3 bg-indigo-800 rounded-sm text-lg font-medium hover:bg-indigo-700 transition-colors duration-300 md:mt-0 sm:p-4 sm:justify-center">
+                    <h2> Adicionar Trabalhador </h2>
+                  </button>
+                </Link>
+              ) : (
+                <></>
+              )}
               <Link to={`/add-item/${id}`}>
-                <button className="flex w-full px-14 py-3 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 mt-5 md:mt-0 sm:ml-3 sm:p-4 sm:justify-center">
-                  <h2 className="w-32">Adicionar Item</h2>
+                <button
+                  className={`w-full px-14 py-3 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 md:mt-0 sm:ml-3 sm:p-4 sm:justify-center ${
+                    user === "master" || user === "admin"
+                      ? "items-center mt-5"
+                      : ""
+                  }`}
+                >
+                  <h2>Adicionar Item</h2>
                 </button>
               </Link>
             </div>
@@ -339,16 +376,24 @@ const ShopDetails = () => {
                             <FaTrashAlt
                               style={{
                                 cursor: "pointer",
-                                marginRight: ".75rem",
+                                marginRight: user === "worker" ? 0 : ".75rem",
                               }}
                               size={20}
                               color="white"
-                              onClick={() => confirmDeleteItem(_id)}
+                              onClick={() => confirmRemoveItem(_id)}
                               title="Deletar"
                             />
-                            <Link to={`/edit-item/${_id}`} state={{ id: id }}>
-                              <FaEdit size={22} color="white" title="Editar" />
-                            </Link>
+                            {user === "master" || user === "admin" ? (
+                              <Link to={`/edit-item/${_id}`} state={{ id: id }}>
+                                <FaEdit
+                                  size={22}
+                                  color="white"
+                                  title="Editar"
+                                />
+                              </Link>
+                            ) : (
+                              <></>
+                            )}
                           </span>
                         </td>
                       </tr>

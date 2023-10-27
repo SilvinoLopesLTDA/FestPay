@@ -123,6 +123,36 @@ const getPurchases = async () => {
   return response.data;
 };
 
+// Add Worker
+const addWorker = async (id, workers) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.post(
+    `${API_URL}/${id}/assign-workers`,
+    { workers },
+    config
+  );
+  return response.data;
+};
+
+// Remove Worker
+const removeWorker = async (id, workers) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.post(
+    `${API_URL}/${id}/remove-workers`,
+    workers,
+    config
+  );
+  return response.data;
+};
+
 const shopService = {
   createShop,
   createItem,
@@ -136,6 +166,8 @@ const shopService = {
   purchaseQRCode,
   registerPurchase,
   getPurchases,
+  addWorker,
+  removeWorker,
 };
 
 export default shopService;

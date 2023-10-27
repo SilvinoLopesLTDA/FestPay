@@ -40,7 +40,7 @@ const subaccountSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, "Por favor, adicione uma senha"],
+      required: [true, "Por favor, adicione uma senha."],
       minLength: [6, "A senha dever conter no mínimo 6 caracteres."],
     },
     role: {
@@ -100,6 +100,16 @@ const userSchema = mongoose.Schema(
       default: "master",
     },
     subaccounts: [subaccountSchema],
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    confirmationToken: {
+      type: String,
+    },
+    emailVerificationTokenExpires: {
+      type: Date,
+    },
   },
   {
     timestamps: true,

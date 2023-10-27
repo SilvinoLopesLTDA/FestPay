@@ -4,6 +4,7 @@ const Shop = require("../models/shopModel");
 
 // Create Item
 const createItem = asyncHandler(async (req, res) => {
+  const userId = req.subaccount ? req.subaccount.user : req.user.id;
   const { name, price, quantity } = req.body;
 
   // Validation
@@ -14,7 +15,7 @@ const createItem = asyncHandler(async (req, res) => {
 
   // Create Item
   const item = await Item.create({
-    user: req.user.id,
+    user: userId,
     name,
     price,
     quantity,
@@ -25,7 +26,8 @@ const createItem = asyncHandler(async (req, res) => {
 
 // Get all workers
 const getItems = asyncHandler(async (req, res) => {
-  const items = await Item.find({ user: req.user.id }).sort("-createdAt");
+  const userId = req.subaccount ? req.subaccount.user : req.user.id;
+  const items = await Item.find({ user: userId }).sort("-createdAt");
   res.status(200).json(items);
 });
 
@@ -47,6 +49,7 @@ const getItem = asyncHandler(async (req, res) => {
   }
 });
 
+// Delete Item
 const deleteItem = asyncHandler(async (req, res) => {
   const item = await Item.findById(req.params.id);
 
@@ -55,9 +58,18 @@ const deleteItem = asyncHandler(async (req, res) => {
     throw new Error("Item não encontrado.");
   }
 
-  if (item.user.toString() !== req.user.id) {
+  if (
+    !(
+      req.user?.role === "master" ||
+      req.subaccount?.role === "admin" ||
+      (req.subaccount?.role === "worker" &&
+        req.subaccount.workerFunction === "Almoxarifado")
+    )
+  ) {
     res.status(401);
-    throw new Error({ message: "Item Deletado com Sucesso." });
+    return res.json({
+      message: "Usuário não autorizado para excluir este item.",
+    });
   }
 
   await item.remove();
@@ -157,6 +169,37 @@ const handleUserChoice = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Item colocado na barraca com sucesso." });
 });
 
+// Remove Item
+const removeItemFromShop = asyncHandler(async (req, res) => {
+  const { id, itemId } = req.params;
+
+  const shop = await Shop.findById(id);
+
+  if (!shop) {
+    res.status(404);
+    throw new Error("Barraca não encontrada.");
+  }
+
+  const itemToRemove = shop.items.find(
+    (item) => item._id.toString() === itemId
+  );
+
+  if (!itemToRemove) {
+    res.status(404);
+    throw new Error("Item não encontrado na barraca.");
+  }
+
+  const originalItem = await Item.findById(itemToRemove._id);
+  originalItem.quantity += 1;
+  await originalItem.save();
+
+  shop.items = shop.items.filter((item) => item._id.toString() !== itemId);
+
+  await shop.save();
+
+  res.status(200).json({ message: "Item removido da barraca com sucesso." });
+});
+
 module.exports = {
   createItem,
   getItems,
@@ -165,4 +208,5 @@ module.exports = {
   updateItem,
   placeItemInShop,
   handleUserChoice,
+  removeItemFromShop,
 };

@@ -9,6 +9,7 @@ import { selectIsLoading } from "../../../redux/features/shop/shopSlice";
 
 const ShopContainer = ({ shop }) => {
   const isLoading = useSelector(selectIsLoading);
+  const user = useSelector((state) => state.auth.user?.role);
 
   const [currentPage, setCurrentPage] = useState(0);
   const cardsPerPage = 12;
@@ -30,13 +31,16 @@ const ShopContainer = ({ shop }) => {
             Pontos de <span className="text-violet-600 font-bold">Vendas</span>
           </h3>
           {isLoading && <SpinnerImg />}
-          <Link to="/add-shop">
-            <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 sm:mt-5">
-              Adicionar Barraca
-            </button>
-          </Link>
+          {user === "master" || user === "admin" ? (
+            <Link to="/add-shop">
+              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 sm:mt-5">
+                Adicionar Barraca
+              </button>
+            </Link>
+          ) : (
+            <></>
+          )}
         </div>
-
         <div className="my-5 py-1 border-t-2 border-indigo-500/50">
           <div className="mx-5">
             {currentCards?.length === 0 ? (

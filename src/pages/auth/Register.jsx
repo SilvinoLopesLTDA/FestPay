@@ -7,12 +7,6 @@ import {
   registerUser,
   validateEmail,
 } from "../../redux/features/auth/authService";
-import { useDispatch } from "react-redux";
-import {
-  SET_LOGIN,
-  SET_NAME,
-  SET_USER,
-} from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
@@ -24,7 +18,6 @@ const initialState = {
 };
 
 const Register = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState(initialState);
@@ -68,11 +61,11 @@ const Register = () => {
     setIsLoading(true);
 
     try {
-      const data = await registerUser(userData);
-      dispatch(SET_LOGIN(true));
-      dispatch(SET_NAME(data.name));
-      dispatch(SET_USER(data));
-      navigate("/home");
+      await registerUser(userData);
+      toast.success(
+        "Um e-mail de confirmação foi enviado para o seu endereço de e-mail."
+      );
+      navigate("/login");
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

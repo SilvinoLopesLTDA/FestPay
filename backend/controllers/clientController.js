@@ -64,6 +64,7 @@ const generateQRCode = async (data) => {
 };
 
 const registerClient = asyncHandler(async (req, res) => {
+  const userId = req.subaccount ? req.subaccount.user : req.user.id;
   const { name, phone, email, paymentMethod, balance } = req.body;
 
   if (!name || !email || !paymentMethod || !balance) {
@@ -71,7 +72,7 @@ const registerClient = asyncHandler(async (req, res) => {
     throw new Error("Preencha os campos corretamente.");
   }
 
-  const clientExists = await Client.findOne({ user: req.user.id, email });
+  const clientExists = await Client.findOne({ user: userId, email });
 
   if (clientExists) {
     res.status(400);
@@ -94,7 +95,7 @@ const registerClient = asyncHandler(async (req, res) => {
   );
 
   const client = await Client.create({
-    user: req.user.id,
+    user: userId,
     name,
     phone,
     email,

@@ -15,9 +15,9 @@ const Header = () => {
   const handleLogout = async () => {
     await LogoutUser();
     dispatch(SET_LOGIN(false));
+    dispatch(SET_USER(null));
     localStorage.clear();
     navigate("/");
-    dispatch(SET_USER(null));
   };
 
   return (

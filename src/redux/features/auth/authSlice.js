@@ -137,6 +137,7 @@ const authSlice = createSlice({
     },
     SET_USER(state, action) {
       state.user = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload));
     },
   },
   extraReducers: (builder) => {
@@ -166,6 +167,7 @@ const authSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.user = action.payload;
+        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(getUserAccount.rejected, (state, action) => {
         state.isLoading = false;

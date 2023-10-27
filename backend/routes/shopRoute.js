@@ -13,6 +13,8 @@ const {
   registerPurchase,
   getPurchases,
   getCosts,
+  addWorker,
+  removeWorker,
 } = require("../controllers/shopController");
 const protect = require("../middleware/authMiddleware");
 
@@ -28,5 +30,7 @@ router.patch("/:id", protect, updateShop);
 router.patch("/update-item/:shopId/:itemId", protect, updateItem);
 router.post("/buy-item/:shopId", protect, purchaseItem);
 router.post("/purchase/:id", protect, registerPurchase);
+router.post("/:id/assign-workers", protect, addWorker);
+router.post("/:id/remove-workers", protect, removeWorker);
 
 module.exports = router;

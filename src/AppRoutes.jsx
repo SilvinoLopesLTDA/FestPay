@@ -34,6 +34,9 @@ import {
   EditProfile,
   Clients,
   EditClient,
+  AddWorker,
+  EmailConfirmation,
+  WorkersShop,
 } from "./AppPages";
 
 const appRoutes = [
@@ -42,6 +45,7 @@ const appRoutes = [
   { path: "/register", element: <Register /> },
   { path: "/forgot", element: <Forgot /> },
   { path: "/reset-password/:resetToken", element: <Reset /> },
+  { path: "/confirm-email/:confirmationToken", element: <EmailConfirmation /> },
   {
     path: "/home",
     element: (
@@ -139,12 +143,15 @@ const appRoutes = [
   {
     path: "/shops",
     element: (
-      <ProtectedRoute allowedRoles={["master", "admin"]}>
-      <Sidebar>
-        <Layout>
-          <Shop />
-        </Layout>
-      </Sidebar>
+      <ProtectedRoute
+        allowedRoles={["master", "admin", "worker"]}
+        allowedWorkerFunction={["Barraca"]}
+      >
+        <Sidebar>
+          <Layout>
+            <Shop />
+          </Layout>
+        </Sidebar>
       </ProtectedRoute>
     ),
   },
@@ -154,6 +161,26 @@ const appRoutes = [
       <Sidebar>
         <Layout>
           <AddShop />
+        </Layout>
+      </Sidebar>
+    ),
+  },
+  {
+    path: "/add-worker/:id",
+    element: (
+      <Sidebar>
+        <Layout>
+          <AddWorker />
+        </Layout>
+      </Sidebar>
+    ),
+  },
+  {
+    path: "/workers-shop/:id",
+    element: (
+      <Sidebar>
+        <Layout>
+          <WorkersShop />
         </Layout>
       </Sidebar>
     ),

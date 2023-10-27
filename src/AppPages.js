@@ -3,6 +3,7 @@ import Login from "./pages/auth/Login.jsx";
 import Register from "./pages/auth/Register.jsx";
 import Forgot from "./pages/auth/Forgot.jsx";
 import Reset from "./pages/auth/Reset.jsx";
+import EmailConfirmation from "./pages/auth/EmailConfirmation.jsx";
 import Sidebar from "./components/sidebar/Sidebar.jsx";
 import Layout from "./components/layout/Layout.jsx";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
@@ -33,6 +34,8 @@ import Profile from "./pages/profile/Profile.jsx";
 import EditProfile from "./pages/profile/EditProfile.jsx";
 import Clients from "./pages/client/Clients.jsx";
 import EditClient from "./pages/client/editClient/EditClient.jsx";
+import AddWorker from "./pages/shop/addWorker/addWorker";
+import WorkersShop from "./pages/shop/worker/WorkersShop.jsx";
 
 export {
   ProtectedRoute,
@@ -60,6 +63,7 @@ export {
   Register,
   Forgot,
   Reset,
+  EmailConfirmation,
   Sidebar,
   Layout,
   AccessDenied,
@@ -70,4 +74,6 @@ export {
   EditProfile,
   Clients,
   EditClient,
+  AddWorker,
+  WorkersShop,
 };

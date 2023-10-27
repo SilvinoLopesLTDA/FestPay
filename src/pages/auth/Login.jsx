@@ -58,10 +58,26 @@ const Login = () => {
       navigate("/home");
     } catch (error) {
       console.error(error.message);
-      if (error.message === "Request failed with status code 400") {
-        toast.error(
-          "Verifique se seus dados estão corretos e tente novamente!"
-        );
+      if (error.response && error.response.data && error.response.data.error) {
+        const errorMessage = error.response.data.error;
+        if (
+          errorMessage ===
+          "Você precisa confirmar seu e-mail antes de fazer login."
+        ) {
+          toast.error(
+            "Você precisa confirmar seu e-mail antes de fazer login."
+          );
+        } else if (
+          errorMessage === "Email ou Senha incorretos! Tente novamente."
+        ) {
+          toast.error("Email ou Senha incorretos! Tente novamente.");
+        } else if (
+          errorMessage === "Usuário não encontrado. Por favor, cadastre-se!"
+        ) {
+          toast.error("Usuário não encontrado. Por favor, cadastre-se!");
+        } else {
+          toast.error("Erro ao fazer login. Tente novamente mais tarde.");
+        }
       } else {
         toast.error("Erro ao fazer login. Tente novamente mais tarde.");
       }

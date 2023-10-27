@@ -1,4 +1,3 @@
-import { useRedirectLoggedOutUser } from "../../customHook/useRedirectLoggedOutUser";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -7,8 +6,13 @@ import { SET_NAME, SET_USER } from "../../redux/features/auth/authSlice";
 import { SpinnerImg } from "../../components/loader/Loader";
 import { Link } from "react-router-dom";
 
+const roleNames = {
+  master: "Dono",
+  admin: "Administrador",
+  worker: "Trabalhador",
+};
+
 const Profile = () => {
-  useRedirectLoggedOutUser("/login");
   const dispatch = useDispatch();
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +35,8 @@ const Profile = () => {
     fetchUserData();
   }, [dispatch]);
 
+  const getRoleName = (role) => roleNames[role] || role;
+
   return (
     <div className="flex items-center justify-center">
       <div className="w-[93%] p-8 bg-[#0f172a] m-5 rounded-xl">
@@ -52,6 +58,25 @@ const Profile = () => {
                 <b>Email:</b>{" "}
                 <span className="text-primary">{profile?.email}</span>
               </p>
+            </div>
+            <div className="flex items-center justify-center">
+              <hr className="my-3 w-3/5 border-indigo-500/80" />
+            </div>
+            <div>
+              <p className="text-xl text-center">
+                <b>Tipo de conta:</b>{" "}
+                <span className="text-primary">
+                  {getRoleName(profile?.role)}
+                </span>
+              </p>
+              {profile?.role === "worker" && (
+                <p className="text-xl text-center">
+                  <b>Função:</b>{" "}
+                  <span className="text-primary">
+                    {profile?.workerFunction}
+                  </span>
+                </p>
+              )}
             </div>
             <div className="flex items-center justify-center">
               <hr className="my-3 w-3/5 border-indigo-500/80" />

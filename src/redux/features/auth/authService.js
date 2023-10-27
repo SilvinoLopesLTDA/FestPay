@@ -57,8 +57,17 @@ export const registerSubUser = async (formData) => {
 export const LoginUser = async (userData) => {
   const response = await axios.post(`${BACKEND_URL}/api/user/login`, userData);
   if (response.statusText === "OK") {
-    toast.success("Usuário Logado com sucesso!");
+    toast.success("Usuário logado com sucesso!");
   }
+  return response.data;
+};
+
+// Confirmate email
+export const confirmateEmail = async (confirmationToken) => {
+  console.log(confirmationToken);
+  const response = await axios.get(
+    `${BACKEND_URL}/api/user/confirm-email/${confirmationToken}`
+  );
   return response.data;
 };
 
@@ -229,6 +238,23 @@ export const deleteSubaccount = async (id) => {
   try {
     const response = await axios.delete(
       `${BACKEND_URL}/api/user/delete-subaccount/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    toast.error(message);
+  }
+};
+
+// Delete Account
+export const deleteAccount = async (password) => {
+  try {
+    const response = await axios.delete(
+      `${BACKEND_URL}/api/user/delete-account`,
+      password
     );
     return response.data;
   } catch (error) {

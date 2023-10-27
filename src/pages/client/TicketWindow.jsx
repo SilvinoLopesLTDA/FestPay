@@ -13,7 +13,6 @@ import {
 import FormClient from "../../components/forms/client/FormClient";
 import { useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useRedirectLoggedOutUser } from "../../customHook/useRedirectLoggedOutUser";
 import PropTypes from "prop-types";
 
 const initialState = {
@@ -70,16 +69,18 @@ const QrCode = ({ handleCloseQrCode }) => {
 
   return (
     <div className="fixed top-0 left-0 h-full w-full flex justify-center items-center bg-black/60">
-      <div className="bg-slate-800 py-4 px-6 my-4 rounded w-3/12 sm:w-11/12">
-        <button
-          onClick={handleCloseQrCode}
-          className="absolute top-2 right-2 p-2 rounded-full bg-gray-700"
-        >
-          <AiOutlineClose size={24} color="#94a3b8" />
-        </button>
-        <h1 className="text-xl text-center font-semibold mb-4">
-          QrCode gerado com sucesso!
-        </h1>
+      <div className="bg-slate-800 py-4 px-6 my-4 rounded w-3/12 sm:w-11/12 relative">
+        <div className="flex justify-between items-center">
+          <h1 className="text-xl text-center font-semibold mb-4">
+            QrCode gerado com sucesso!
+          </h1>
+          <button
+            onClick={handleCloseQrCode}
+            className="absolute top-2 right-4 p-2 rounded hover:bg-black/40"
+          >
+            <AiOutlineClose size={24} color="#94a3b8" />
+          </button>
+        </div>
         <hr className="mb-4" />
         <h1 className="text-lg font-semibold mb-2">
           Nome do cliente: {client?.name}
@@ -89,7 +90,7 @@ const QrCode = ({ handleCloseQrCode }) => {
         <h2 className="mb-4">Valor da recarga: R$ {client?.balance}</h2>
         <img src={client?.qrCode} alt="QR Code" className="w-full" />
         <button
-          className="px-3 py-2 mt-4 mb-2 w-full bg-violet-800 rounded-sm text-lg font-medium"
+          className="px-3 py-2 mt-4 mb-2 w-full bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300"
           onClick={handlePrintQRCode}
         >
           Imprimir QR Code
@@ -104,14 +105,6 @@ const TicketWindow = () => {
   const navigate = useNavigate();
   const [client, setClient] = useState(initialState);
   const [showQrCode, setShowQrCode] = useState(false);
-
-  useEffect(() => {
-    if (sessionStorage.getItem("shouldReloadDashboard")) {
-      window.location.reload();
-      sessionStorage.removeItem("shouldReloadDashboard");
-    }
-  }, []);
-  useRedirectLoggedOutUser("/login");
 
   const isLoading = useSelector(selectIsLoading);
 

@@ -18,6 +18,8 @@ const AddItem = () => {
   const itemState = useSelector((state) => state.items);
   const { item, isLoading, isError, message } = itemState || {};
 
+  const user = useSelector((state) => state.auth.user?.role);
+
   const [formData, setFormData] = useState(-1);
 
   useEffect(() => {
@@ -36,6 +38,7 @@ const AddItem = () => {
     if (formData !== -1) {
       dispatch(handleUserChoice({ id: id, selectedItemIndex: formData }));
       setFormData(-1);
+      dispatch(getShop(id));
       navigate(`/details-shop/${id}`);
     }
   }, [dispatch, formData, id, navigate]);
@@ -136,18 +139,22 @@ const AddItem = () => {
               </>
             )}
           </div>
-          <div className="mt-5 text-center">
-            <div className="flex items-center justify-center">
-              <hr className="pb-4 w-3/4 border-indigo-500/80" />
+          {user === "master" || user === "admin" ? (
+            <div className="mt-5 text-center">
+              <div className="flex items-center justify-center">
+                <hr className="pb-4 w-3/4 border-indigo-500/80" />
+              </div>
+              <p className="opacity-80">
+                Não encontrou o seu item?{" "}
+                <Link to="/add-item" className="hover:text-violet-500">
+                  Cadastre mais produtos clicando aqui
+                </Link>
+                !
+              </p>
             </div>
-            <p className="opacity-80">
-              Não encontrou o seu item?{" "}
-              <Link to="/add-item" className="hover:text-violet-500">
-                Cadastre mais produtos clicando aqui
-              </Link>
-              !
-            </p>
-          </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>
