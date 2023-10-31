@@ -280,7 +280,8 @@ const ClientToken = asyncHandler(async (req, res) => {
 
 // Get all Clients
 const getClients = asyncHandler(async (req, res) => {
-  const clients = await Client.find({ user: req.user.id });
+  const userId = req.subaccount ? req.subaccount.user : req.user.id;
+  const clients = await Client.find({ user: userId });
   res.status(200).json(clients);
 });
 

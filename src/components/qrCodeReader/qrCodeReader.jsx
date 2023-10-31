@@ -27,11 +27,13 @@ const QrCodeReader = ({ quantityValues, cart }) => {
   const [, setQrscan] = useState("Sem Resultados");
   const [isReadingEnabled, setIsReadingEnabled] = useState(true);
   const [shopInitial, setShop] = useState(initialState);
+  const [isQrCodeScanned, setIsQrCodeScanned] = useState(false);
   const isLoading = useSelector(selectIsLoading);
   const clients = useSelector(selectClient);
   const { shop } = useSelector((state) => state.shop);
   const { _id } = shop;
   let totalValue = 0;
+
   const item = shop?.items ?? [];
   item.forEach((itemData) => {
     const itemQuantInput = parseInt(quantityValues[itemData._id] || 0, 10);
@@ -74,6 +76,7 @@ const QrCodeReader = ({ quantityValues, cart }) => {
         ...prevState,
         email: email,
       }));
+      setIsQrCodeScanned(true);
     }
   };
 
@@ -92,7 +95,6 @@ const QrCodeReader = ({ quantityValues, cart }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const clientWithEmail = clients.find((client) => client.email === email);
-    console.log(clientWithEmail);
     if (
       clientWithEmail &&
       parseFloat(totalValue) <= parseFloat(clientWithEmail.balance)
@@ -146,6 +148,15 @@ const QrCodeReader = ({ quantityValues, cart }) => {
             value={email}
             className="cursor-not-allowed placeholder:text-black"
             disabled
+            required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            title="Digite um email válido."
+            onChange={(e) =>
+              setShop((prevState) => ({
+                ...prevState,
+                email: e.target.value,
+              }))
+            }
           />
 
           <label>Aproxime o QR Code:</label>
@@ -159,7 +170,12 @@ const QrCodeReader = ({ quantityValues, cart }) => {
           </div>
           <button
             type="submit"
-            className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10 hover:bg-violet-700 transition-colors duration-300"
+            className={`px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium mt-10 ${
+              !isQrCodeScanned || !email
+                ? "cursor-not-allowed"
+                : "hover:bg-violet-700 transition-colors duration-300"
+            }`}
+            disabled={!isQrCodeScanned || !email}
           >
             Realizar compra
           </button>

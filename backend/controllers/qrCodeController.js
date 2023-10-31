@@ -70,7 +70,7 @@ const qrCodePurchase = asyncHandler(async (req, res) => {
   try {
     // eslint-disable-next-line no-unused-vars
     const { qrCodeData, purchaseAmount, email, name } = req.body;
-    const user = req.user.id;
+    const userId = req.subaccount ? req.subaccount.user : req.user.id;
 
     if (!name || !email || !purchaseAmount) {
       res.status(400);
@@ -82,7 +82,7 @@ const qrCodePurchase = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Cliente não encontrado" });
     }
 
-    const shop = await Shop.findOne({ name: name, user: user });
+    const shop = await Shop.findOne({ name: name, user: userId });
     if (!shop) {
       return res.status(404).json({ message: "Barraca não encontrada" });
     }

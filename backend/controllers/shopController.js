@@ -236,8 +236,9 @@ const updateItem = asyncHandler(async (req, res) => {
 const purchaseItem = asyncHandler(async (req, res) => {
   const { shopId } = req.params;
   const { cart } = req.body;
+  const userId = req.subaccount ? req.subaccount.user : req.user.id;
 
-  if (!req.user) {
+  if (!userId) {
     res.status(401);
     throw new Error("Usuário não autenticado.");
   }
