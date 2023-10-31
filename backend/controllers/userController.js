@@ -32,11 +32,11 @@ const cleanExpiredAccounts = async () => {
 };
 
 const job = new CronJob(
-  "* */12 * * *",
+  '0 2 * * *',
   cleanExpiredAccounts,
   null,
   true,
-  "UTC"
+  'UTC'
 );
 
 job.start();
