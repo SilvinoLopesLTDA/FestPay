@@ -160,7 +160,7 @@ const Login = () => {
                   )}
                 </div>
               </div>
-              <p className="text-center text-indigo-400 font-semibold mt-2 hover:text-indigo-500">
+              <p className="text-start text-gray-500 font-semibold mt-2 hover:text-indigo-500">
                 <Link to="/forgot">Esqueceu a Senha?</Link>
               </p>
             </div>

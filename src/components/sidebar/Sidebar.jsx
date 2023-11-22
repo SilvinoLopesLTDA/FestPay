@@ -9,6 +9,7 @@ import Menu from "../../data/Menu";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(window.innerWidth >= 600);
+  // const [expandMenu, setExpandMenu] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -28,6 +29,11 @@ const Sidebar = ({ children }) => {
         style={{ width: isOpen ? "230px" : "60px" }}
       >
         <div className={`${styles.top_section} bg-violet-900`}>
+          {/* {expandMenu ? (
+              <div> teste </div>
+          ) : (
+           <span> teste  2</span>
+          )} */}
           {isOpen && (
             <div className={`${styles.logo}`}>
               <Link to="/">

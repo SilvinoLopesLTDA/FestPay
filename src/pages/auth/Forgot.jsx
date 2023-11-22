@@ -36,9 +36,23 @@ const Forgot = () => {
     <div className={`${styles.auth}`}>
       <Card>
         <div className={styles.form}>
+          <div className={styles.links}>
+            <p className="text-[#94a3b8]">
+              <Link to="/login" className="hover:text-violet-500">
+                {" "}
+                {"< "}Voltar{" "}
+              </Link>
+            </p>
+            <p className="text-[#94a3b8]">
+              <Link to="/login" className="hover:text-violet-500">
+                {" "}
+                Entrar{" >"}{" "}
+              </Link>
+            </p>
+          </div>
           <h2> Esqueceu a Senha? </h2>
           <p className="text-slate-400/75 text-lg">
-            Siga os passos a seguir para redefinir a sua senha:{" "}
+            Siga os passos a seguir para redefinir a senha{" "}
           </p>
           <form onSubmit={forgot}>
             <div className={`mt-8 ${styles.fields}`}>
@@ -51,6 +65,7 @@ const Forgot = () => {
                 required
                 id="email"
                 name="email"
+                className="w-full"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -62,20 +77,6 @@ const Forgot = () => {
               {" "}
               Recuperar Senha{" "}
             </button>
-            <div className={styles.links}>
-              <p className="text-[#94a3b8]">
-                <Link to="/login" className="hover:text-violet-500">
-                  {" "}
-                  {"< "}Voltar{" "}
-                </Link>
-              </p>
-              <p className="text-[#94a3b8]">
-                <Link to="/login" className="hover:text-violet-500">
-                  {" "}
-                  Entrar{" >"}{" "}
-                </Link>
-              </p>
-            </div>
           </form>
         </div>
       </Card>

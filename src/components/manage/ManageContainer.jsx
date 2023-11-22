@@ -103,11 +103,16 @@ const ManageContainer = ({ subaccount, isLoading }) => {
       >
         <div className="bg-slate-900 w-11/12 my-16 rounded-xl">
           <div className="flex justify-between items-center mx-10 my-7 sm:flex-col">
-            <h3 className="text-2xl font-semibold">
+            <h3 className="text-3xl mb-8 text-center font-semibold">
               {" "}
               Controle de{" "}
               <span className="text-violet-600 font-bold">Subcontas</span>
             </h3>
+            <Link to="/add-subaccount">
+              <button className="px-3 mb-12 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 sm:mt-5">
+                Adicionar Novo Membro
+              </button>
+            </Link>
             <div className="flex justify-center">
               <button
                 className={`${
@@ -130,11 +135,6 @@ const ManageContainer = ({ subaccount, isLoading }) => {
                 Trabalhadores
               </button>
             </div>
-            <Link to="/add-subaccount">
-              <button className="px-3 py-2 bg-violet-800 rounded-sm text-lg font-medium hover:bg-violet-700 transition-colors duration-300 sm:mt-5">
-                Adicionar Novo Membro
-              </button>
-            </Link>
           </div>
           <div className="my-5 border-t-2 border-indigo-500/50">
             {activeTab === "admins" && (
