@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import ShopContainer from "../../components/shop/shopContainer/ShopContainer";
 import { getShops } from "../../redux/features/shop/shopSlice";
-// import PasswordCard from "../../components/passwordCard/PasswordCard";
 
 const Shop = () => {
   const dispatch = useDispatch();

@@ -17,7 +17,6 @@ const itemRoute = require("./routes/itemRoute");
 
 const app = express();
 
-// Middlewares
 app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
@@ -40,22 +39,18 @@ app.use(
 app.use(express.static(path.join(__dirname, "dist")));
 app.options("*", cors());
 
-// Routes Middleware
 app.use("/api/user", userRoute);
 app.use("/api/clients", clientRoute);
 app.use("/api/shops", shopRoute);
 app.use("/api/items", itemRoute);
 app.use("/api/qrCode", qrCodeRoute);
 
-// Rota para a página inicial
 app.get("/", (req, res) => {
   res.send("Home Page");
 });
 
-// Middleware de tratamento de erros
 app.use(errorHandler);
 
-// Conexão com o banco de dados e inicialização do servidor
 const PORT = process.env.PORT || 5000;
 mongoose
   .connect(process.env.MONGO_URI)

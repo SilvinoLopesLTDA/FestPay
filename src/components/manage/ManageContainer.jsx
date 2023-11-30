@@ -11,7 +11,6 @@ import {
   getSubaccounts,
 } from "../../redux/features/auth/authSlice";
 import ReactPaginate from "react-paginate";
-// import PasswordCard from "../passwordCard/PasswordCard";
 
 const ManageContainer = ({ subaccount, isLoading }) => {
   const dispatch = useDispatch();
@@ -64,7 +63,6 @@ const ManageContainer = ({ subaccount, isLoading }) => {
       subaccount.filter((subacc) => subacc && subacc.role === "worker") || [];
   }
 
-  // Pagination
   const [currentPageAdmins, setCurrentPageAdmins] = useState(0);
   const [currentPageWorkers, setCurrentPageWorkers] = useState(0);
   const itemsPerPage = 5;

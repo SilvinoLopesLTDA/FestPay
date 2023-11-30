@@ -4,11 +4,9 @@ const Purchase = require("../models/purchaseModel");
 const Cost = require("../models/costModel");
 const mongoose = require("mongoose");
 
-// Create Shop
 const createShop = asyncHandler(async (req, res) => {
   const { name, password, profit, cost } = req.body;
 
-  // Validation
   if (!req.user && req.subaccount.role !== "admin") {
     res.status(403);
     throw new Error("Você não tem permissão para criar pontos de venda.");
@@ -40,7 +38,6 @@ const createShop = asyncHandler(async (req, res) => {
     throw new Error("Não foi possível determinar o usuário para criar a loja.");
   }
 
-  // Create Shop
   const shop = await Shop.create({
     user: userId,
     name,
@@ -80,7 +77,6 @@ const createItem = asyncHandler(async (req, res) => {
   res.status(201).json(updatedShop);
 });
 
-// Get all Shops
 const getShops = asyncHandler(async (req, res) => {
   const userId = req.subaccount ? req.subaccount.user : req.user.id;
   const isSubaccountBarraca =
@@ -97,7 +93,6 @@ const getShops = asyncHandler(async (req, res) => {
   }
 });
 
-// Get single Shop
 const getShop = asyncHandler(async (req, res) => {
   const userId = req.subaccount ? req.subaccount.user : req.user.id;
   const shop = await Shop.findById(req.params.id);
@@ -115,7 +110,6 @@ const getShop = asyncHandler(async (req, res) => {
   res.status(200).json(shop);
 });
 
-// Delete Shop
 const deleteShop = asyncHandler(async (req, res) => {
   const shop = await Shop.findById(req.params.id);
 
@@ -133,7 +127,6 @@ const deleteShop = asyncHandler(async (req, res) => {
   res.status(200).json(shop);
 });
 
-// Delete Item
 const deleteItem = asyncHandler(async (req, res) => {
   const itemId = req.params.id;
 
@@ -154,10 +147,8 @@ const deleteItem = asyncHandler(async (req, res) => {
     throw new Error({ message: "Ponto de venda Deletado com Sucesso." });
   }
 
-  // Filtrar os itens do shop, excluindo o item com o ID especificado
   shop.items = shop.items.filter((item) => item._id.toString() !== itemId);
 
-  // Salvar o shop atualizado no banco de dados
   const updatedShop = await shop.save();
 
   res.status(200).json(updatedShop);
@@ -211,7 +202,6 @@ const updateItem = asyncHandler(async (req, res) => {
   const { name, price, quantity } = req.body;
   const { shopId, itemId } = req.params;
 
-  // Encontre o Shop pelo ID
   const shop = await Shop.findById(shopId);
   if (!shop) {
     res.status(404);
@@ -339,7 +329,6 @@ const registerPurchase = asyncHandler(async (req, res) => {
   res.status(200).json(updatedShop);
 });
 
-// Get all Purchases
 const getPurchases = asyncHandler(async (req, res) => {
   const userId = req.user
     ? req.user.id
@@ -355,7 +344,6 @@ const getPurchases = asyncHandler(async (req, res) => {
   }
 });
 
-// Get all Costs
 const getCosts = asyncHandler(async (req, res) => {
   const userId = req.user
     ? req.user.id
@@ -371,7 +359,6 @@ const getCosts = asyncHandler(async (req, res) => {
   }
 });
 
-// Add Worker
 const addWorker = asyncHandler(async (req, res) => {
   const shopId = req.params.id;
   const { workers } = req.body;
@@ -392,7 +379,6 @@ const addWorker = asyncHandler(async (req, res) => {
   }
 });
 
-// Remove Worker
 const removeWorker = asyncHandler(async (req, res) => {
   const shopId = req.params.id;
   const workers = req.body;

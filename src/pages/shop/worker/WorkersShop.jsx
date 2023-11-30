@@ -48,7 +48,6 @@ const WorkersShop = () => {
     return assignedWorkerIds.includes(worker._id);
   });
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(0);
   const subaccountsPerPage = 5;
   const startIndex = currentPage * subaccountsPerPage;

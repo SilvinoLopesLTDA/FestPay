@@ -11,7 +11,6 @@ const initialState = {
   message: "",
 };
 
-// Create New Shop
 export const createShop = createAsyncThunk(
   "shops/create",
   async (formData, thunkAPI) => {
@@ -29,7 +28,6 @@ export const createShop = createAsyncThunk(
   }
 );
 
-// Get all Shops
 export const getShops = createAsyncThunk(
   "shops/getAll",
   async (_, thunkAPI) => {
@@ -48,7 +46,6 @@ export const getShops = createAsyncThunk(
   }
 );
 
-// Delete a Shop
 export const deleteShop = createAsyncThunk(
   "shops/delete",
   async (id, thunkAPI) => {
@@ -67,7 +64,6 @@ export const deleteShop = createAsyncThunk(
   }
 );
 
-// Get a Shop
 export const getShop = createAsyncThunk(
   "shops/getShop",
   async (id, thunkAPI) => {
@@ -86,7 +82,6 @@ export const getShop = createAsyncThunk(
   }
 );
 
-// Update Shop
 export const updateShop = createAsyncThunk(
   "shops/updateShop",
   async ({ id, formData }, thunkAPI) => {
@@ -105,7 +100,6 @@ export const updateShop = createAsyncThunk(
   }
 );
 
-// Purchase QR Code
 export const purchaseQRCode = createAsyncThunk(
   "qrCode/purchase",
   async (formData, thunkAPI) => {
@@ -124,7 +118,6 @@ export const purchaseQRCode = createAsyncThunk(
   }
 );
 
-// Register a Purchase
 export const registerPurchase = createAsyncThunk(
   "shops/purchase",
   async ({ id, cart }, thunkAPI) => {
@@ -143,7 +136,6 @@ export const registerPurchase = createAsyncThunk(
   }
 );
 
-// Get all Purchases
 export const getPurchases = createAsyncThunk(
   "shops/getAllPurchases",
   async (_, thunkAPI) => {
@@ -162,7 +154,6 @@ export const getPurchases = createAsyncThunk(
   }
 );
 
-// Add Worker
 export const addWorker = createAsyncThunk(
   "shops/addWorker",
   async ({ id, workers }, thunkAPI) => {
@@ -181,7 +172,6 @@ export const addWorker = createAsyncThunk(
   }
 );
 
-// Remove Worker
 export const removeWorker = createAsyncThunk(
   "shops/removeWorker",
   async ({ id, workers }, thunkAPI) => {

@@ -11,7 +11,6 @@ const initialState = {
   message: "",
 };
 
-// Create New Client
 export const createClient = createAsyncThunk(
   "clients/create",
   async (formData, thunkAPI) => {
@@ -30,7 +29,6 @@ export const createClient = createAsyncThunk(
   }
 );
 
-// Get all Clients
 export const getClients = createAsyncThunk(
   "clients/getAll",
   async (_, thunkAPI) => {
@@ -49,7 +47,6 @@ export const getClients = createAsyncThunk(
   }
 );
 
-// Delete a Client
 export const deleteClient = createAsyncThunk(
   "clients/delete",
   async (id, thunkAPI) => {
@@ -68,7 +65,6 @@ export const deleteClient = createAsyncThunk(
   }
 );
 
-// Get a CLient
 export const getClient = createAsyncThunk(
   "clients/getClient",
   async (id, thunkAPI) => {
@@ -87,7 +83,6 @@ export const getClient = createAsyncThunk(
   }
 );
 
-// Get a CLient
 export const getClientInfo = createAsyncThunk(
   "clients/getClientInfo",
   async (id, thunkAPI) => {
@@ -106,7 +101,6 @@ export const getClientInfo = createAsyncThunk(
   }
 );
 
-// Update Client
 export const updateClient = createAsyncThunk(
   "clients/updateClient",
   async ({ id, formData }, thunkAPI) => {
@@ -125,7 +119,6 @@ export const updateClient = createAsyncThunk(
   }
 );
 
-// Recharge Client Amount
 export const rechargeClient = createAsyncThunk(
   "qrCode/recharge",
   async (formData, thunkAPI) => {

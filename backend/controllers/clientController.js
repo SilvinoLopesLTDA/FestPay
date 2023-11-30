@@ -263,7 +263,6 @@ const registerClient = asyncHandler(async (req, res) => {
   }
 });
 
-// Get Client Token Status
 const ClientToken = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
   if (!token) {
@@ -278,22 +277,18 @@ const ClientToken = asyncHandler(async (req, res) => {
   return res.json(false);
 });
 
-// Get all Clients
 const getClients = asyncHandler(async (req, res) => {
   const userId = req.subaccount ? req.subaccount.user : req.user.id;
   const clients = await Client.find({ user: userId });
   res.status(200).json(clients);
 });
 
-// Get a single Client
 const getClient = asyncHandler(async (req, res) => {
   const client = await Client.findById(req.params.id);
-  // If client doesn't exist
   if (!client) {
     res.status(404);
     throw new Error("Client não encontrado.");
   }
-  // Match product with User
   if (client.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("Usuário não autorizado!");
@@ -301,13 +296,11 @@ const getClient = asyncHandler(async (req, res) => {
   res.status(200).json(client);
 });
 
-// Get Client Info
 const getClientInfo = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const client = await Client.findById(id);
 
-  // If client doesn't exist
   if (!client) {
     res.status(404);
     throw new Error("Cliente não encontrado.");
@@ -316,15 +309,12 @@ const getClientInfo = asyncHandler(async (req, res) => {
   res.status(200).json(client);
 });
 
-// Delete Client
 const deleteClient = asyncHandler(async (req, res) => {
   const client = await Client.findById(req.params.id);
-  // If client doesn't exist
   if (!client) {
     res.status(404);
     throw new Error("Cliente não encontrado.");
   }
-  // Match product with User
   if (client.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error({ message: "Cliente Deletado com Sucesso." });
@@ -333,25 +323,22 @@ const deleteClient = asyncHandler(async (req, res) => {
   res.status(200).json(client);
 });
 
-// Update Client
 const updateClient = asyncHandler(async (req, res) => {
   const { name, phone, email, paymentMethod, balance, qrCode } = req.body;
   const { id } = req.params;
   const client = await Client.findById(id);
 
-  // If client doesn't exist
+
   if (!client) {
     res.status(404);
     throw new Error("Cliente não encontrado.");
   }
 
-  // Match product to the User
   if (client.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error({ message: "Cliente Deletado com Sucesso." });
   }
 
-  // Update Client
   const updatedClient = await Client.findByIdAndUpdate(
     { _id: id },
     {

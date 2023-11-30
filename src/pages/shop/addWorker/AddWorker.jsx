@@ -26,7 +26,6 @@ const AddWorker = () => {
   useEffect(() => {
     dispatch(getUserAccount());
 
-    // Pré-preencher os trabalhadores já atribuídos
     setSelectedWorkerIds(assignedWorkerIds);
   }, [dispatch, assignedWorkerIds]);
 
@@ -62,7 +61,6 @@ const AddWorker = () => {
     return worker.workerFunction === "Barraca";
   });
 
-  // Paginate
   const [currentPage, setCurrentPage] = useState(0);
   const subaccountsPerPage = 5;
   const startIndex = currentPage * subaccountsPerPage;

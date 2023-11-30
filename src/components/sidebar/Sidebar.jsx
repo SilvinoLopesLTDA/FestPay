@@ -9,7 +9,6 @@ import Menu from "../../data/Menu";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(window.innerWidth >= 600);
-  // const [expandMenu, setExpandMenu] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
 

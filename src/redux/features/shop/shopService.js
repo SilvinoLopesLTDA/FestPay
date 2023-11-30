@@ -5,7 +5,6 @@ export const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/shops`;
 const API_URL_QR = `${BACKEND_URL}/api/qrCode`;
 
-// Create New Shop
 const createShop = async (formData) => {
   const config = {
     headers: {
@@ -16,7 +15,6 @@ const createShop = async (formData) => {
   return response.data;
 };
 
-// Create New Item
 const createItem = async (formData) => {
   const config = {
     headers: {
@@ -32,31 +30,26 @@ const createItem = async (formData) => {
   return response.data;
 };
 
-// Get all Shops
 const getShops = async () => {
   const response = await axios.get(`${API_URL}`);
   return response.data;
 };
 
-// Delete a Shop
 const deleteShop = async (id) => {
   const response = await axios.delete(`${API_URL}/${id}`);
   return response.data;
 };
 
-// Delete a Shop
 const deleteItem = async (id) => {
   const response = await axios.delete(`${API_URL}/delete-item/${id}`);
   return response.data;
 };
 
-// Get a Shop
 const getShop = async (id) => {
   const response = await axios.get(`${API_URL}/${id}`);
   return response.data;
 };
 
-// Update Shop
 const updateShop = async (id, formData) => {
   const config = {
     headers: {
@@ -67,7 +60,6 @@ const updateShop = async (id, formData) => {
   return response.data;
 };
 
-// Update  Item
 const updateItem = async (shopId, itemId, formData) => {
   const config = {
     headers: {
@@ -82,7 +74,6 @@ const updateItem = async (shopId, itemId, formData) => {
   return response.data;
 };
 
-// Purchase  Item
 const purchaseItem = async (shopId, cartData) => {
   const config = {
     headers: {
@@ -117,13 +108,11 @@ const registerPurchase = async (id, cart) => {
   return response.data;
 };
 
-// Get all Purchases
 const getPurchases = async () => {
   const response = await axios.get(`${API_URL}/get-purchases`);
   return response.data;
 };
 
-// Add Worker
 const addWorker = async (id, workers) => {
   const config = {
     headers: {
@@ -138,7 +127,6 @@ const addWorker = async (id, workers) => {
   return response.data;
 };
 
-// Remove Worker
 const removeWorker = async (id, workers) => {
   const config = {
     headers: {

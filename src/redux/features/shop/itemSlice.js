@@ -11,7 +11,6 @@ const initialState = {
   message: "",
 };
 
-// Create New Item
 export const createItem = createAsyncThunk(
   "item/create",
   async (formData, thunkAPI) => {
@@ -29,7 +28,6 @@ export const createItem = createAsyncThunk(
   }
 );
 
-// Get all Items
 export const getItems = createAsyncThunk("item/getAll", async (_, thunkAPI) => {
   try {
     return await shopService.getShops();
@@ -43,7 +41,6 @@ export const getItems = createAsyncThunk("item/getAll", async (_, thunkAPI) => {
   }
 });
 
-// Delete a Item
 export const deleteItem = createAsyncThunk(
   "item/delete",
   async (id, thunkAPI) => {
@@ -62,7 +59,6 @@ export const deleteItem = createAsyncThunk(
   }
 );
 
-// Get a Item
 export const getItem = createAsyncThunk(
   "item/getItem",
   async (id, thunkAPI) => {
@@ -81,7 +77,6 @@ export const getItem = createAsyncThunk(
   }
 );
 
-// Update Item
 export const updateItem = createAsyncThunk(
   "item/updateItem",
   async ({ shopId, itemId, formData }, thunkAPI) => {

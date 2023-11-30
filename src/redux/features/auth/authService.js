@@ -9,7 +9,6 @@ export const validateEmail = (email) => {
   );
 };
 
-//Register User
 export const registerUser = async (userData) => {
   try {
     const response = await axios.post(
@@ -30,7 +29,6 @@ export const registerUser = async (userData) => {
   }
 };
 
-//Register SubUser
 export const registerSubUser = async (formData) => {
   try {
     const response = await axios.post(
@@ -53,7 +51,6 @@ export const registerSubUser = async (formData) => {
   }
 };
 
-//Login User
 export const LoginUser = async (userData) => {
   const response = await axios.post(`${BACKEND_URL}/api/user/login`, userData);
   if (response.statusText === "OK") {
@@ -62,7 +59,6 @@ export const LoginUser = async (userData) => {
   return response.data;
 };
 
-// Confirmate email
 export const confirmateEmail = async (confirmationToken) => {
   console.log(confirmationToken);
   const response = await axios.get(
@@ -71,7 +67,6 @@ export const confirmateEmail = async (confirmationToken) => {
   return response.data;
 };
 
-//Logout User
 export const LogoutUser = async (userData) => {
   try {
     await axios.get(`${BACKEND_URL}/api/user/logout`, userData);
@@ -84,7 +79,6 @@ export const LogoutUser = async (userData) => {
   }
 };
 
-//Forgot Password
 export const forgotPassword = async (userData) => {
   try {
     const response = await axios.post(
@@ -101,7 +95,6 @@ export const forgotPassword = async (userData) => {
   }
 };
 
-//Reset Password
 export const resetPassword = async (userData, resetToken) => {
   try {
     const response = await axios.put(
@@ -118,7 +111,6 @@ export const resetPassword = async (userData, resetToken) => {
   }
 };
 
-//get Login Status
 export const getLoginStatus = async () => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/user/loggedin`);
@@ -132,7 +124,6 @@ export const getLoginStatus = async () => {
   }
 };
 
-//get user profile
 export const getUser = async () => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/user/get-user`);
@@ -146,7 +137,6 @@ export const getUser = async () => {
   }
 };
 
-//update profile
 export const updateUser = async (formData) => {
   try {
     const config = {
@@ -169,7 +159,6 @@ export const updateUser = async (formData) => {
   }
 };
 
-//Change Password
 export const changePassword = async (formData) => {
   try {
     const response = await axios.patch(
@@ -186,7 +175,6 @@ export const changePassword = async (formData) => {
   }
 };
 
-// List SubUsers
 export const listSubaccounts = async () => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/user/get-subaccounts`);
@@ -200,7 +188,6 @@ export const listSubaccounts = async () => {
   }
 };
 
-// List SubUser
 export const getSubaccountById = async (id) => {
   try {
     const response = await axios.get(
@@ -216,7 +203,6 @@ export const getSubaccountById = async (id) => {
   }
 };
 
-// Update Subaccount
 export const updateSubaccount = async (id, formData) => {
   try {
     const response = await axios.patch(
@@ -233,7 +219,6 @@ export const updateSubaccount = async (id, formData) => {
   }
 };
 
-// Delete Subaccount
 export const deleteSubaccount = async (id) => {
   try {
     const response = await axios.delete(
@@ -249,7 +234,6 @@ export const deleteSubaccount = async (id) => {
   }
 };
 
-// Delete Account
 export const deleteAccount = async (password) => {
   try {
     const response = await axios.delete(

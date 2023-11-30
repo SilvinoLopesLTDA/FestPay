@@ -48,7 +48,6 @@ const StorageContainer = ({ item, isLoading }) => {
     });
   };
 
-  // Paginate
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
   const startIndex = currentPage * itemsPerPage;

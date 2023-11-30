@@ -52,7 +52,6 @@ const ClientContainer = ({ clients, isLoading }) => {
     });
   };
 
-  // Paginate
   const [currentPage, setCurrentPage] = useState(0);
   const clientsPerPage = 10;
   const startIndex = currentPage * clientsPerPage;

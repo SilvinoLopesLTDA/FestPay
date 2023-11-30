@@ -116,11 +116,9 @@ const confirmEmail = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Email confirmado com sucesso." });
 });
 
-// Register Subaccount (Admin or Worker)
 const registerSubaccount = asyncHandler(async (req, res) => {
   const { name, email, password, role, workerFunction } = req.body;
 
-  // Validation
   if (!name || !email || !password) {
     res.status(400);
     throw new Error("Preencha os campos corretamente.");
@@ -130,7 +128,6 @@ const registerSubaccount = asyncHandler(async (req, res) => {
     throw new Error("A senha deve conter mais de 6 caracteres.");
   }
 
-  // Check if user email already exists
   const user = await User.findById(req.user._id);
 
   if (!user) {
@@ -149,7 +146,6 @@ const registerSubaccount = asyncHandler(async (req, res) => {
     throw new Error("O email já está cadastrado!");
   }
 
-  // Create new subaccount
   user.subaccounts.push({
     user: req.user.id,
     name,
@@ -161,7 +157,6 @@ const registerSubaccount = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  // Confirmation email
   if (role === "worker") {
     const message = `
     <!DOCTYPE html>
@@ -449,11 +444,9 @@ const registerSubaccount = asyncHandler(async (req, res) => {
   });
 });
 
-// Register User
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Validation
   if (!name || !email || !password) {
     res.status(400);
     throw new Error("Preencha os campos corretamente.");
@@ -463,7 +456,6 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("A senha deve conter mais de 6 caracteres.");
   }
 
-  // Check if user email already exists
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -493,17 +485,14 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 });
 
-// Login User
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Validate Request
     if (!email || !password) {
       throw new Error("Por favor, adicione o email e a senha.");
     }
 
-    // Check if user exists (master user or subaccount)
     const user = await User.findOne({
       $or: [{ email }, { "subaccounts.email": email }],
     });
@@ -512,21 +501,18 @@ const loginUser = asyncHandler(async (req, res) => {
       throw new Error("Usuário não encontrado. Por favor, cadastre-se!");
     }
 
-    // Check if the user's email is confirmed
     if (!user.isEmailVerified) {
       throw new Error(
         "Você precisa confirmar seu e-mail antes de fazer login."
       );
     }
 
-    // Check if password is correct for the user
     const passwordIsCorrect = await bcrypt.compare(password, user.password);
 
     if (!passwordIsCorrect) {
       throw new Error("Email ou Senha incorretos! Tente novamente.");
     }
 
-    // Generate a new token with an extended expiration
     let token;
 
     let responseData;
@@ -586,7 +572,6 @@ const loginUser = asyncHandler(async (req, res) => {
       };
     }
 
-    // Send the new token as an HTTP-only cookie
     res.cookie("token", token, {
       path: "/",
       httpOnly: true,
@@ -601,7 +586,6 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Logout User
 const logout = asyncHandler(async (req, res) => {
   res.cookie("token", "", {
     path: "/",
@@ -615,7 +599,6 @@ const logout = asyncHandler(async (req, res) => {
   });
 });
 
-// Get User Data
 const getUser = asyncHandler(async (req, res) => {
   try {
     let userData;
@@ -659,7 +642,6 @@ const getUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Get subaccounts
 const listSubaccounts = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -679,9 +661,8 @@ const listSubaccounts = asyncHandler(async (req, res) => {
   res.status(200).json(subaccounts);
 });
 
-// Get Specific Subaccount
 const getSubaccountById = asyncHandler(async (req, res) => {
-  const subaccountIdToGet = req.params.id; // ID da subconta a ser obtida
+  const subaccountIdToGet = req.params.id;
 
   const user = await User.findById(req.user._id);
 
@@ -690,7 +671,6 @@ const getSubaccountById = asyncHandler(async (req, res) => {
     throw new Error("Usuário não encontrado.");
   }
 
-  // Encontre a subconta com o ID especificado
   const subaccountToGet = user.subaccounts.find(
     (subaccount) => subaccount._id.toString() === subaccountIdToGet
   );
@@ -700,11 +680,9 @@ const getSubaccountById = asyncHandler(async (req, res) => {
     throw new Error("Subconta não encontrada.");
   }
 
-  // Retorne a subconta encontrada
   res.status(200).json(subaccountToGet);
 });
 
-// Get Login Status
 const loginStatus = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
   if (!token) {
@@ -719,7 +697,6 @@ const loginStatus = asyncHandler(async (req, res) => {
   return res.json(false);
 });
 
-// Update User
 const updateUser = asyncHandler(async (req, res) => {
   const userId = req.user ? req.user._id : null;
   const isSubaccount = req.subaccount ? req.subaccount._id.toString() : null;
@@ -761,7 +738,6 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Update Password
 const changePassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const userId = req.user ? req.user._id : null;
@@ -796,7 +772,6 @@ const changePassword = asyncHandler(async (req, res) => {
   }
 });
 
-//Forgot Password
 const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
@@ -806,22 +781,18 @@ const forgotPassword = asyncHandler(async (req, res) => {
     throw new Error("Usuário não existe!");
   }
 
-  // Delete Token if it exists in DB
   let token = await Token.findOne({ userId: user._id });
   if (token) {
     await token.deleteOne();
   }
 
-  // Create Reset Token
   let resetToken = crypto.randomBytes(32).toString("hex") + user._id;
 
-  // Hash Token before saving to DB
   const hashedToken = crypto
     .createHash("sha256")
     .update(resetToken)
     .digest("hex");
 
-  // Save Token to DB
   await new Token({
     userId: user._id,
     token: hashedToken,
@@ -829,10 +800,8 @@ const forgotPassword = asyncHandler(async (req, res) => {
     expiresAt: Date.now() + 30 * (60 * 1000), // 30 minutes
   }).save();
 
-  // Construct Reset Url
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-  // Reset Email
   const message = `
   <!DOCTYPE html>
   <html>
@@ -910,18 +879,15 @@ const forgotPassword = asyncHandler(async (req, res) => {
   }
 });
 
-// Reset Password
 const resetPassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
   const { resetToken } = req.params;
 
-  // Hash Token, then compare to Token in DB
   const hashedToken = crypto
     .createHash("sha256")
     .update(resetToken)
     .digest("hex");
 
-  // Find Token in DB
   const userToken = await Token.findOne({
     token: hashedToken,
     expiresAt: { $gt: Date.now() },
@@ -932,7 +898,6 @@ const resetPassword = asyncHandler(async (req, res) => {
     throw new Error("Token Inválido ou Expirado!");
   }
 
-  // Find user
   const user = await User.findOne({
     _id: userToken.userId,
   });
@@ -943,7 +908,6 @@ const resetPassword = asyncHandler(async (req, res) => {
   });
 });
 
-// Update Subaccount
 const updateSubaccount = asyncHandler(async (req, res) => {
   const subaccountIdToUpdate = req.params.id;
 
@@ -993,7 +957,6 @@ const updateSubaccount = asyncHandler(async (req, res) => {
   });
 });
 
-// Delete Subaccount
 const deleteSubaccount = asyncHandler(async (req, res) => {
   const subaccountIdToDelete = req.params.id;
 
@@ -1024,7 +987,6 @@ const deleteSubaccount = asyncHandler(async (req, res) => {
   });
 });
 
-// Delete Account
 const deleteAccount = async (req, res) => {
   try {
     const userId = req.subaccount ? req.subaccount.user : req.user.id;

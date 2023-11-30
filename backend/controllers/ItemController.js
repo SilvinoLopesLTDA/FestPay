@@ -2,18 +2,15 @@ const asyncHandler = require("express-async-handler");
 const Item = require("../models/itemModel");
 const Shop = require("../models/shopModel");
 
-// Create Item
 const createItem = asyncHandler(async (req, res) => {
   const userId = req.subaccount ? req.subaccount.user : req.user.id;
   const { name, price, quantity } = req.body;
 
-  // Validation
   if (!name || !price || !quantity) {
     res.status(400);
     throw new Error("Por favor, preencha os campos corretamente!");
   }
 
-  // Create Item
   const item = await Item.create({
     user: userId,
     name,
@@ -24,14 +21,12 @@ const createItem = asyncHandler(async (req, res) => {
   res.status(201).json({ _id: item._id, name, price, quantity });
 });
 
-// Get all workers
 const getItems = asyncHandler(async (req, res) => {
   const userId = req.subaccount ? req.subaccount.user : req.user.id;
   const items = await Item.find({ user: userId }).sort("-createdAt");
   res.status(200).json(items);
 });
 
-// Get Item Data
 const getItem = asyncHandler(async (req, res) => {
   const item = await Item.findById(req.params.id);
 
@@ -49,7 +44,6 @@ const getItem = asyncHandler(async (req, res) => {
   }
 });
 
-// Delete Item
 const deleteItem = asyncHandler(async (req, res) => {
   const item = await Item.findById(req.params.id);
 
@@ -76,7 +70,6 @@ const deleteItem = asyncHandler(async (req, res) => {
   res.status(200).json(item);
 });
 
-// Update Item
 const updateItem = asyncHandler(async (req, res) => {
   const { name, price, quantity } = req.body;
   const { id } = req.params;
@@ -87,7 +80,6 @@ const updateItem = asyncHandler(async (req, res) => {
     throw new Error("Item não encontrado.");
   }
 
-  // Update Item
   const updatedItem = await Item.findByIdAndUpdate(
     { _id: id },
     {
@@ -103,7 +95,6 @@ const updateItem = asyncHandler(async (req, res) => {
   res.status(200).json(updatedItem);
 });
 
-// Place Item in a Shop
 const placeItemInShop = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -128,7 +119,6 @@ const placeItemInShop = asyncHandler(async (req, res) => {
   res.status(200).send(itemList);
 });
 
-// Assuming you have another endpoint to handle the user's choice
 const handleUserChoice = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { selectedItemIndex } = req.body;
@@ -169,7 +159,6 @@ const handleUserChoice = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Item colocado na barraca com sucesso." });
 });
 
-// Remove Item
 const removeItemFromShop = asyncHandler(async (req, res) => {
   const { id, itemId } = req.params;
 

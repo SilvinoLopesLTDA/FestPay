@@ -77,7 +77,6 @@ const EditProfile = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      //Handle Image upload
       let imageURL;
       if (
         profileImage &&
@@ -91,7 +90,6 @@ const EditProfile = () => {
         image.append("upload_preset", "nqsh9wjr");
         image.append("folder", "FestPay/avatarImages");
 
-        // First save image to cloudinary
         const response = await fetch(
           "https://api.cloudinary.com/v1_1/dpyrlntco/image/upload",
           {
@@ -103,7 +101,6 @@ const EditProfile = () => {
         imageURL = imgData.url.toString();
       }
 
-      // Save Profile
       const formData = {
         name: profile.name,
         phone: profile.phone,

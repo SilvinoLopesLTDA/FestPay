@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-// import PasswordCard from "../../components/passwordCard/PasswordCard";
 import styles from "./Client.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

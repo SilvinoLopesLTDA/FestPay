@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import Loader, { SpinnerImg } from "../../components/loader/Loader";
-// import PasswordCard from "../../components/passwordCard/PasswordCard";
 import styles from "./Dashboard.module.scss";
 import {
   Chart,
