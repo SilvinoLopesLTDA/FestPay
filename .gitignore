@@ -8,13 +8,17 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+dist
 dist-ssr
-dev-dist
-*.local
 .env
-
+*.local
+/uploads
+/dev-dist
+.jest
+__snapshots__
 # Editor directories and files
 .vscode/*
+.vs
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -23,4 +27,5 @@ dev-dist
 *.njsproj
 *.sln
 *.sw?
+
 .vercel
